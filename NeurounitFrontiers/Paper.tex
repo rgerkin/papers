@@ -1,0 +1,568 @@
+\documentclass[11pt,letterpaper]{article}
+\pagestyle{plain}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{setspace}
+\usepackage{python_syntax}
+\usepackage[sort&compress]{natbib}
+\usepackage{bibentry}
+\usepackage{todonotes}
+\usepackage{url}
+\usepackage[compact]{titlesec}
+\titleformat{\subsection}[runin]
+{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]
+{\normalfont\large\bfseries}{\thesubsubsection}{1em}{}
+\usepackage{enumitem}
+\usepackage[
+top    = 1in,
+bottom = 1in,
+left   = 1in,
+right  = 1in]{geometry}
+\usepackage{caption}
+\captionsetup{belowskip=0pt,aboveskip=0pt}
+\linespread{0.92} % NSF allows up to 6 lines per inch.  
+\def\UrlFont{\em} % Italicize all URLs.  
+\frenchspacing
+\setlist{nolistsep} % or \setlist{noitemsep} to leave space around whole list
+\lstset{
+	basicstyle=\small\ttfamily,
+	breaklines=true,
+	language=Python,
+	}
+\let\verbx\lstinline
+\newcommand{\bfhead}[1]{\noindent \textbf{#1:}}
+
+\begin{document}
+
+\section{Abstract}
+Rigorously validating a scientific model’s explanatory power requires comparing its predictions against empirical data -- both data available during model development and data gathered after publication. 
+However, model validation remains an informal and incomplete process, especially in neuroscience.   
+This makes it difficult to evaluate a model's strengths and weaknesses, or to adequately compare two models.
+
+Here we describe a model-testing library that draws inspiration from ``unit tests'', a common form of software testing that validates a single component of a computer program against a single correctness criterion. 
+This is realized by using the \textit{SciUnit} Python framework for analogous ``model validation tests'' -- 
+executable functions validating models against an empirical observation by producing a score indicating model/data agreement. 
+We applied this framework to neuroscience to produce \textit{NeuroUnit}, a library for test construction in neuroscience, and a repository of useful tests.  
+
+% Section 1.
+\section{Introduction}
+Neuroscientists construct quantitative models to explain observations about neurons, circuits, and brains in a coherent and rigorous manner. 
+These models are characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}, the extent to which these predictions agree with empirical observations of those quantities. 
+As the quantity of models and empirical data in neuroscience proliferates, it is increasingly challenging to efficiently discover models whose scope is of interest and then assessing their validity against this mountain of data. 
+
+Neuroscience models are traditionally described in publications. 
+Although authors may refer to some relevant experimental data and alternative models, these comparisons are incomplete and tend to serve the goals of authors rather than readers. 
+However, making exhaustive comparisons to exisiting models and data would make such publications encyclopedic and obscure their main points. 
+Thus, a strength of publication is its focused description of how a model works and its conceptual advances. 
+A weakness, however, is that evaluating the scope and validity of a model is intractable using a publication alone. 
+This problem is exacerbated post-pubication as new data is rarely compared against existing models, and the original publication -- a resource of first resort for new scientists and onlookers -- is cited ``as-is'' in perpetuity. 	
+The validation of neuroscience models must be formalized to supplement the publication system and provide a straightforward way to determine how well models do what they claim to do.  
+
+There are related efforts in the machine learning community to develop models and validate them against standardized, publicly-available datasets according to well-specified metrics. 
+Kaggle\cite{kaggle_url} drives model development by organizing competitions where training data is made public and competitors submit competing algorithms, compared automatically by cross-validated accuracy on an unrevealed test set. 
+The success of Kaggle shows that open competitions are effective\cite{carpenter_may_2011}, and that a ``modeling as a competition'' paradigm attracts data scientists across traditional discipline boundaries.  
+On the other hand, Kaggle focuses solely on a few general cases in machine learning: classification, regression, and clustering, where validation criteria are straightforward.
+
+Discipline-specific competitions having a similar structure but with more sophisticated validation criteria within neuroscience have also resulted in important advances. 
+For example, the quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} addressed the complexity-accuracy tradeoff among reduced models of excitable membranes; 
+the ``Hopfield'' challenge\cite{hopfield_what_2000} asked for neuronal network form, given function; 
+the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity\cite{neural_prediction_url}; the Diadem challenge is advancing the art of neurite reconstruction\cite{diadem_url}; 
+examples from other subfields of biology abound\cite{dream_url}. 
+
+Recognizing that neuroscience contains a wide variety of models that aim to explain phenomena at multiple levels, we leveraged a discipline-agnostic Python framework called \textit{SciUnit}\cite{sciunit_url} to create tools for testing neuroscience models and associated tests.  The result is \textit{NeuroUnit}, which extends \textit{SciUnit} into neuroscience by supporting the testing of models described using \textit{NeuroML}, the construction of test logic using \textit{NeuroTools} \cite{neurotools_url}, and employing a test ``answer key" using electrophysiology data from the \textit{NeuroElectro Project} \cite{neuroelectro_url}.  In addition to this open testing framework we also provide a library of tests for models of spiking single neurons.  
+
+% Section 2.
+\section{Fundamentals of Testing}
+\vspace{-12px}
+\begin{wrapfigure}{r}{0.6\textwidth}
+\vspace{-38px}
+\includegraphics[scale=0.75]{sciunit_overview.pdf}
+\caption{Proposal overview. 
+\small{i) The \textit{SciUnit} framework can generate discipline-specific libraries for tests generation and model interfacing.  
+\textit{NeuronUnit} is proposed and described here.  Experimental data guides test development; model generation informs and is informed by these \textit{SciUnit} libraries.  
+Each \text{SciUnit} test suite repository on GitHub is indexed by the \textit{SciDash} web application.  
+Test suites for OSB and QSNMC (described in the text) are being built. 
+\textit{SciDash} automatically runs the test collections in each suite and publicly displays the results.}}
+\vspace{-10px}
+\label{fig:sciunit_overview}
+\end{wrapfigure}
+\leavevmode
+\vspace{-0px}
+
+The \textit{SciUnit} framework is organized around simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation. 
+
+\begin{figure}
+\small
+\begin{python}
+class SpikeCountTest(sciunit.Test):
+  """Tests models that generates spike counts from currents. Computes p-values based on a chi-squared test statistic, and pools them using Fisher's method.
+
+  parameters:
+    inputs: list of numpy arrays containing input currents (nA)
+    means, stds: list of means and standard deviations of the 
+      spike counts observed in response to the inputs
+  """
+  def __init__(self, inputs, means, stds):
+    self.inputs, self.means, self.stds = inputs, means, stds
+	
+  required_capabilities = [SpikeCountFromCurrent]
+	
+  def run_test(self, model):
+    inputs, means, stds = self.inputs, self.means, self.stds
+    n = len(inputs)
+    counts = numpy.empty((n,))
+    for i in xrange(n):
+      counts[i] = model.spike_count_from_current(inputs[i])
+    chisquared = sum((counts-means)**2 / means) # An array of chi-squared values.  
+    p = scipy.stats.chi2.cdf(chisquared,n-1) # An array of p-values.  
+    pooled_p = sciunit.utils.fisherp(p_array) # A pooled p-value.  
+    return sciunit.PValue(pooled_p, related_data={
+      "inputs": input_current,
+      "obs_means": means,
+      "obs_stds": stds
+    })
+\end{python}
+\vspace{-5px}
+\caption{A single neuron spike count test family implemented in \textit{SciUnit}}
+\label{fig:rate_test}
+\vspace{-15px}
+\end{figure}
+
+\subsection{Example: Neural Membrane Potential Dynamics} To clarify the basic ideas, we begin by describing a test suite related to single-neuron neurophysiology. 
+The tests in this suite are designed for experiments where stimuli are delivered to neurons of a particular type, as somatically injected current (in pA), while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
+A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
+
+One simple validation test would ask candidate models to predict the number of action potentials generated in response to a series of stimuli, and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials with the same stimuli. 
+The test creator is responsible for specifying how to measure the goodness-of-fit; 
+for example, a p-value derived from a chi-squared statistic could be calculated for each prediction and then these p-values could be combined using Fisher's method\cite{fisher_statistical_1925}.
+
+Alongside this \emph{spike count test}, a number of other tests capturing different features of the data could be specified to produce a more comprehensive suite. 
+For data of this sort, the QSNMC defined 17 other validation criteria in addition to one based on the overall spike count, capturing features like spike latencies (SL), mean subthreshold voltage (SV), interspike intervals (ISI) and interspike minima (ISM) that can be extracted from the data\cite{jolivet_quantitative_2008}. 
+They then defined a combined metric favoring models that broadly succeeded at meeting these criteria, to produce an overall ranking. 
+Such combined criteria are simply validation tests that invoke other tests to produce a result.
+
+Importantly, the validation criteria in each case are made explicit by the specification of a test suite, so modelers need not guess which criteria are being used to validate or invalidate their model. 
+Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and scientists who wish to promote different criteria need only derive alternative test suites. 
+In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
+
+Fig. \ref{fig:rate_test} shows how a scientist would implement the spike count test described in the preceding section using \textit{SciUnit}. 
+A \textit{SciUnit} validation test is an {instance} of a Python class implementing the \verbx{sciunit.Test} interface. 
+Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor (in Python, the constructor is always named \verbx{__init__}; the parameters' meaning is documented on lines 5-8). 
+For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
+To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
+For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows:
+\begin{python}
+  CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
+\end{python}
+We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test. 
+As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their field so that test generation for a particular system of interest will often consist simply of instantiating a previously-developed family with particular experimental parameters and data. 
+For single-neuron tests like the \verbx{SpikeCountTest}, we have developed a library to facilitate development (Sec. \ref{sec:neuronunit}). 
+
+Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{run_test} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
+To specify the interface between the test and the model (that is, to constrain the test's scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
+Capabilities are simply collections of methods that a test may need to invoke to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java \cite{java_interfaces_url}. 
+In Python, they are written as classes with unimplemented members. 
+The capability required by the test in Fig. \ref{fig:rate_test} (used on line 19) is shown in Fig. \ref{fig:capability}. 
+In \textit{SciUnit}, classes defining capabilities be tagged by inheriting from \verbx{sciunit.Capability}, and discovered automatically (Figs. \ref{fig:capability},\ref{fig:training}). 
+
+\begin{figure}
+\begin{python}
+class SpikeCountFromCurrent(sciunit.Capability):
+  def spike_count_from_current(self, input): 
+    """Takes a numpy array containing current stimulus (in nA) and
+    produces an integer spike count. Can be called multiple times."""
+    raise NotImplementedError("Model does not implement capability.")
+\end{python}
+\caption{An example capability specifying a single required method (used by the test in Figure \ref{fig:rate_test}).}
+\label{fig:capability}
+\vspace{-10px}
+\end{figure}
+
+\begin{figure}
+\begin{python}
+class TrainSpikeCountFromCurrent(sciunit.Capability):
+  def train_with_currents(self, currents, counts):
+    """Takes a list of numpy arrays containing current stimulus (in nA) and
+    observed spike counts. Model parameters should be adjusted based on this
+    training data."""
+    raise NotImplementedError("Model does not implement capability.")
+\end{python}
+\caption{Another capability specifying a training protocol (not used by the test in Figure \ref{fig:rate_test}).}
+\label{fig:training}
+\vspace{-15px}
+\end{figure}
+
+Capabilities are \emph{implemented} by models. 
+A simple \emph{family} of models implementing this capability is shown in Fig. \ref{fig:simple_model}. 
+Models in this family produce a spike count by applying a linear transformation to the mean of the provided input current. 
+The family is parameterized by a scale factor and offset, both scalars. 
+To create a \emph{particular} model, the modeler may choose particular parameter values, just as with test families:
+\begin{python}
+CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
+\end{python}
+Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
+An alternative test design to the one in Fig. \ref{fig:rate_test} would add a second required capability (Fig. \ref{fig:training}) and a corresponding training phase to the \verb|run_test| method. 
+This design would be relevant only for those models for which parameters can be adjusted without human involvement. 
+Whether to build a training phase into the test protocol is a choice left to each modeler. 
+Although Fig. \ref{fig:rate_test} does not include a training phase, if training data is available then models that nevertheless implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
+\begin{python}
+CA1_linear_model_fit = LinearModel()
+CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
+\end{python}
+\begin{figure}
+\begin{python}
+class LinearModel(sciunit.Model, SpikeCountFromCurrent, 
+    TrainSpikeCountFromCurrent):
+  def __init__(self, scale=None, offset=None): 
+    self.scale, self.offset = scale, offset
+    
+  def spike_count_from_current(self, input):
+    return int(self.scale*numpy.mean(input) + self.offset)
+
+  def train_with_currents(self, currents, counts):
+    means = [numpy.mean(c) for c in currents]
+    [self.offset, self.scale] = numpy.polyfit(means, counts, deg=1)    
+\end{python}
+\caption{A simple model that returns a spike count by scaling the mean of the input by a fixed parameter.}
+\label{fig:simple_model}
+\vspace{-15px}
+\end{figure}
+
+In the test in Fig. \ref{fig:rate_test}, the \verbx{run_test} method simply calls the \verbx{spike_count_from_current} capability method to produce spike count predictions for each input current on line 18. 
+There are many possibly statistical choices for deriving a test score.  
+In the figure, the resulting spike count is compared to the empirical mean to produce a chi-squared statistic, and ultimately a p-value. 
+Alternatively, the array of standard deviations (line 10) could be used to derive a Z-score.  
+In addition to the score itself, the returned score object also contains metadata of use to those wishing to examine the result in detail. 
+In this test we saved the inputs and observed means and standard deviations alongside the score by using the \verbx{related_data} parameter. 
+We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
+
+Finally, a test is executed against a model instance, using the \verbx{sciunit.judge} function:
+\begin{python}
+score = sciunit.judge(CA1_sc_test, CA1_linear_model_heuristic)
+\end{python}
+
+The \verbx{sciunit.judge} function operates in three phases: 
+\textbf{(1) Capability Checking}: The model is verified as capable of taking the test by checking each capability in the test's \verbx{required_capabilities} attribute; 
+\textbf{(2) Test Execution}: The test's \verbx{run_test} method is called to execute the model and the output is cached. 
+\textbf{(3) Output Validation}: \verbx{run_test} returns an instance of a \verbx{sciunit.Score} subclass containing a goodness-of-fit metric between the model output and the data used to parameterize the test.  
+Any errors that occur during this process are reported by raising an appropriate exception.
+
+\subsection{\textit{SciUnit} Test Suites}
+A test suite is a collection of tests designed to validate a model against several mutually coherent requirements, i.e. various summaries of the data.  
+The following is a test suite that could be used for a simplified version of the QSNMC:  
+\begin{python}
+CA1_suite = sciunit.TestSuite([CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_ism_test])
+\end{python}
+When a test suite is executed against a model, it produces summary data that can be shown on the console or visualized by other tools, such as the web application described in Sec. \ref{sec:scidash}.
+
+\subsection{\textit{SciUnit} Design Considerations}
+Each community can collaboratively specify capabilities capturing the high-level semantics of their preferred modeling formalisms. 
+Existing modeling standards (e.g. NeuroML\cite{neuroml_url,gleeson_neuroml:_2010}) can be leveraged to simplify this process. \textbf{\textit{SciUnit}, written in Python, was designed to make test construction (from data) and test-driven model execution exceptionally easy and flexible.} 
+All figures shown here containing code blocks make use of this framework.
+ 
+\subsection{\textit{SciDash}: A community web application}\label{sec:scidash}
+This framework is most effective when the current state of a research area is represented by a collection of tests and models. 
+This requires coordination among research groups, so community-oriented cyberinfrastructure to support test suite creation and summarization, building upon \textit{SciUnit}, is essential.
+We developed a service called \textit{SciDash}, utilizing existing infrastructure for coordinated development of software repositories, and focusing on GitHub\cite{github_url}\cite{ram_git_2013}. 
+A suite of related tests will be contained in a GitHub repository with a stereotyped high-level structure allowing the \textit{SciDash} web application to discover, index and summarize it continuously (Fig. \ref{fig:scidash_repo}).
+
+\begin{wrapfigure}[18]{r}{0.45\textwidth}
+\center
+\vspace{-10px}
+\includegraphics[scale=0.72]{scidash_github.png}
+\caption{A \textit{SciDash} repository on GitHub}
+\label{fig:scidash_repo}
+\end{wrapfigure}
+\vspace{-10px}
+\leavevmode
+
+Test results can be visualized as a ``record matrix'' composed of large numbers of model/test combinations (Fig. \ref{fig:scidash_matrix}).  
+Each row in this matrix contains results for all tests taken by one model and serve as clear evidence of that model's scope and validity.  
+Models, tests, and records will be stored on GitHub, pointed to by hyperlinks in the record matrix. 
+\textit{SciDash} serves as a public record of competition among models, facilitating and encouraging data-driven development among modelers.
+\textbf{Thus, the second product of this proposal is a web application called \textit{SciDash}, whose back-end can index test suite repositories collaboratively developed on GitHub, and whose front-end offers users a simple environment for discovery and evaluation of models, tests, and records.}  
+
+\subsection{\textit{NeuronUnit}: A Suite of Tests for Neurophysiology}\label{sec:neuronunit}
+By using machine-readable models from Open Source Brain (OSB), and machine-readable data from resources like The NeuroElectro Project\cite{neuroelectro_url}, we have produced a suite of data-driven validation tests in \textit{NeuronUnit}, as well as tools for capability implementation, and model interfaces for a representative set of canonical neurophysiology models, all publicly available. 
+
+% Section 3.
+\section{Results}
+
+\subsection{\textit{SciDash} Activities}\label{sec:scidash_activities}
+The \textit{SciDash} web application points to test suite repositories and aggregates test results for scientific communities \cite{scidash_url}. 
+It is populated with models and tests from the educational illustration in Table \ref{table:record_matrix} (section~\ref{sec:education}). 
+\textit{SciDash} exists in three layers.
+The \textbf{first layer} is completely under the control of individual developer communities, and consists of git repositories. 
+Git is the most popular implementation of ``version control'' among developers today\cite{ram_git_2013}, and is increasingly used for open science projects (e.g. OSB\cite{osb_url}). 
+The GitHub website\cite{github_url} is the most popular location for collaborative code development using git. 
+\textit{SciDash} identifies all similarly structured repositories (by tracking the lineage of the repository above using the GitHub API).
+This list of repositories will be indexed by \textit{SciDash} to form the \textbf{second layer}, an overview of the state of all \textit{SciDash} repositories on GitHub.  
+This index is searchable and filterable on the \textit{SciDash} website to identify repositories of interest to a particular research community.  
+The \textbf{third layer} is a ``dashboard'' view of the state of a field, visible through a matrix of records for model/test combinations in a GitHub repository (Fig. \ref{fig:scidash_repo}). 
+Each record links to test records (stored in the repository), displaying line-by-line the executed code and intermediate output statements, as well as the underlying models and tests.   
+
+\begin{figure}%[18]{r}{1\textwidth}
+\includegraphics[scale=0.65]{table.png}
+\caption{A \textit{SciDash} record matrix}
+\label{fig:scidash_matrix}
+\vspace{-15px}
+\end{figure}
+\vspace{-10px}
+\leavevmode
+
+\subsection{\textit{NeuronUnit} Activities}
+\label{sec:neuronunit_acitivities}
+Here we describe standard neuroinformatics tools we have adopted to develop \textit{NeuronUnit}\cite{neurounit_url}.  
+
+\subsubsection{Models from NeuroML}\label{sec:neuroml_models}
+NeuroML is a standardized model description language for neuroscience \cite{gleeson_neuroml:_2010}. 
+It permits many neurophysiological/neuroanatomical models to be described in a simulator-independent fashion, and executed across many popular simulators due to inter-conversion capabilities of the NeuroML API. 
+Because NeuroML is an XML specification, model descriptions can be validated for correctness and queried for model properties and components, exposing potential capabilities. 
+It is ideal for model sharing, curation, and for answering both \textit{what} and \textit{how} programatically.  
+
+NeuroConstruct\cite{neuroconstruct_url,gleeson_neuroconstruct:_2007} is a simulation manager that takes NeuroML models and hands off simulation to supported simulators. 
+\textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, instantiated with the path to a NeuroML model.  
+Because NeuroML can describe such a wide range of models, \verbx{NeuroConstructModel} makes few assumptions about them: that each one is \verbx{TimeIntegrable}, and \verbx{HasMembranePotential}.  
+It is subclassed to test \textit{specific} NeuroML models (Fig. \ref{fig:ca1_model}). 
+
+The Open Source Brain project (OSB,\cite{osb_url}) curates many models described in NeuroML. 
+OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators\cite{neuron_url,genesis_url,nest_url,moose_url}. 
+Concordance between model output (beginning with the NeuroML description) and reference output (from native simulator source files) is reported for each model. 
+Thus, OSB is an excellent source of models that, in addition to being open source, are sufficiently described to enable validation. 
+The hippocampal CA1 pyramidal cell is commonly modeled, and we implement one such model hosted on OSB\cite{osb_ca1_url} by simply declaring a \verbx{CA1PyramidalCellModel} class, inheriting from \verbx{NeuroConstructModel}.  
+This basic implementation simply ``wraps'' the components of the existing model, with simulator interaction taken care of by \verbx{NeuroConstructModel} methods; 
+thus, only the code shown in Fig. \ref{fig:ca1_model} is required. 
+All OSB models, and indeed any NeuroML model, can be tested similarly. 
+Working together with OSB is part of our \textbf{first collaboration}, and our integration efforts can be publicly tracked\cite{neuroconstruct_rgerkin_url}.  
+
+Spanning a range of scales and original development environments, all OSB models are formally described using NeuroML, as are all model components and sub-components, such as cells, ion channels, calcium stores, etc. 
+These models are regularly executed on OSB servers to ensure that their output remains consistent as they are updated. 
+Therefore, OSB can confirm that they \textit{do} work, while linked journal articles, on-site wiki, and code inspection can establish \textit{how} they work. 
+However, there is no mechanism for establishing \textit{how well} they work, i.e. how well the models accord with data. 
+\textit{NeuroUnit} fills this gap by helping OSB (and the larger biology community) assess models using data-driven tests. 
+\textit{SciUnit} can be applied similarly to other neuroscience (or biology) sub-disciplines using \textit{NeuronUnit} analogues written by the corresponding communities.    
+
+\begin{figure}
+\begin{python}
+class CA1PyramidalCellModel(NeuroConstructModel):
+	"""CA1 Pyramidal Cell model from Open Source Brain."""
+	def __init__(self,**kwargs):
+		project_path = neuroconstruct.get_path("hippocampus","CA1_pyramidal_neuron","CA1PyramidalCell","neuroConstruct")
+		models.NeuroConstructModel.__init__(self,project_path,**kwargs)
+\end{python}
+\vspace{-5px}
+\caption{A model class corresponding to a CA1 Pyramidal Cell model from Open Source Brain}
+\label{fig:ca1_model}
+\vspace{-15px}
+\end{figure}
+
+\subsubsection{Capabilities from NeuroTools}
+NeuroTools\cite{neuralensemble_url} is a Python library supporting tasks associated with analysis of neural data (or model output), such as membrane potential time series, spike trains, etc. 
+It is an open source and actively developed project, containing reliable algorithms on which to base neurophysiology tests.
+
+We use NeuroTools to implement \textit{SciUnit} capabilities in \textit{NeuronUnit}. 
+For example, an \verbx{AnalogSignal} object (e.g. a membrane potential time series) from NeuroTools has a threshold detection method that returns a NeuroTools \verbx{SpikeTrain} object. 
+A \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that the method \verbx{getSpikeTrain} be implemented. 
+\verbx{NeuroConstructModel} does so by placing the object method \verbx{AnalogSignal.threshold_detection} inside \verbx{getSpikeTrain}. 
+Many such NeuroTools objects are similarly exchanged between \verbx{NeuroConstructModel} methods. 
+This simplifies test writing, since basic model output properties are obtained trivially using NeuroTools object methods, and these NeuroTools objects are easily extracted from model output using candidate models subclassing \verbx{NeuroConstructModel}.  
+
+\subsubsection{Reference Data for Tests from NeuroElectro}
+Answering \textit{how well} requires validation testing against data. 
+The NeuroElectro project\cite{neuroelectro_url} is an effort to curate all published single cell neurophysiology data\cite{tripathy_neuroelectro:_2012}.  
+Currently, up to 27 electrophysiological properties are reported for 93 cell types, spanning $>$ 2000 single pieces of published data extracted from article tables. 
+We have made it easy to construct \textit{NeuronUnit} tests using the NeuroElectro API to get reference data. 
+Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
+The former is illustrated in Figure \ref{fig:neuronunit_example}. 
+Associated statistics of that data (e.g mean, standard error, and sample size) are attached and enable judgement of model output according to a chosen scoring mechanism. 
+While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
+As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
+Continued development of the NeuroElectro API, through which data are systematically exposed to test authors, represents our \textbf{second collaboration}\cite{neuroelectro_dev_url}.  
+
+% Section 4.
+\section{Research and Development Plan}
+
+\subsection{A Complete Pipeline}
+Although the tools described in Sec. \ref{sec:neuronunit_acitivities} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
+In the \textit{NeuronUnit} repository\cite{neurounit_url} is a runnable script (\textit{examples.py}) demonstrating a complete testing pipeline. 
+It (1) selects an OSB model; 
+(2) simulates it using NeuroConstruct; 
+(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; 
+and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
+
+\begin{figure}
+\begin{python}
+# Interface with neuroelectro.org to search for spike widths of CA1 Pyramidal cells. 
+reference_data = NeuroElectroSummary(neuron={'id':85}, ephysprop={'id':23})
+reference_data.get_values()  # Get summary data for the above. 
+model = CA1PyramidalCellModel(population_name="CG_CML_0") # Initialize the model with some parameters.
+test = SpikeWidthTestDynamic( # Initialize the test.    
+	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics from the reference data
+	model_args = {'current':40.0}, # Somatic current injection in pA.  
+	comparator = ZComparator), # A comparison class that implements a Z-score.  
+result = sciunit.judge(test,model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
+result.summarize() # Summarize the result.  
+\end{python}
+\caption{Working example of a testing in \textit{NeuronUnit}}
+\label{fig:neuronunit_example}
+\vspace{-15px}
+\end{figure}
+
+\subsection{Creating New Models, Capabilities, and Tests}
+\textit{NeuronUnit} provides base classes to enable rapid generation of models, capabilities, and tests for neurophysiology data. 
+However these objects can also be created from scratch, requiring only adherence to the \textit{SciUnit} interface. 
+For example, a Model could implement an \verbx{integrate} capability method by wrapping execution of a MATLAB script and a \verbx{get_spikes} capability method by parsing a .csv file on disk; 
+a Test could be initialized using empirical spike rates collected in the lab.  
+While this does not meet our idealized vision of development and testing, in practice this may be a common scenario. 
+As part of our outreach efforts (Sec. \ref{sec:broader_impacts}) we will train modelers in the use of this framework, and encourage them to use it as part of their workflow of choice. 
+Adoption of \textit{SciUnit} into traditional, custom workflows would be reflected in the Methods sections of articles.  
+
+\subsubsection{Visualization}
+\label{sec:scidash_visualization}
+There are many possibilities for visualization of specific test results though \textit{SciDash}. 
+When a test record is selected from the record matrix (Fig. \ref{fig:scidash_matrix}), it can point to a Sage notebook\cite{sagenb_url}, whose ``worksheets'' facilitate visualization and storage of executed code. 
+While Sage was written for Python, the notebook also supports the execution of code and visualization of outputs from other programming languages, making possible worksheets based on MATLAB, Mathematica, and other popular environments for modeling. 
+Even with \textit{SciUnit} written in Python, calls to other languages can still be issued, and their results visualized using these worksheets.
+
+\subsubsection{Collaboration}
+Community-moderated comments on GitHub will allow test-makers and test-takers to discuss issues associated with test suites. 
+On GitHub, these takes the form of ``issues,'' commit messages, and comments surrounding merge requests from forked repositories. 
+Thus, disagreements about the appropriateness of a test can be openly aired and in many cases resolved. 
+The \textit{SciDash} website itself can also support public comment to extend the features of GitHub. 
+More importantly, we will enable sorting and filtering of \textit{SciDash} results by repository statistics, e.g. the volume of activity and the number of followers, via the GitHub API. 
+This will allow the most important test suites, as judged by each community, to be featured prominently on \textit{SciDash}. 
+Simple tagging should enable filtering by subject matter. 
+We also will support open authentication via existing web applications (Google, Twitter, etc.), lowering the barrier to participation.  
+
+\subsubsection{Population}
+\textit{SciDash} will regularly run scripts that (1) read the GitHub repositories, (2) run any outstanding tests on new or existing models, and (3) format the results. 
+In order to quickly populate \textit{SciDash} with repositories that are both useful and illustrative, we will use \textit{SciUnit} to recapitulate the results of some ``settled'' competitions as \textit{SciDash} repositories, i.e. we will encode the competition rules as tests and \textit{SciDash} will then index the results. 
+There are several examples of settled competitions which have publicly available rules, entries, and results against which to check\cite{jolivet_quantitative_2008,hopfield_what_2000,neural_prediction_url}.  
+
+\subsection{Challenges}
+Here we describe theoretical and practical challenges to implementation, and how they can be overcome.
+
+\subsubsection{Participation from Modeling Communities}
+Modelers may not want to expose model capabilities, a requirement of test-taking.  
+We anticipate four solutions: \textbf{First}, interfacing a model to \textit{SciUnit} requires only implementing selected model capabilities. 
+Often this means identifying native model procedures that satisfy a capability, and wrapping their functionality. 
+This can require as little as one line of code. 
+Importantly, the modeler is not required to expose or rewrite any model flow control. 
+\textbf{Second}, we support multiple environments automatically by using NeuroML\cite{gleeson_neuroml:_2010}, and other simulator-independent model descriptions are possible for other domains. 
+Automated generation of NeuroML from native model source code is in development (Gleeson, personal communication); for the popular NEURON simulator\cite{neuron_url}, this functionality is already mature and in use. 
+This minimizes modeler effort for a large and growing number of models. 
+\textbf{Third}, modelers have an incentive to demonstrate publicly their models' validity. 
+Participation in public modeling competitions (Sec. \ref{sec:existing_efforts}) demonstrates this incentive. 
+\textbf{Fourth}, modelers have an incentive to use \textit{SciUnit} during development (see TDD, above) to ensure that ongoing development preserves correspondence between model and data. 
+A popular test suite can represent a ``gold standard'' by which progress during development is judged.
+
+\subsubsection{Participation from Experimental Communities}
+Experimentalists may not want to write tests derived from their data.  We anticipate four solutions: \textbf{First}, tests require no special data formatting; only a list of required  capabilities (for selecting eligible models), optional metadata (as run-time arguments), and a statistical data summary (for scoring tests) are required.  A unit test is focused and does not require arbitrary computations on data.  For example, suppose intracellular current injection evokes 100 action potentials, the width of which is of interest.  Writing the test consists of selecting \verbx{ReceivesCurrent} and \verbx{ProducesActionPotentialShape} capabilities (one line of code each), computing the mean and variance of action potential widths (one line of code), specifying current injection parameters, e.g. amplitude and duration (two lines of code), and selecting a scoring mechanism from \verbx{sciunit.scores}, e.g. (colloquially) ``Must be $<$ 1 standard deviation of the mean'' (one line of code).  This example can be found in \verbx{NeuronUnit.tests.SpikeWidthTest}; heavy-lifting is done by the interface.
+\textbf{Second}, data-sharing is becoming accepted, and test-writing can be distributed across scientists, including non-experimentalists with other aims such as analysis or modeling. 
+\textbf{Third}, many tests can be automatically generated using the NeuroElectro API, and the continued emergence of such data-aggregation initiatives will expand these possibilities. 
+\textbf{Fourth}, an incentive to write tests for one's data exists: the ability to identify models that give the data clear context and impact. 
+
+\subsubsection{Diversity of Levels and Kinds of Models and Data}
+The diversity of topics in biology is vast. 
+\textbf{First}, we address this by providing an interface allowing modelers to express specific capabilities.  
+This capability set determines the range of eligible tests.  Scale hierarchies are embedded in capability inheritance.  =
+For example, \verbx{HasActionPotentials} inherits from \verbx{HasNeurons}, and \verbx{HodgkinHuxley} inherits from \verbx{VoltageGated}. 
+Thus, incompatibility of a test-requiring-action-potentials for a model-lacking-neurons is known without explicit tagging. 
+\textbf{Second}, NeuroML naturally addresses diversity of scales because it is organized hierarchically, in ``levels.''  
+Models can be sub- or supersets of other models; similarly for SBML\cite{sbml_url,hucka_systems_2003}, a general systems biology markup language. 
+\textbf{Third}, cross-level testing can use ``Representional Similarity Analysis'' (RSA)\cite{kriegeskorte_representational_2008}, requiring only that a model respond to defined inputs (e.g. stimuli). 
+A ``similarity matrix'' for input responses defines a unique model signature, and can serve as intermediate test output. 
+Goodness-of-fit between similarity matrices for model and experiment determines test scores; 
+these matrices are independent of model scale because their size depends only on test inputs, not system detail.  
+
+\subsubsection{Arbitrary Scoring Criteria for Tests}
+A test first assesses goodness-of-fit, and applies a normalization (e.g. pass/fail, 0.0-1.0) to generate a score. 
+Arbitrary choices at both stages may benefit some models over others.  \textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
+For example, given a data mean and variance, ordering model output by Z-score or p-value will yield the same relative ranking of models. 
+Indeed, rank ordering of models may prove more valuable than test scores themselves. 
+\textbf{Second}, suite repositories are open (e.g. Fig. \ref{fig:scidash_repo}), so tests can be cloned and new statistical choices implemented. 
+Statistics as applied to neuroscience have been notoriously ``fast and loose''; 
+identification and correction of flawed methodology is becoming increasingly common\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010,fish_fmri_url}, and is accelerated by an open framework. 
+The community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used on GitHub -- and the \textit{SciUnit} framework determines whether the model \textit{does} it.  
+
+\subsubsection{Reliability of Data Underlying Tests}
+Unreliable data can undermine model validation. 
+\textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
+GitHub supports community moderation, permitting users to comment on tests, indicating their concerns. 
+Suite repository popularity, by which \textit{SciDash} results can be filtered, can reflect consensus. 
+Experimental metadata also constrains a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
+Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
+Such capabilities require no implementation, so the model definition must only inherit them. 
+\textbf{Second}, models cannot perfectly reproduce data that is itself a random draw from a ``true'' distribution. 
+Uncertainty in data must be made explicit, by asking how well a data set validates its own experimental replications\cite{kriegeskorte_representational_2008}. 
+The degree of such ``self-validation'' represents the upper limit of what a model can be expected to achieve, and should represent a ``perfect'' score.  
+
+\subsubsection{Occam's Razor}
+All things being equal, simpler models are better. 
+Model complexity has many definitions, so \textit{SciDash} will report several complexity metrics\cite{mccabe_complexity_1976}, including: 
+1) model length; 2) memory use; 3) CPU load; 4) \# of capabilities. 
+\textit{SciDash} will report the model validity vs complexity tradeoff in tabular form (e.g. Table \ref{table:record_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
+The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot, a visualization familiar from the symbolic regression package Eureqa\cite{schmidt_distilling_2009}.  
+
+\subsubsection{Expansion Into Other Areas of Biology}
+After covering neurophysiology, we would like \textit{SciUnit} to be applied across neuroscience and in other biological sciences. 
+The framework is discipline-agnostic, so community participation and model description are the only obstacles. 
+Community participation begins with enumerating the capabilities relevant to a sub-discipline, and then writing tests. 
+Model description can expand within NeuroML (which already covers multiple levels within neuroscience) and tools for capability implementation can incorporate libraries for neuroimaging (NiBabel\cite{nibabel_url}), neuroanatomy (NeuroHDF,\cite{neurohdf_url}) and other sub-disciplines. 
+SBML\cite{hucka_systems_2003,sbml_url} will enable expansion beyond neuroscience, facilitated by parallel efforts among NeuroML developers to interface with it (Crook, unpublished). 
+One intriguing possiblity is applying \textit{SciUnit} to the OpenWorm project\cite{open_worm_url}, which through open, collaborative development seeks to model the entire organism C. elegans.  
+
+% Section 5.
+\section{Broader Impacts}
+\label{sec:broader_impacts}
+\subsection{Education}
+\label{sec:education}
+The scientific method is a cornerstone of basic science education. 
+However, its application in professional science is often informal and therefore of limited pedagogical value. 
+\textit{SciDash} will provide a window to the scientific method in practice, illustrating which hypotheses (models) withstand the scrutiny of evidence (pass tests). 
+Hypothesis (model) revision will be transparent through version control and repository lineage on GitHub. 
+The ability to visualize the scientific method in practice from any computer in the world will represent a major step forward in science education.  
+
+\begin{wraptable}[10]{r}{0.7\columnwidth}
+\vspace{-7px}
+\caption{A record matrix illustrating models and data-driven tests from the history of cosmology. Each row is a model; each column is a test.}
+\label{table:record_matrix}
+\begin{tabular}{| c | c | c | c | c | c | c }
+\hline
+    & \textit{Complexity} & \textbf{Babylon} & \textbf{Brahe} & \textbf{Galileo} & \textbf{Le Verrier} \\ \hline
+  \textbf{Ptolemy} & Medium & \textcolor{ForestGreen}{Pass} & \textcolor{Red}{Fail} & \textcolor{Red}{Fail} & \textcolor{Red}{Fail} \\ \hline
+  \textbf{Copernicus} & Low & \textcolor{ForestGreen}{Pass} & \textcolor{Red}{Fail} & \textcolor{Red}{Fail} & \textcolor{Red}{Fail} \\ \hline
+  \textbf{Kepler} & Medium & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{Red}{Fail} \\ \hline
+  \textbf{Newton} & Low & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{Red}{Fail} \\ \hline
+  \textbf{Einstein} & High & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} & \textcolor{ForestGreen}{Pass} \\ \hline
+\end{tabular}
+\end{wraptable}
+\leavevmode
+\leavevmode
+\leavevmode
+
+As a pedagogical tool, we will provide \textit{SciDash} repositories for historical case studies. 
+For example, Table \ref{table:record_matrix} summarizes 5 astronomical models and 4 validation tests derived from, and recapitulating, the history of cosmology. 
+This shows the scientific method to be an on-going process. 
+Ptolemy's geocentric model\cite{ptolemy_almagest_150} passes a test derived from Babylonian records of planetary motion. 
+Ptolemy's model fails other tests shown here, including one constructed from Brahe's more meticulous measurements\cite{kepler_rudolphine_1627}, falsifying Ptolemy's hypothesis of circular orbits. 
+The Copernican heliocentric model\cite{copernicus_revolutionibus_1543} also uses circular orbits and fails Brahe's test, but is simpler than Ptolemy's model, dispensing with ``epicycles.'' 
+Kepler's laws of planetary motion permit elliptic orbits\cite{kepler_astronomia_1609}, as well as Galileo's discovery of elliptic orbits among Jupiter's moons\cite{galilei_siderius_1610}. 
+Newton's model passes these tests and does so by unifying Kepler's laws under the principle of gravity\cite{newton_philosophiae_1687}. 
+Newton's model cannot explain Mercury's perihelion precession\cite{le_verrier_lettre_1859}, solved only by General Relativity\cite{einstein_foundation_1916}. 
+This account is simplistic compared with testing practice in modern biology, but it is appropriate for pre-baccalaureate teaching. 
+\textit{SciDash} will index and highlight such case studies for teaching.  
+
+\bibliographystyle{unsrt}
+\bibliography{references,references_crook,urls,references_ja}
+%\listoftodos
+\end{document}
+
