@@ -47,7 +47,7 @@ Rigorously validating a scientific model’s explanatory power requires comparin
 However, model validation remains an informal and incomplete process, especially in neuroscience.   
 This makes it difficult to evaluate a model's strengths and weaknesses, or to adequately compare two models.
 
-Here we describe a model-testing library that draws inspiration from ``unit tests'', a common form of software testing that validates a single component of a computer program against a single correctness criterion. 
+Here we describe a model-testing library for neuroscience that draws inspiration from ``unit tests'', a common form of software testing that validates a single component of a computer program against a single correctness criterion. 
 This is realized by using the \textit{SciUnit} Python framework for analogous ``model validation tests'' -- 
 executable functions validating models against an empirical observation by producing a score indicating model/data agreement. 
 We applied this framework to neuroscience to produce \textit{NeuroUnit}, a library for test construction in neuroscience, and a repository of useful tests.  
@@ -56,32 +56,22 @@ We applied this framework to neuroscience to produce \textit{NeuroUnit}, a libra
 \section{Introduction}
 Neuroscientists construct quantitative models to explain observations about neurons, circuits, and brains in a coherent and rigorous manner. 
 These models are characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}, the extent to which these predictions agree with empirical observations of those quantities. 
-As the quantity of models and empirical data in neuroscience proliferates, it is increasingly challenging to efficiently discover models whose scope is of interest and then assessing their validity against this mountain of data. 
+As the quantity of models and empirical data in neuroscience proliferates, it is increasingly challenging to efficiently discover models whose scope is of interest and to then assess their validity against this mountain of data. 
 
 Neuroscience models are traditionally described in publications. 
 Although authors may refer to some relevant experimental data and alternative models, these comparisons are incomplete and tend to serve the goals of authors rather than readers. 
-However, making exhaustive comparisons to exisiting models and data would make such publications encyclopedic and obscure their main points. 
-Thus, a strength of publication is its focused description of how a model works and its conceptual advances. 
+However, making exhaustive comparisons to existing models and data would make such publications encyclopedic and obscure their main points. 
+Thus, a strength of publication is its focused description of \textit{how} a model works and its conceptual advances. 
 A weakness, however, is that evaluating the scope and validity of a model is intractable using a publication alone. 
 This problem is exacerbated post-pubication as new data is rarely compared against existing models, and the original publication -- a resource of first resort for new scientists and onlookers -- is cited ``as-is'' in perpetuity. 	
 The validation of neuroscience models must be formalized to supplement the publication system and provide a straightforward way to determine how well models do what they claim to do.  
 
-There are related efforts in the machine learning community to develop models and validate them against standardized, publicly-available datasets according to well-specified metrics. 
-Kaggle\cite{kaggle_url} drives model development by organizing competitions where training data is made public and competitors submit competing algorithms, compared automatically by cross-validated accuracy on an unrevealed test set. 
-The success of Kaggle shows that open competitions are effective\cite{carpenter_may_2011}, and that a ``modeling as a competition'' paradigm attracts data scientists across traditional discipline boundaries.  
-On the other hand, Kaggle focuses solely on a few general cases in machine learning: classification, regression, and clustering, where validation criteria are straightforward.
-
-Discipline-specific competitions having a similar structure but with more sophisticated validation criteria within neuroscience have also resulted in important advances. 
+Modeling competitions in neuroscience have resulted in important advances. 
 For example, the quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} addressed the complexity-accuracy tradeoff among reduced models of excitable membranes; 
 the ``Hopfield'' challenge\cite{hopfield_what_2000} asked for neuronal network form, given function; 
 the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity\cite{neural_prediction_url}; the Diadem challenge is advancing the art of neurite reconstruction\cite{diadem_url}; 
 examples from other subfields of biology abound\cite{dream_url}. 
 
-Recognizing that neuroscience contains a wide variety of models that aim to explain phenomena at multiple levels, we leveraged a discipline-agnostic Python framework called \textit{SciUnit}\cite{sciunit_url} to create tools for testing neuroscience models and associated tests.  The result is \textit{NeuroUnit}, which extends \textit{SciUnit} into neuroscience by supporting the testing of models described using \textit{NeuroML}, the construction of test logic using \textit{NeuroTools} \cite{neurotools_url}, and employing a test ``answer key" using electrophysiology data from the \textit{NeuroElectro Project} \cite{neuroelectro_url}.  In addition to this open testing framework we also provide a library of tests for models of spiking single neurons.  
-
-% Section 2.
-\section{Fundamentals of Testing}
-\vspace{-12px}
 \begin{wrapfigure}{r}{0.6\textwidth}
 \vspace{-38px}
 \includegraphics[scale=0.75]{sciunit_overview.pdf}
@@ -96,8 +86,10 @@ Test suites for OSB and QSNMC (described in the text) are being built.
 \end{wrapfigure}
 \leavevmode
 \vspace{-0px}
+Recognizing that neuroscience contains a wide variety of models that aim to explain phenomena at multiple levels, we leveraged a discipline-agnostic Python framework called \textit{SciUnit}\cite{sciunit_url} to create tools for testing neuroscience models and associated tests.  The result is \textit{NeuroUnit}, which extends \textit{SciUnit} into neuroscience by supporting the testing of models described using \textit{NeuroML}, the construction of test logic using \textit{NeuroTools} \cite{neurotools_url}, and employing a test ``answer key" using electrophysiology data from the \textit{NeuroElectro Project} \cite{neuroelectro_url}.  In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
 
-The \textit{SciUnit} framework is organized around simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation. 
+% Section 2.
+\section{Implementation of Testing}
 
 \begin{figure}
 \small
@@ -136,8 +128,8 @@ class SpikeCountTest(sciunit.Test):
 \vspace{-15px}
 \end{figure}
 
-\subsection{Example: Neural Membrane Potential Dynamics} To clarify the basic ideas, we begin by describing a test suite related to single-neuron neurophysiology. 
-The tests in this suite are designed for experiments where stimuli are delivered to neurons of a particular type, as somatically injected current (in pA), while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
+Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  We begin by describing abstractly the outlines of a test suite related to single-neuron neurophysiology. 
+Suppose that the tests in this suite are designed for experiments where stimuli are delivered to neurons as somatically injected current (in pA), while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
 A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
 One simple validation test would ask candidate models to predict the number of action potentials generated in response to a series of stimuli, and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials with the same stimuli. 
@@ -153,9 +145,9 @@ Importantly, the validation criteria in each case are made explicit by the speci
 Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative test suites. 
 In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
 
-Fig. \ref{fig:rate_test} shows how a scientist would implement the spike count test described in the preceding section using \textit{SciUnit}. 
+Fig. \ref{fig:rate_test} shows how a scientist would implement the spike count test described above using \textit{SciUnit}. 
 A \textit{SciUnit} validation test is an {instance} of a Python class implementing the \verbx{sciunit.Test} interface. 
-Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor (in Python, the constructor is always named \verbx{__init__}; the parameters' meaning is documented on lines 5-8). 
+Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor; the parameters' meaning is documented on lines 5-8). 
 For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
 For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows:
@@ -163,8 +155,8 @@ For example, given observations from hippocampal CA1 cells (not shown), we can i
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{python}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test. 
-As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their field so that test generation for a particular system of interest will often consist simply of instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron tests like the \verbx{SpikeCountTest}, we have developed a library to facilitate development (Sec. \ref{sec:neuronunit}). 
+As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often consist simply of instantiating a previously-developed family with particular experimental parameters and data. 
+For single-neuron tests like the \verbx{SpikeCountTest}, we have developed a library \cite{neurounit_url} to facilitate development (Sec. \ref{sec:neuronunit}). 
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{run_test} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
 To specify the interface between the test and the model (that is, to constrain the test's scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
