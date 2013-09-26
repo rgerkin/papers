@@ -43,14 +43,13 @@ right  = 1in]{geometry}
 \begin{document}
 
 \section{Abstract}
-Rigorously validating a scientific model’s explanatory power requires comparing its predictions against empirical data -- both data available during model development and data gathered after publication. 
-However, model validation remains an informal and incomplete process, especially in neuroscience.   
-This makes it difficult to evaluate a model's strengths and weaknesses, or to adequately compare two models.
+Rigorously validating a scientific model's explanatory power requires comparing its predictions against empirical data on an ongoing basis. 
+However, model validation remains an informal and incomplete process, especially in fields, like neuroscience, where the available data is growing rapidly.   
+This makes it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models to determine the state-of-the-art, and to precisely identify open modeling problems.
 
-Here we describe a model-testing library for neuroscience that draws inspiration from ``unit tests'', a common form of software testing that validates a single component of a computer program against a single correctness criterion. 
-This is realized by using the \textit{SciUnit} Python framework for analogous ``model validation tests'' -- 
-executable functions validating models against an empirical observation by producing a score indicating model/data agreement. 
-We applied this framework to neuroscience to produce \textit{NeuroUnit}, a library for test construction in neuroscience, and a repository of useful tests.  
+Software engineers validate software by developing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. Suites of such unit tests that collectively capture the desired program behavior provide evidence for its validity and correctness. Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
+executable functions, here written in Python, that compare model predictions against single empirical observations to  produce a score indicating agreement between the model and the data. Suites of such validation tests are used as a summary of modeling progress within a scientific community. 
+Using this framework, we develop \textit{NeuroUnit}, a library that aids validation testing in neuroscience\todo{neurophys specifically?}.
 
 % Section 1.
 \section{Introduction}
