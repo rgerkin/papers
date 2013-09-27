@@ -1,0 +1,44 @@
+\documentclass[12pt]{article}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{bibentry}
+
+\begin{document}
+
+Computational neuroscience produces models that can help to explain empirical data. 
+Empirical and theoretical researchers can benefit from resources that facilitate discovery of these models and the data that informs both these and future models.   
+
+First, there are databases of computational models and model parts.  
+The BioModels database (\url{http://www.ebi.ac.uk/biomodels-main}) is a general repository of computational models of biological processes.  
+The SenseLab database, ModelDB, (\cite{migliore_modeldb_2003},\url{http://senselab.med.yale.edu/modeldb}) compiles user-submitted computational models developed specifically for simulating the electrophysiological and neurochemical properties of single neurons and networks of neurons (e.g., multi-compartment Hodgkin-Huxley type conductance based models \cite{hodgkin_quantitative_1952}). 
+The Physiome Model Repository \url{http://www.cellml.org/tools/pmr} is a software suite that facilitates storage and management of models, focusing on those described in CellML, a standard markup language for biological models. 
+Similarly, OpenSourceBrain (\url{http://www.opensourcebrain.org/}) is a community platform for collaborative development of computational neuron and network models that utilizes open standards such as NeuroML \cite{gleeson_neuroml:_2010} to facilitate interoperability and visualization of neuroscience models developed by different researchers. 
+
+Second, there are databases containing structured information specific to neurons and their properties. 
+For example, information on the detailed shapes of neurons (i.e., their morphology) is being compiled by NeuroMorpho \url{http://neuromorpho.org} which contains user-submitted neuron morphological reconstructions made using the NeuroLucida format \cite{glaser_neuron_1990}. 
+Measured electrophysiological properties of neuron types, and the metadata associated with these measurements, is catalogued in the NeuroElectro Project \url{http://neuroelectro.org}.  
+Similarly, other SenseLab databases, including NeuronDB and CellPropDB (\cite{crasto_senselab:_2007},\url{http://senselab.med.yale.edu/NeuronDB/}), contain information on the ionic currents and neurotransmitters expressed by each neuron and how these are distributed with respect to neuronal morphology. 
+Detailed information on ion channel subtypes, including voltage and temporal dynamics, genetic homology, and corresponding literature references is being compiled by Channelpedia (\cite{ranjan_channelpedia:_2011},\url{http://channelpedia.net/‎}), a subproject within the Blue Brain Project \citep{markram_blue_2006}. 
+
+Third, there are databases focusing on the anatomical organization of the brain.  
+BrainInfo (\url{http://braininfo.rprc.washington.edu}) provides general information about brain areas, including what they do, where they are located, and what they contain.  
+The Allen Institute for Brain Sciences provides brain-wide gene expression atlases, where the expression of each of the genes in the mammalian genome has been systematically quantified throughout the brain for a number of animal species and across stages of neural development (\cite{lein_genome-wide_2007}, \url{http://brain-map.org}). 
+Similarly, the Allen Institute also provides information on the anatomical connectivity of different brain regions.
+Parallel to this effort is The Human Connectome Project (\url{http://www.humanconnectomeproject.org}), a large-scale effort to map complete structural and functional neural connections \textit{in vivo} in individual humans. 
+BrainMap (\url{http://www.brainmap.org}) consists of a database and related software to search published functional and structural human neuroimaging experiments.  
+CoCoMac (\url{http://cocomac.g-node.org}), in contrast, is focused on the primate brain, containing records of tracing studies in the macaque. 
+The Brain Architecture Management System (BAMS, \cite{bota_brain_2005}, \url{http://brancusi1.usc.edu}) contains neural connectivity information across species that has been manually curated from the existing research literature.  
+Finally, Cell Centered Database (\url{http://ccdb.ucsd.edu}) focuses on images from light and electron microscopy, ranging from whole brain areas to subcellular compartments.  
+
+In addition to these neuroscience domain-specific databases are uber-databases that provide linking facilities for cross-resource data integration. 
+For example, NeuroLex (\cite{larson_neurolex.org:_2013},\url{http://neurolex.org}), provides a platform for community annotation of neuron types on the basis of morphological, neurochemical, or electrophysiological properties. 
+Given this wealth of neuroscience resources, the Neuroscience Information Framework (NIF, \cite{gardner_neuroscience_2008},\url{http://www.neuinfo.org}), provides tools for semantically searching across these diverse databases through the development and incorporation of neuroscience domain-specific ontologies \cite{bug_nifstd_2008,larson_ontologies_2009,hamilton_ontological_2012,imam_development_2012}. 
+For example, in NIF, the search query ``mitral cell" returns a number of database records including relevant research literature from PubMed, computational models from ModelDB, and connectivity information from BAMS.  
+
+The number and size of these database continues to grow with the collection and contribution of ever more models and data.  
+These databases give computational neuroscientists a powerful tool for constraining data-driven models and serve as an alternative to conventional literature searches.  
+
+\bibliographystyle{plainnat}
+\nobibliography{shreejoy}
+
+\end{document}
