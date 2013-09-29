@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2011)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Paper.aux
+The style file: unsrt.bst
+Database file #1: references.bib
+Database file #2: references_crook.bib
+Database file #3: urls.bib
+Database file #4: references_ja.bib
+Warning--I didn't find a database entry for "tdd"
+Warning--I didn't find a database entry for "neurotools_url"
+You've used 40 entries,
+            1791 wiz_defined-function locations,
+            669 strings with 10341 characters,
+and the built_in function-call counts, 6419 in all, are:
+= -- 470
+> -- 333
+< -- 0
++ -- 134
+- -- 94
+* -- 389
+:= -- 875
+add.period$ -- 78
+call.type$ -- 40
+change.case$ -- 13
+chr.to.int$ -- 0
+cite$ -- 40
+duplicate$ -- 256
+empty$ -- 784
+format.name$ -- 94
+if$ -- 1476
+int.to.chr$ -- 0
+int.to.str$ -- 40
+missing$ -- 15
+newline$ -- 161
+num.names$ -- 14
+pop$ -- 167
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 250
+stack$ -- 0
+substring$ -- 273
+swap$ -- 40
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 35
+width$ -- 42
+write$ -- 305
+(There were 2 warnings)

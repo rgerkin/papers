@@ -1,0 +1,183 @@
+\begin{thebibliography}{10}
+
+\bibitem{jolivet_quantitative_2008}
+Renaud Jolivet, Felix Schürmann, Thomas Berger, Richard Naud, Wulfram
+  Gerstner, and Arnd Roth.
+\newblock The quantitative single-neuron modeling competition.
+\newblock {\em Biological Cybernetics}, 99(4):417--426, November 2008.
+
+\bibitem{hopfield_what_2000}
+J~J Hopfield and C~D Brody.
+\newblock What is a moment? {"Cortical"} sensory integration over a brief
+  interval.
+\newblock {\em Proceedings of the National Academy of Sciences of the United
+  States of America}, 97(25):13919--13924, December 2000.
+\newblock {PMID:} 11095747.
+
+\bibitem{neural_prediction_url}
+\url{http://neuralprediction.berkeley.edu/}.
+
+\bibitem{diadem_url}
+\url{http://www.diademchallenge.org}.
+
+\bibitem{dream_url}
+\url{http://www.the-dream-project.org/}.
+
+\bibitem{sciunit_url}
+\url{http://github.com/scidash/sciunit}.
+
+\bibitem{neuroelectro_url}
+\url{http://www.neuroelectro.org/}.
+
+\bibitem{fisher_statistical_1925}
+Ronald~A Fisher.
+\newblock {\em Statistical Methods for Research Workers}.
+\newblock Oliver and Boyd, Edinburgh, 1925.
+
+\bibitem{numpy_url}
+\url{http://www.numpy.org/}.
+
+\bibitem{scipy_url}
+\url{http://www.scipy.org/}.
+
+\bibitem{neurounit_url}
+\url{http://github.com/scidash/neurounit}.
+
+\bibitem{java_interfaces_url}
+\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}.
+
+\bibitem{gleeson_neuroml:_2010}
+Padraig Gleeson, Sharon Crook, Robert~C Cannon, Michael~L Hines, Guy~O
+  Billings, Matteo Farinella, Thomas~M Morse, Andrew~P Davison, Subhasis Ray,
+  Upinder~S Bhalla, Simon~R Barnes, Yoana~D Dimitrova, and R~Angus Silver.
+\newblock {NeuroML:} a language for describing data driven models of neurons
+  and networks with a high degree of biological detail.
+\newblock {\em {PLoS} computational biology}, 6(6):e1000815, June 2010.
+\newblock {PMID:} 20585541.
+
+\bibitem{neuroconstruct_url}
+\url{http://www.neuroconstruct.org}.
+
+\bibitem{gleeson_neuroconstruct:_2007}
+Padraig Gleeson, Volker Steuber, and R~Angus Silver.
+\newblock {neuroConstruct:} a tool for modeling networks of neurons in {3D}
+  space.
+\newblock {\em Neuron}, 54(2):219--235, April 2007.
+\newblock {PMID:} 17442244.
+
+\bibitem{osb_url}
+\url{http://www.opensourcebrain.org}.
+
+\bibitem{neuron_url}
+\url{http://www.neuron.yale.edu/neuron}.
+
+\bibitem{genesis_url}
+\url{http://genesis-sim.org/}.
+
+\bibitem{nest_url}
+\url{http://www.nest-initiative.org/}.
+
+\bibitem{moose_url}
+\url{http://moose.ncbs.res.in/}.
+
+\bibitem{osb_ca1_url}
+\url{http://opensourcebrain.org/projects/ca1pyramidalcell}.
+
+\bibitem{neuroconstruct_rgerkin_url}
+\url{http://github.com/rgerkin/neuroConstruct}.
+
+\bibitem{neuralensemble_url}
+\url{http://neuralensemble.org}.
+
+\bibitem{tripathy_neuroelectro:_2012}
+{SJ} Tripathy, J~Saviskaya, {RC} Gerkin, and {NN} Urban.
+\newblock {NeuroElectro:} a database describing the electrophysiology
+  properties of different neuron types.
+\newblock {\em Neuroinformatics Meeting}, 2012.
+
+\bibitem{neuroelectro_dev_url}
+\url{http://bitbucket.org/rgerkin/neuroelectro_org}.
+
+\bibitem{scidash_url}
+\url{http://www.scidash.org}.
+
+\bibitem{ram_git_2013}
+Karthik Ram.
+\newblock Git can facilitate greater reproducibility and increased transparency
+  in science.
+\newblock {\em Source code for biology and medicine}, 8(1):7, 2013.
+\newblock {PMID:} 23448176.
+
+\bibitem{github_url}
+\url{http://www.neuron.yale.edu/neuron}.
+
+\bibitem{sbml_url}
+\url{http://sbml.org/}.
+
+\bibitem{hucka_systems_2003}
+M~Hucka, A~Finney, H~M Sauro, H~Bolouri, J~C Doyle, H~Kitano, A~P Arkin, B~J
+  Bornstein, D~Bray, A~Cornish-Bowden, A~A Cuellar, S~Dronov, E~D Gilles,
+  M~Ginkel, V~Gor, I~I Goryanin, W~J Hedley, T~C Hodgman, J-H Hofmeyr, P~J
+  Hunter, N~S Juty, J~L Kasberger, A~Kremling, U~Kummer, N~Le~Novère, L~M
+  Loew, D~Lucio, P~Mendes, E~Minch, E~D Mjolsness, Y~Nakayama, M~R Nelson, P~F
+  Nielsen, T~Sakurada, J~C Schaff, B~E Shapiro, T~S Shimizu, H~D Spence,
+  J~Stelling, K~Takahashi, M~Tomita, J~Wagner, J~Wang, and {{SBML} Forum}.
+\newblock The systems biology markup language ({SBML):} a medium for
+  representation and exchange of biochemical network models.
+\newblock {\em Bioinformatics (Oxford, England)}, 19(4):524--531, March 2003.
+\newblock {PMID:} 12611808.
+
+\bibitem{kriegeskorte_representational_2008}
+Nikolaus Kriegeskorte, Marieke Mur, and Peter Bandettini.
+\newblock Representational similarity analysis - connecting the branches of
+  systems neuroscience.
+\newblock {\em Frontiers in systems neuroscience}, 2:4, 2008.
+\newblock {PMID:} 19104670.
+
+\bibitem{button_power_2013}
+Katherine~S Button, John P~A Ioannidis, Claire Mokrysz, Brian~A Nosek, Jonathan
+  Flint, Emma S~J Robinson, and Marcus~R Munafò.
+\newblock Power failure: why small sample size undermines the reliability of
+  neuroscience.
+\newblock {\em Nature reviews. Neuroscience}, 14(5):365--376, May 2013.
+\newblock {PMID:} 23571845.
+
+\bibitem{kriegeskorte_circular_2009}
+Nikolaus Kriegeskorte, W~Kyle Simmons, Patrick S~F Bellgowan, and Chris~I
+  Baker.
+\newblock Circular analysis in systems neuroscience: the dangers of double
+  dipping.
+\newblock {\em Nature neuroscience}, 12(5):535--540, May 2009.
+\newblock {PMID:} 19396166.
+
+\bibitem{galbraith_study_2010}
+Sally Galbraith, James~A. Daniel, and Bryce Vissel.
+\newblock A study of clustered data and approaches to its analysis.
+\newblock {\em The Journal of Neuroscience}, 30(32):10601--10608, August 2010.
+\newblock {PMID:} 20702692.
+
+\bibitem{fish_fmri_url}
+\url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg/}.
+
+\bibitem{mccabe_complexity_1976}
+{TJ} {McCabe}.
+\newblock A complexity measure.
+\newblock {\em {IEEE} Transactions on Software Engineering}, 2(4):308--320,
+  1976.
+
+\bibitem{schmidt_distilling_2009}
+Michael Schmidt and Hod Lipson.
+\newblock Distilling free-form natural laws from experimental data.
+\newblock {\em Science (New York, {N.Y.)}}, 324(5923):81--85, April 2009.
+\newblock {PMID:} 19342586.
+
+\bibitem{nibabel_url}
+\url{http://nipy.org/nibabel}.
+
+\bibitem{neurohdf_url}
+\url{http://neurohdf.readthedocs.org}.
+
+\bibitem{open_worm_url}
+\url{http://www.openworm.org/}.
+
+\end{thebibliography}
