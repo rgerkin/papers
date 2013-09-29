@@ -43,37 +43,35 @@ right  = 1in]{geometry}
 \begin{document}
 
 \section{Abstract}
-Rigorously validating a scientific model’s explanatory power requires comparing its predictions against empirical data -- both data available during model development and data gathered after publication. 
-However, model validation remains an informal and incomplete process, especially in neuroscience.   
-This makes it difficult to evaluate a model's strengths and weaknesses, or to adequately compare two models.
+Rigorously validating a scientific model's explanatory power requires comparing its predictions against empirical data on an ongoing basis. 
+However, model validation remains an informal and incomplete process, especially in fields, like neuroscience, where the available data is growing rapidly.   
+This makes it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models to determine the state-of-the-art, and to precisely identify open modeling problems.
 
-Here we describe a model-testing library for neuroscience that draws inspiration from ``unit tests'', a common form of software testing that validates a single component of a computer program against a single correctness criterion. 
-This is realized by using the \textit{SciUnit} Python framework for analogous ``model validation tests'' -- 
-executable functions validating models against an empirical observation by producing a score indicating model/data agreement. 
-We applied this framework to neuroscience to produce \textit{NeuroUnit}, a library for test construction in neuroscience, and a repository of useful tests.  
+Software engineers validate software by developing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. Suites of such unit tests that collectively capture the desired program behavior provide evidence for its validity and correctness. Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
+executable functions, here written in Python, that compare model predictions against single empirical observations to  produce a score indicating agreement between the model and the data. Suites of such validation tests are used as a summary of modeling progress within a scientific community. 
+Using this framework, we develop \textit{NeuroUnit}, a library that aids validation testing in neuroscience\todo{neurophys specifically?}.
 
 % Section 1.
 \section{Introduction}
-Neuroscientists construct quantitative models to explain observations about neurons, circuits, and brains in a coherent and rigorous manner. 
-These models are characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}, the extent to which these predictions agree with empirical observations of those quantities. 
-As the quantity of models and empirical data in neuroscience proliferates, it is increasingly challenging to efficiently discover models whose scope is of interest and to then assess their validity against this mountain of data. 
+Neuroscientists construct quantitative models to explain observations about neurons, circuits, brain regions and behavior in a coherent and rigorous manner. 
+These models are characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}: the extent to which these predictions agree with empirical observations of those quantities. 
+As the number of models and the volume of empirical data in neuroscience increases, it has become a challenge to efficiently and exhaustively discover models that relate to a system of interest and to comparatively assess their  validity against  growing mountains of data. This is because today, modelers contribute their results to the community by publishing the technical details of a new model along with a few selected demonstrations that they predict some observable quantities better than previous models do. Unfortunately, these demonstrations are necessarily incomplete, they naturally tend to serve the goals of authors rather than readers, they quickly go out of date and there is no easy way to summarize and compare the claims being made across modeling papers in order to synthesize an understanding of a research area as a whole. 
+%Indeed, requiring exhaustive comparisons to all existing models and data would make publications encyclopedic and obscure their main points. Similarly, it is unrealistic to expect that publications containing new data exhaustively evaluate how they affect the validity of previously-developed models. 
+A strength of publications are their focused descriptions of new data and models. 
+A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
 
-Neuroscience models are traditionally described in publications. 
-Although authors may refer to some relevant experimental data and alternative models, these comparisons are incomplete and tend to serve the goals of authors rather than readers. 
-However, making exhaustive comparisons to existing models and data would make such publications encyclopedic and obscure their main points. 
-Thus, a strength of publication is its focused description of \textit{how} a model works and its conceptual advances. 
-A weakness, however, is that evaluating the scope and validity of a model is intractable using a publication alone. 
-This problem is exacerbated post-pubication as new data is rarely compared against existing models, and the original publication -- a resource of first resort for new scientists and onlookers -- is cited ``as-is'' in perpetuity. 	
-The validation of neuroscience models must be formalized to supplement the publication system and provide a straightforward way to determine how well models do what they claim to do.  
+In professional software development, software is not validated simply by trying the program on a few example inputs at one point in its development. Instead, developers often follow a \emph{test-driven development} process by creating a suite of \emph{unit tests} that collectively validate the functionality of a program as it is being developed and modified. Each test is responsible for verifying that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. Collectively, these tests serve as a summary of the validity of the software as it progresses through its development cycle. Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many more tests pass after a given period of time. This methodology has been highly successful in practice \cite{tdd}\todo{cite tdd}.
 
-Modeling competitions in neuroscience have resulted in important advances. 
-For example, the quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} addressed the complexity-accuracy tradeoff among reduced models of excitable membranes; 
+%publications would be analagous to user manuals, rather than rigorous justifications that a program meets a specific specification. Unit tests serve this purpose for software, so we argue that the validation of neuroscience models by means of executable tests would be useful to scientists as a supplement the publication system.
+
+\todo{paragraph transitioning between the previous one and this one???}Test-driven methodologies have started to see success in science as well. Modeling competitions in neuroscience, for example, are typically structured around a collection of simple validation criteria, and these competitions continue to produce important advances and improve scientists' understanding of the state-of-the-art in their research areas. 
+The quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} addressed the complexity-accuracy tradeoff among reduced models of excitable membranes; 
 the ``Hopfield'' challenge\cite{hopfield_what_2000} asked for neuronal network form, given function; 
-the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity\cite{neural_prediction_url}; the Diadem challenge is advancing the art of neurite reconstruction\cite{diadem_url}; 
-examples from other subfields of biology abound\cite{dream_url}. 
+the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity\cite{neural_prediction_url}; the Diadem challenge is advancing the art of neurite reconstruction\cite{diadem_url}; and 
+examples from other subfields of biology also abound\cite{dream_url}.
 
-\begin{wrapfigure}{r}{0.6\textwidth}
-\vspace{-38px}
+\begin{figure}%{r}{0.6\textwidth}
+%\vspace{-38px}
 \includegraphics[scale=0.75]{sciunit_overview.pdf}
 \caption{Proposal overview. 
 \small{i) The \textit{SciUnit} framework can generate discipline-specific libraries for tests generation and model interfacing.  
@@ -81,12 +79,12 @@ examples from other subfields of biology abound\cite{dream_url}.
 Each \text{SciUnit} test suite repository on GitHub is indexed by the \textit{SciDash} web application.  
 Test suites for OSB and QSNMC (described in the text) are being built. 
 \textit{SciDash} automatically runs the test collections in each suite and publicly displays the results.}}
-\vspace{-10px}
+%\vspace{-10px}
 \label{fig:sciunit_overview}
-\end{wrapfigure}
+\end{figure}
 \leavevmode
 \vspace{-0px}
-Recognizing that neuroscience contains a wide variety of models that aim to explain phenomena at multiple levels, we leveraged a discipline-agnostic Python framework called \textit{SciUnit}\cite{sciunit_url} to create tools for testing neuroscience models and associated tests.  The result is \textit{NeuroUnit}, which extends \textit{SciUnit} into neuroscience by supporting the testing of models described using \textit{NeuroML}, the construction of test logic using \textit{NeuroTools} \cite{neurotools_url}, and employing a test ``answer key" using electrophysiology data from the \textit{NeuroElectro Project} \cite{neuroelectro_url}.  In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
+Each of these examples leveraged \emph{ad hoc} infrastructure. Although the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that can be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific model validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework in combination with existing neuroinformatics tools, we developed \textit{NeuronUnit\-}, which allows scientists to build \textit{SciUnit} tests that validate neural models described using the  \text{NeuroML} modeling standard against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}.% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
 
 % Section 2.
 \section{Implementation of Testing}
