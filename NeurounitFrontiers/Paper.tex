@@ -84,7 +84,7 @@ Test suites for OSB and QSNMC (described in the text) are being built.
 \end{figure}
 \leavevmode
 \vspace{-0px}
-Each of these examples leveraged \emph{ad hoc} infrastructure. Although the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that can be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific model validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework in combination with existing neuroinformatics tools, we developed \textit{NeuronUnit\-}, which allows scientists to build \textit{SciUnit} tests that validate neural models described using the  \text{NeuroML} modeling standard against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}.% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
+Each of these examples leveraged \emph{ad hoc} infrastructure. Although the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that can be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific model validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework in combination with existing neuroinformatics tools, we developed \textit{NeuronUnit\-}, which allows scientists to build \textit{SciUnit} tests that validate neural models described using the  \text{NeuroML} modeling standard against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}.\todo{This is what NeuronUnit can do now, but it is not in principle limited to this.  I would rather have this pipeline be described in the results as one thing that is fully implemented, but not limit ourselves to this in the introduciton.}% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons. 
 
 % Section 2.
 \section{Implementation of Testing}
@@ -472,6 +472,9 @@ Community participation begins with enumerating the capabilities relevant to a s
 Model description can expand within NeuroML (which already covers multiple levels within neuroscience) and tools for capability implementation can incorporate libraries for neuroimaging (NiBabel\cite{nibabel_url}), neuroanatomy (NeuroHDF,\cite{neurohdf_url}) and other sub-disciplines. 
 SBML\cite{hucka_systems_2003,sbml_url} will enable expansion beyond neuroscience, facilitated by parallel efforts among NeuroML developers to interface with it (Crook, unpublished). 
 One intriguing possiblity is applying \textit{SciUnit} to the OpenWorm project\cite{open_worm_url}, which through open, collaborative development seeks to model the entire organism C. elegans.  
+
+\section{Acknowledgements}
+This work was supported in part by grant R01MH081905 from the National Institute of Mental Health. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.
 
 \bibliographystyle{unsrt}
 \bibliography{references,references_crook,urls,references_ja}
