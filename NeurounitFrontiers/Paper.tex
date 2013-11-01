@@ -44,23 +44,40 @@ right  = 1in]{geometry}
 
 \section{Abstract}
 Rigorously validating a scientific model's explanatory power requires comparing its predictions against empirical data on an ongoing basis. 
-However, model validation remains an informal and incomplete process, especially in fields, like neuroscience, where the available data is growing rapidly.   
-This makes it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models to determine the state-of-the-art, and to precisely identify open modeling problems.
+However, model validation remains an informal and incomplete process, especially in fields like neuroscience where the available data is growing rapidly.   
+This has made it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models, to determine the state-of-the-art, and to precisely identify open modeling problems.
 
 Software engineers validate software by developing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. Suites of such unit tests that collectively capture the desired program behavior provide evidence for its validity and correctness. Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
 executable functions, here written in Python, that compare model predictions against single empirical observations to  produce a score indicating agreement between the model and the data. Suites of such validation tests are used as a summary of modeling progress within a scientific community. 
-Using this framework, we develop \textit{NeuroUnit}, a library that aids validation testing in neuroscience\todo{neurophys specifically?}.
+Building on this framework, we develop \textit{NeuronUnit}, a library that supports validation testing for neurophysiology\todo{is this accurate?}.
 
 % Section 1.
 \section{Introduction}
-Neuroscientists construct quantitative models to explain observations about neurons, circuits, brain regions and behavior in a coherent and rigorous manner. 
-These models are characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}: the extent to which these predictions agree with empirical observations of those quantities. 
-As the number of models and the volume of empirical data in neuroscience increases, it has become a challenge to efficiently and exhaustively discover models that relate to a system of interest and to comparatively assess their  validity against  growing mountains of data. This is because today, modelers contribute their results to the community by publishing the technical details of a new model along with a few selected demonstrations that they predict some observable quantities better than previous models do. Unfortunately, these demonstrations are necessarily incomplete, they naturally tend to serve the goals of authors rather than readers, they quickly go out of date and there is no easy way to summarize and compare the claims being made across modeling papers in order to synthesize an understanding of a research area as a whole. 
-%Indeed, requiring exhaustive comparisons to all existing models and data would make publications encyclopedic and obscure their main points. Similarly, it is unrealistic to expect that publications containing new data exhaustively evaluate how they affect the validity of previously-developed models. 
-A strength of publications are their focused descriptions of new data and models. 
-A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
+Neuroscientists construct quantitative models to coherently explain a body of observations about neurons, circuits, brain regions and behavior. 
+These models can be characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}: the extent to which these predictions agree with empirical observations of those quantities.
 
-In professional software development, software is not validated simply by trying the program on a few example inputs at one point in its development. Instead, developers often follow a \emph{test-driven development} process by creating a suite of \emph{unit tests} that collectively validate the functionality of a program as it is being developed and modified. Each test is responsible for verifying that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. Collectively, these tests serve as a summary of the validity of the software as it progresses through its development cycle. Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many more tests pass after a given period of time. This methodology has been highly successful in practice \cite{tdd}\todo{cite tdd}.
+Today, modelers contribute a new model to the research community by submitting a paper describing how it works, along with selected figures demonstrating its scope and validity and comparing its validity to other models with the same scope. Reviewers are then responsible for discovering relevant data and competing models that the paper did not adequately consider, relying on their knowledge of the publication history of the field. Unfortunately, in many research areas, the volume of research being published every year is outpacing the abilities of even the most SOMETHING \todo{need good adjective} scientists \todo{citation/stats?}. 
+
+%This suggests that tools that help researchers answer questions like these could help readers and reviewers develop a more comprehensive understanding of the state-of-the-art and improve the quality of the research being published as a result: to renewed calls for tools that help researchers . 
+
+Readers, like reviewers, face similar challenges when attempting to answer fundamental questions like these, given the enormity of the publication history in many fields:
+\begin{itemize}
+\item Which models are capable of predicting the quantities I am interested in?
+\item Which metrics should be used to evaluate the goodness-of-fit between these models and  data?
+\item How well do these models perform, according to these metrics?
+\item What other quantities can these models predict?
+\item What observations are not adequately explained by available models?
+\end{itemize}
+
+%These questions are particularly relevant for young scientists and  scientists aiming to enter a new research area to answer.
+
+%understanding of the state-of-the-art from publications containing only a few pieces of data, and then only that data available at the time of publication. 
+
+%These demonstrations also quickly go out of date. Finally, there is no easy way to summarize and compare the claims being made in modeling papers in order to synthesize an understanding of a research area as a whole. 
+%A strength of publications are their focused descriptions of new data and models. 
+%A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
+
+In professional software development, complex programs are not validated by simply choosing a few interesting inputs and presenting the outputs of the program on these inputs to reviewers. Instead, developers typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that collectively validate the functionality of a program as it is being developed and modified. Each test is responsible for checking that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. Collectively, the test results serve as summary of the validity of the software as it progresses through its development cycle. Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. This methodology is widely adopted and has been highly successful in practice \cite{tdd}\todo{cite tdd}.
 
 %publications would be analagous to user manuals, rather than rigorous justifications that a program meets a specific specification. Unit tests serve this purpose for software, so we argue that the validation of neuroscience models by means of executable tests would be useful to scientists as a supplement the publication system.
 
