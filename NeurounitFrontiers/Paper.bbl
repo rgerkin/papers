@@ -34,12 +34,6 @@ Ronald~A Fisher.
 \newblock {\em Statistical Methods for Research Workers}.
 \newblock Oliver and Boyd, Edinburgh, 1925.
 
-\bibitem{numpy_url}
-\url{http://www.numpy.org/}.
-
-\bibitem{scipy_url}
-\url{http://www.scipy.org/}.
-
 \bibitem{neurounit_url}
 \url{http://github.com/scidash/neurounit}.
 

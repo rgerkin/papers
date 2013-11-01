@@ -53,20 +53,20 @@ Building on this framework, we develop \textit{NeuronUnit}, a library that suppo
 
 % Section 1.
 \section{Introduction}
-Neuroscientists construct quantitative models to coherently explain a body of observations about neurons, circuits, brain regions and behavior. 
+Neuroscientists construct quantitative models to coherently explain observations of neurons, circuits, brain regions and behavior. 
 These models can be characterized by their \textit{scope}: the set of observable quantities that the model can generate predictions about, and by their \textit{validity}: the extent to which these predictions agree with empirical observations of those quantities.
 
-Today, modelers contribute a new model to the research community by submitting a paper describing how it works, along with selected figures demonstrating its scope and validity and comparing its validity to other models with the same scope. Reviewers are then responsible for discovering relevant data and competing models that the paper did not adequately consider, relying on their knowledge of the publication history of the field. Unfortunately, in many research areas, the volume of research being published every year is outpacing the abilities of even the most SOMETHING \todo{need good adjective} scientists \todo{citation/stats?}. 
+Today, scientists contribute a new model to the research community by submitting a paper describing how the model works, along with selected figures demonstrating its scope and validity and comparing its validity to other models with the same scope. Reviewers are then responsible for discovering relevant data and competing models that the paper did not adequately consider, drawing on their knowledge of prior publications. Unfortunately, in many areas, the number of publications being generated every year can overwhelm  even the most conscientious  scientists \todo{citation/stats?}. 
 
 %This suggests that tools that help researchers answer questions like these could help readers and reviewers develop a more comprehensive understanding of the state-of-the-art and improve the quality of the research being published as a result: to renewed calls for tools that help researchers . 
 
-Readers, like reviewers, face similar challenges when attempting to answer fundamental questions like these, given the enormity of the publication history in many fields:
+Unfortunately, there are few alternatives to a comprehensive literature review available when scientists need to answer questions like these:
 \begin{itemize}
 \item Which models are capable of predicting the quantities I am interested in?
 \item Which metrics should be used to evaluate the goodness-of-fit between these models and  data?
-\item How well do these models perform, according to these metrics?
-\item What other quantities can these models predict?
-\item What observations are not adequately explained by available models?
+\item How well do these models perform, as judged to these metrics, given currently available data?
+\item What other quantities can and can't these models predict?
+\item What observations are not adequately explained by any available model?
 \end{itemize}
 
 %These questions are particularly relevant for young scientists and  scientists aiming to enter a new research area to answer.
@@ -77,35 +77,45 @@ Readers, like reviewers, face similar challenges when attempting to answer funda
 %A strength of publications are their focused descriptions of new data and models. 
 %A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
 
-In professional software development, complex programs are not validated by simply choosing a few interesting inputs and presenting the outputs of the program on these inputs to reviewers. Instead, developers typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that collectively validate the functionality of a program as it is being developed and modified. Each test is responsible for checking that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. Collectively, the test results serve as summary of the validity of the software as it progresses through its development cycle. Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. This methodology is widely adopted and has been highly successful in practice \cite{tdd}\todo{cite tdd}.
+Professional software developers face similar issues. They must understand the scope of each component of a software project and validate it by measuring how well each component achieves its stated goals. But software developers do not validate components by simply choosing a few interesting inputs and presenting the outputs to reviewers. Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that collectively specify the scope of each component and validate the functionality of its implementation as it is being developed and modified. Each test individually checks that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. Collectively, the test results serve as a summary of the validity of the project as it progresses through its development cycle. Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. This methodology is widely adopted in practice \cite{tdd}\todo{cite tdd}.
 
 %publications would be analagous to user manuals, rather than rigorous justifications that a program meets a specific specification. Unit tests serve this purpose for software, so we argue that the validation of neuroscience models by means of executable tests would be useful to scientists as a supplement the publication system.
 
-\todo{paragraph transitioning between the previous one and this one???}Test-driven methodologies have started to see success in science as well. Modeling competitions in neuroscience, for example, are typically structured around a collection of simple validation criteria, and these competitions continue to produce important advances and improve scientists' understanding of the state-of-the-art in their research areas. 
-The quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} addressed the complexity-accuracy tradeoff among reduced models of excitable membranes; 
-the ``Hopfield'' challenge\cite{hopfield_what_2000} asked for neuronal network form, given function; 
+Test-driven methodologies have started to see success in science as well. Modeling competitions in neuroscience, for example, are typically organized around a collection of simple validation criteria, implemented as executable tests. These competitions continue to drive important advances and improve scientists' understanding of the relative merits of different models. For example, 
+the quantitative single neuron modeling competition (QSNMC)\cite{jolivet_quantitative_2008} investigates the complexity-accuracy tradeoff among reduced models of excitable membranes; 
+the ``Hopfield'' challenge\cite{hopfield_what_2000} tested techniques for generating neuronal network form given its function; 
 the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity\cite{neural_prediction_url}; the Diadem challenge is advancing the art of neurite reconstruction\cite{diadem_url}; and 
-examples from other subfields of biology also abound\cite{dream_url}.
+examples from other subfields of biology abound\cite{dream_url}.
 
-\begin{figure}%{r}{0.6\textwidth}
-%\vspace{-38px}
-\includegraphics[scale=0.75]{sciunit_overview.pdf}
-\caption{Proposal overview. 
-\small{i) The \textit{SciUnit} framework can generate discipline-specific libraries for tests generation and model interfacing.  
-\textit{NeuronUnit} is proposed and described here.  Experimental data guides test development; model generation informs and is informed by these \textit{SciUnit} libraries.  
-Each \text{SciUnit} test suite repository on GitHub is indexed by the \textit{SciDash} web application.  
-Test suites for OSB and QSNMC (described in the text) are being built. 
-\textit{SciDash} automatically runs the test collections in each suite and publicly displays the results.}}
-%\vspace{-10px}
+% \begin{figure}%{r}{0.6\textwidth}
+% %\vspace{-38px}
+% \includegraphics[scale=0.75]{sciunit_overview.pdf}
+% \caption{Proposal overview. 
+% \small{i) The \textit{SciUnit} framework can generate discipline-specific libraries for tests generation and model interfacing.  
+% \textit{NeuronUnit} is proposed and described here.  Experimental data guides test development; model generation informs and is informed by these \textit{SciUnit} libraries.  
+% Each \text{SciUnit} test suite repository on GitHub is indexed by the \textit{SciDash} web application.  
+% Test suites for OSB and QSNMC (described in the text) are being built. 
+% \textit{SciDash} automatically runs the test collections in each suite and publicly displays the results.}}
+% %\vspace{-10px}
+% \label{fig:sciunit_overview}
+% \end{figure}
+% \leavevmode
+% \vspace{-0px}
+\begin{figure}
+\vspace{-38px}
+\includegraphics[scale=0.5]{diagram1.pdf}
+\vspace{-25px}
+\caption{Paper overview.}
 \label{fig:sciunit_overview}
 \end{figure}
 \leavevmode
 \vspace{-0px}
-Each of these examples leveraged \emph{ad hoc} infrastructure. Although the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that can be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific model validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework in combination with existing neuroinformatics tools, we developed \textit{NeuronUnit\-}, which allows scientists to build \textit{SciUnit} tests that validate neural models described using the  \text{NeuroML} modeling standard against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}.\todo{This is what NeuronUnit can do now, but it is not in principle limited to this.  I would rather have this pipeline be described in the results as one thing that is fully implemented, but not limit ourselves to this in the introduciton.}% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons. 
+
+Each of these examples has leveraged \emph{ad hoc} infrastructure to support test generation. While the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that could be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework and show how it can be used to bridge several existing neuroinformatics tools, we then  developed \textit{NeuronUnit\-}. This library allows scientists to build \textit{SciUnit} tests that validate \text{NeuroML}  models against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}\todo{refer to and describe figure 1}.% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
 
 % Section 2.
-\section{Implementation of Testing}
-
+\section{Validation Testing with \textit{SciUnit}}
+\subsection{Example: Quantitative Single Neuron Modeling Competition}
 \begin{figure}
 \small
 \begin{python}
@@ -132,53 +142,52 @@ class SpikeCountTest(sciunit.Test):
     p = scipy.stats.chi2.cdf(chisquared,n-1) # An array of p-values.  
     pooled_p = sciunit.utils.fisherp(p_array) # A pooled p-value.  
     return sciunit.PValue(pooled_p, related_data={
-      "inputs": input_current,
-      "obs_means": means,
-      "obs_stds": stds
+      "inputs": inputs, "counts": counts, "obs_means": means, "obs_stds": stds
     })
 \end{python}
 \vspace{-5px}
-\caption{A single neuron spike count test family implemented in \textit{SciUnit}}
+\caption{A single neuron spike count test family implemented using \textit{SciUnit}. This family contains logic common to many different domains, so it is distributed in the \textit{NeuronUnit} repository (see Sec. \ref{sec:neuronunit}).}
 \label{fig:rate_test}
 \vspace{-15px}
 \end{figure}
 
-Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  We begin by describing abstractly the outlines of a test suite related to single-neuron neurophysiology. 
-Suppose that the tests in this suite are designed for experiments where stimuli are delivered to neurons as somatically injected current (in pA), while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
+%Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  
+We begin by constructing an example validation test suite. 
+Suppose we have collected data from an experiment where current stimuli (measured in pA) are delivered to neurons in some brain region, while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
 A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
-One simple validation test would ask candidate models to predict the number of action potentials generated in response to a series of stimuli, and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials with the same stimuli. 
-The test creator is responsible for specifying how to measure the goodness-of-fit; 
-for example, a p-value derived from a chi-squared statistic could be calculated for each prediction and then these p-values could be combined using Fisher's method\cite{fisher_statistical_1925}.
+One simple validation test would ask candidate models to predict the number of action potentials generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials with the same stimulus. 
+Goodness-of-fit can be measured in different ways. Each test makes a choice about  how goodness-of-fit is measured. In our example, we will calculate a p-value derived from a chi-squared statistic for each prediction and then combine these p-values using Fisher's method\cite{fisher_statistical_1925}. Importantly, the validation criteria is made explicit by the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
+Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. A community consensus will emerge in the form a common test suite (see Sec. \ref{sec:scidash}).
 
 Alongside this \emph{spike count test}, a number of other tests capturing different features of the data could be specified to produce a more comprehensive suite. 
 For data of this sort, the QSNMC defined 17 other validation criteria in addition to one based on the overall spike count, capturing features like spike latencies (SL), mean subthreshold voltage (SV), interspike intervals (ISI) and interspike minima (ISM) that can be extracted from the data\cite{jolivet_quantitative_2008}. 
 They then defined a combined metric favoring models that broadly succeeded at meeting these criteria, to produce an overall ranking. 
 Such combined criteria are simply validation tests that invoke other tests to produce a result.
-
-Importantly, the validation criteria in each case are made explicit by the specification of a test suite, so modelers need not guess which criteria are being used to validate or invalidate their model. 
-Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative test suites. 
-In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
-
+ 
+%In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
+\subsection{Implementing a Validation Test in \textit{SciUnit}}
 Fig. \ref{fig:rate_test} shows how a scientist would implement the spike count test described above using \textit{SciUnit}. 
 A \textit{SciUnit} validation test is an {instance} of a Python class implementing the \verbx{sciunit.Test} interface. 
-Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor; the parameters' meaning is documented on lines 5-8). 
-For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
+Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor. The meaning of each parameter along with the goodness-of-fit metric used by the test is documented on lines 5-8. 
+%For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
 For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{python}
-We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test. 
+We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the parameters above, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often consist simply of instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron tests like the \verbx{SpikeCountTest}, we have developed a library \cite{neurounit_url} to facilitate development (Sec. \ref{sec:neuronunit}). 
+For single-neuron test families like \verbx{SpikeCountTest}, we have developed a library called \textit{NeuronUnit} \cite{neurounit_url} (Sec. \ref{sec:neuronunit}). 
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{run_test} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
-To specify the interface between the test and the model (that is, to constrain the test's scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
+To specify the interface between the test and the model (that is, to specify what must be in a model's scope for it to be eligible to even take the test), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
 Capabilities are simply collections of methods that a test may need to invoke to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java \cite{java_interfaces_url}. 
 In Python, they are written as classes with unimplemented members. 
 The capability required by the test in Fig. \ref{fig:rate_test} (used on line 19) is shown in Fig. \ref{fig:capability}. 
-In \textit{SciUnit}, classes defining capabilities be tagged by inheriting from \verbx{sciunit.Capability}, and discovered automatically (Figs. \ref{fig:capability},\ref{fig:training}). 
+In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction. The remainder of the \verbx{run_test} method implements the goodness-of-fit test described above, returning an instance of \verbx{sciunit.PValue} which is a subclass of \verbx{sciunit.Score}. In addition to the score itself, the returned score object also contains metadata of use to those wishing to examine the result in detail. 
+In this case we saved the inputs, model outputs and observed means and standard deviations alongside the score by using the \verbx{related_data} parameter. 
+We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
 
 \begin{figure}
 \begin{python}
@@ -242,14 +251,6 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
 \label{fig:simple_model}
 \vspace{-15px}
 \end{figure}
-
-In the test in Fig. \ref{fig:rate_test}, the \verbx{run_test} method simply calls the \verbx{spike_count_from_current} capability method to produce spike count predictions for each input current on line 18. 
-There are many possibly statistical choices for deriving a test score.  
-In the figure, the resulting spike count is compared to the empirical mean to produce a chi-squared statistic, and ultimately a p-value. 
-Alternatively, the array of standard deviations (line 10) could be used to derive a Z-score.  
-In addition to the score itself, the returned score object also contains metadata of use to those wishing to examine the result in detail. 
-In this test we saved the inputs and observed means and standard deviations alongside the score by using the \verbx{related_data} parameter. 
-We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
 
 Finally, a test is executed against a model instance, using the \verbx{sciunit.judge} function:
 \begin{python}
