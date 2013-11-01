@@ -7,45 +7,45 @@ Database file #2: references_crook.bib
 Database file #3: urls.bib
 Database file #4: references_ja.bib
 Warning--I didn't find a database entry for "tdd"
-You've used 40 entries,
+You've used 38 entries,
             1791 wiz_defined-function locations,
-            668 strings with 10327 characters,
-and the built_in function-call counts, 6419 in all, are:
-= -- 470
-> -- 333
+            664 strings with 10255 characters,
+and the built_in function-call counts, 6239 in all, are:
+= -- 458
+> -- 331
 < -- 0
-+ -- 134
++ -- 132
 - -- 94
 * -- 389
-:= -- 875
-add.period$ -- 78
-call.type$ -- 40
+:= -- 863
+add.period$ -- 76
+call.type$ -- 38
 change.case$ -- 13
 chr.to.int$ -- 0
-cite$ -- 40
-duplicate$ -- 256
-empty$ -- 784
+cite$ -- 38
+duplicate$ -- 246
+empty$ -- 748
 format.name$ -- 94
-if$ -- 1476
+if$ -- 1426
 int.to.chr$ -- 0
-int.to.str$ -- 40
+int.to.str$ -- 38
 missing$ -- 15
-newline$ -- 161
+newline$ -- 155
 num.names$ -- 14
-pop$ -- 167
+pop$ -- 155
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 250
+skip$ -- 234
 stack$ -- 0
 substring$ -- 273
-swap$ -- 40
+swap$ -- 38
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
 while$ -- 35
-width$ -- 42
-write$ -- 305
+width$ -- 40
+write$ -- 295
 (There was 1 warning)
