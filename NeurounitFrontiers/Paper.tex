@@ -103,15 +103,16 @@ examples from other subfields of biology abound\cite{dream_url}.
 % \vspace{-0px}
 \begin{figure}
 \vspace{-38px}
-\includegraphics[scale=0.5]{diagram1.pdf}
-\vspace{-25px}
+\centering
+\includegraphics[scale=0.6]{diagram1.pdf}
+\vspace{-55px}
 \caption{Paper overview.}
 \label{fig:sciunit_overview}
 \end{figure}
 \leavevmode
 \vspace{-0px}
 
-Each of these examples has leveraged \emph{ad hoc} infrastructure to support test generation. While the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that could be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework and show how it can be used to bridge several existing neuroinformatics tools, we then  developed \textit{NeuronUnit\-}. This library allows scientists to build \textit{SciUnit} tests that validate \text{NeuroML}  models against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}\todo{refer to and describe figure 1}.% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
+Each of these examples has leveraged \emph{ad hoc} infrastructure to support test generation. While the specific criteria used to evaluate models varies widely between disciplines in neuroscience, the underlying test-driven methodology has many common features that could be implemented once. Recognizing this, we have developed a discipline-agnostic framework for developing scientific validation test suites called \textit{SciUnit}\cite{sciunit_url}. To demonstrate the power of this framework and show how it can be used to bridge several existing neuroinformatics tools, we then  developed \textit{NeuronUnit\-}. This library allows scientists to build \textit{SciUnit} tests that validate \text{NeuroML}  models against electrophysiological data collected by the \textit{NeuroElectro Project} \cite{neuroelectro_url}, leveraging facilities from the \textit{NeuroTools} project to..\todo{what does NeuroTools do?}\todo{refer to and describe figure 1}\todo{add caption to figure 1}.% In addition to this open testing toolkit we also provide a library of tests for models of spiking single neurons.  
 
 % Section 2.
 \section{Validation Testing with \textit{SciUnit}}
@@ -120,12 +121,12 @@ Each of these examples has leveraged \emph{ad hoc} infrastructure to support tes
 \small
 \begin{python}
 class SpikeCountTest(sciunit.Test):
-  """Tests models that generates spike counts from currents. Computes p-values based on a chi-squared test statistic, and pools them using Fisher's method.
+  """Tests spike counts produced in response to several current stimuli against observed means and standard deviations. 
 
+  goodness of fit metric: Computes p-values based on a chi-squared test statistic, and pools them using Fisher's method.
   parameters:
     inputs: list of numpy arrays containing input currents (nA)
-    means, stds: list of means and standard deviations of the 
-      spike counts observed in response to the inputs
+    means, stds: lists of observed means and standard deviations, one per input
   """
   def __init__(self, inputs, means, stds):
     self.inputs, self.means, self.stds = inputs, means, stds
@@ -146,7 +147,7 @@ class SpikeCountTest(sciunit.Test):
     })
 \end{python}
 \vspace{-5px}
-\caption{A single neuron spike count test family implemented using \textit{SciUnit}. This family contains logic common to many different domains, so it is distributed in the \textit{NeuronUnit} repository (see Sec. \ref{sec:neuronunit}).}
+\caption{A single neuron spike count test family implemented using \textit{SciUnit}. This family contains logic common to many different systems, so it is distributed in the \textit{NeuronUnit} repository (see Sec. \ref{sec:neuronunit}).}
 \label{fig:rate_test}
 \vspace{-15px}
 \end{figure}
@@ -156,38 +157,39 @@ We begin by constructing an example validation test suite.
 Suppose we have collected data from an experiment where current stimuli (measured in pA) are delivered to neurons in some brain region, while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
 A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
-One simple validation test would ask candidate models to predict the number of action potentials generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials with the same stimulus. 
-Goodness-of-fit can be measured in different ways. Each test makes a choice about  how goodness-of-fit is measured. In our example, we will calculate a p-value derived from a chi-squared statistic for each prediction and then combine these p-values using Fisher's method\cite{fisher_statistical_1925}. Importantly, the validation criteria is made explicit by the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
-Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. A community consensus will emerge in the form a common test suite (see Sec. \ref{sec:scidash}).
+One simple validation test would ask candidate models to predict the number of action potentials (a.k.a. spikes) generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials using the same stimulus. 
+In our example, we will determine goodness-of-fit by first calculating a p-value from a chi-squared statistic for each prediction and then combining these p-values using Fisher's method\cite{fisher_statistical_1925}. 
 
-Alongside this \emph{spike count test}, a number of other tests capturing different features of the data could be specified to produce a more comprehensive suite. 
+Alongside this \emph{spike count test}, a number of other tests capturing different features of the data can be specified to produce a more comprehensive suite. 
 For data of this sort, the QSNMC defined 17 other validation criteria in addition to one based on the overall spike count, capturing features like spike latencies (SL), mean subthreshold voltage (SV), interspike intervals (ISI) and interspike minima (ISM) that can be extracted from the data\cite{jolivet_quantitative_2008}. 
 They then defined a combined metric favoring models that broadly succeeded at meeting these criteria, to produce an overall ranking. 
 Such combined criteria are simply validation tests that invoke other tests to produce a result.
  
 %In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
 \subsection{Implementing a Validation Test in \textit{SciUnit}}
-Fig. \ref{fig:rate_test} shows how a scientist would implement the spike count test described above using \textit{SciUnit}. 
-A \textit{SciUnit} validation test is an {instance} of a Python class implementing the \verbx{sciunit.Test} interface. 
-Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor. The meaning of each parameter along with the goodness-of-fit metric used by the test is documented on lines 5-8. 
+Fig. \ref{fig:rate_test} shows how a scientist would implement spike count tests such as the one described above using \textit{SciUnit}. 
+A \textit{SciUnit} validation test is an {instance} (i.e. an object) of a Python class implementing the \verbx{sciunit.Test} interface (cf. line 1). 
+Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor (constructors are named \verbx{__init__} in Python, lines 9-10). The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
 For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{python}
-We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the parameters above, derived from data, have been provided. 
-As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often consist simply of instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron test families like \verbx{SpikeCountTest}, we have developed a library called \textit{NeuronUnit} \cite{neurounit_url} (Sec. \ref{sec:neuronunit}). 
+We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
+As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
+For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} \cite{neurounit_url} (Sec. \ref{sec:neuronunit}). 
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{run_test} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
-To specify the interface between the test and the model (that is, to specify what must be in a model's scope for it to be eligible to even take the test), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
+To specify the interface between the test and the model (that is, to specify an appropriate scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
 Capabilities are simply collections of methods that a test may need to invoke to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java \cite{java_interfaces_url}. 
 In Python, they are written as classes with unimplemented members. 
-The capability required by the test in Fig. \ref{fig:rate_test} (used on line 19) is shown in Fig. \ref{fig:capability}. 
-In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction. The remainder of the \verbx{run_test} method implements the goodness-of-fit test described above, returning an instance of \verbx{sciunit.PValue} which is a subclass of \verbx{sciunit.Score}. In addition to the score itself, the returned score object also contains metadata of use to those wishing to examine the result in detail. 
-In this case we saved the inputs, model outputs and observed means and standard deviations alongside the score by using the \verbx{related_data} parameter. 
-We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
+The capability required by the test in Fig. \ref{fig:rate_test} is shown in Fig. \ref{fig:capability}. 
+In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
+
+The remainder of the \verbx{run_test} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} included with \textit{SciUnit}. In addition to the score itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for  those who may wish to examine the result in more detail. 
+In this case we save the input currents, the model outputs and the observed means and standard deviations alongside the score (line 24). 
+%We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
 
 \begin{figure}
 \begin{python}
@@ -216,9 +218,11 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
 \vspace{-15px}
 \end{figure}
 
-Capabilities are \emph{implemented} by models. 
-A simple \emph{family} of models implementing this capability is shown in Fig. \ref{fig:simple_model}. 
-Models in this family produce a spike count by applying a linear transformation to the mean of the provided input current. 
+\subsection{Models}
+Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. Like tests, the class itself represents a family of models, parameterized by the arguments needed in the constructor. A particular model is an object created by supplying the parameters.
+
+A simple {family} of models, \verb{LinearModel}, implementing the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, is shown in Fig. \ref{fig:simple_model}. 
+Models in this family, \verbx{LinearModel}, produce a spike count by applying a linear transformation to the mean of the provided input current. 
 The family is parameterized by a scale factor and offset, both scalars. 
 To create a \emph{particular} model, the modeler may choose particular parameter values, just as with test families:
 \begin{python}
@@ -375,6 +379,8 @@ Each record links to test records (stored in the repository), displaying line-by
 
 % Section 4.
 \section{Discussion}
+The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
+Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. A community consensus will slowly emerge in the form a commonly-accepted test suite (see Sec. \ref{sec:scidash}). \todo{integrate this somewhere down here}
 
 \subsection{A Complete Pipeline}
 Although the tools described in Sec. \ref{sec:neuronunit_acitivities} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
