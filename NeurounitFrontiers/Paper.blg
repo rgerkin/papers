@@ -6,46 +6,44 @@ Database file #1: references.bib
 Database file #2: references_crook.bib
 Database file #3: urls.bib
 Database file #4: references_ja.bib
-Warning--I didn't find a database entry for "tdd"
-You've used 38 entries,
+You've used 40 entries,
             1791 wiz_defined-function locations,
-            664 strings with 10255 characters,
-and the built_in function-call counts, 6239 in all, are:
-= -- 458
-> -- 331
+            673 strings with 10458 characters,
+and the built_in function-call counts, 6609 in all, are:
+= -- 493
+> -- 339
 < -- 0
-+ -- 132
-- -- 94
-* -- 389
-:= -- 863
-add.period$ -- 76
-call.type$ -- 38
-change.case$ -- 13
++ -- 136
+- -- 96
+* -- 411
+:= -- 920
+add.period$ -- 82
+call.type$ -- 40
+change.case$ -- 14
 chr.to.int$ -- 0
-cite$ -- 38
-duplicate$ -- 246
-empty$ -- 748
-format.name$ -- 94
-if$ -- 1426
+cite$ -- 40
+duplicate$ -- 265
+empty$ -- 791
+format.name$ -- 96
+if$ -- 1509
 int.to.chr$ -- 0
-int.to.str$ -- 38
-missing$ -- 15
-newline$ -- 155
-num.names$ -- 14
-pop$ -- 155
+int.to.str$ -- 40
+missing$ -- 18
+newline$ -- 165
+num.names$ -- 16
+pop$ -- 163
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 234
+skip$ -- 239
 stack$ -- 0
-substring$ -- 273
-swap$ -- 38
+substring$ -- 298
+swap$ -- 40
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 35
-width$ -- 40
-write$ -- 295
-(There was 1 warning)
+while$ -- 39
+width$ -- 42
+write$ -- 316

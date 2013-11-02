@@ -213,7 +213,7 @@ Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in i
 The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
-For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows:
+For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{python}
@@ -260,20 +260,21 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
 \end{figure}
 
 \subsection{Models}
-Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. Like tests, the class itself represents a family of models, parameterized by the arguments needed in the constructor. A particular model is an object created by supplying the parameters.
+Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. Like tests, the class itself represents a family of models, parameterized by the arguments of the constructor. A particular model is an instance of such a class.
 
-A simple \emph{family} of models, \verbx{LinearModel}, implementing the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, is shown in Fig. \ref{fig:simple_model}. 
-Models in this family, \verbx{LinearModel}, produce a spike count by applying a linear transformation to the mean of the provided input current. 
-The family is parameterized by a scale factor and offset, both scalars. 
-To create a \emph{particular} model, the modeler may choose particular parameter values, just as with test families:
+Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, discussed below. 
+Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
+To create a \emph{particular} linear model, a modeler can provide particular parameter values, just as with test families:
 \begin{python}
 CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
 \end{python}
 Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
-An alternative test design to the one in Fig. \ref{fig:rate_test} would add a second required capability (Fig. \ref{fig:training}) and a corresponding training phase to the \verbx{_judge} method. 
-This design would be relevant only for those models for which parameters can be adjusted without human involvement. 
+An alternative test design would add a training phase where these parameters were fit to data using the capability shown in Fig. \ref{fig:training}. 
+This test could thus only be used for those models for which parameters can be adjusted without human involvement. 
 Whether to build a training phase into the test protocol is a choice left to each modeler. 
-Although Fig. \ref{fig:rate_test} does not include a training phase, if training data is available then models that nevertheless implement a training capability (like \verbx{LinearModel}) can simply be trained explicitly by calling the capability method just like any other Python method:
+For example, Fig. \ref{fig:rate_test} does not include a training phase. 
+
+If training data is externally available, then models that nevertheless do implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
 \begin{python}
 CA1_linear_model_fit = LinearModel()
 CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
@@ -292,22 +293,28 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
     means = [numpy.mean(c) for c in currents]
     [self.offset, self.scale] = numpy.polyfit(means, counts, deg=1)    
 \end{python}
-\caption{A simple model that returns a spike count by scaling the mean of the input by a fixed parameter.}
+\caption{A model that returns a spike count by applying a linear transformation to the mean input current. The parameters can be provided manually or learned from data provided by a test or user (see text).}
 \label{fig:simple_model}
 \vspace{-15px}
 \end{figure}
 
-Finally, a test is executed against a model instance, using the \verbx{sciunit.judge} function:
+\subsection{Executing Tests} A test is executed against a model using the \verbx{judge} method:
 \begin{python}
-score = sciunit.judge(CA1_sc_test, CA1_linear_model_heuristic)
+score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{python}
 
-Collection of tests with mutually coherent requirments, i.e. various summaries of the available empirical data, can form test suites.
+This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. A reference to the test and model are added to the score for convenience before it is ultimately returned to the user.
+
+\subsection{Test Suites and Score Matrices} A collection of tests intended to be run on the same model can be put together to form a test suite.
 The following is a test suite that could be used for a simplified version of the QSNMC:  
 \begin{python}
 CA1_suite = sciunit.TestSuite([CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_ism_test])
 \end{python}
-When a test suite is executed against a model, it produces summary data that can be shown on the console or visualized by other tools, such as the web application described in Sec. \ref{sec:scidash}.
+Like a single test, a test suite is capable of judging one or more models. The result is a score matrix much like the one diagramed in Fig. \ref{fig:sciunit_overview}.
+\begin{python}
+CA1_matrix = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
+\end{python}
+A simple summary of the scores in a score matrix can be printed to the console or  visualized by other tools, such as the web application \textit{SciDash} described in Sec. \ref{sec:scidash}.
 
 % Section 3.
 \section{Results}

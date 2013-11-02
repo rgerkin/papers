@@ -1,16 +1,16 @@
 # Fdb version 3
-["bibtex Paper"] 1383359641 "Paper.aux" "Paper.bbl" "Paper" 1383359661
+["bibtex Paper"] 1383372842 "Paper.aux" "Paper.bbl" "Paper" 1383372867
   "/usr/local/texlive/2013/texmf-dist/bibtex/bst/base/unsrt.bst" 1292289607 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "Paper.aux" 1383359660 11447 fe685666c23fb0c1b496cac7640c586f ""
+  "Paper.aux" 1383372864 12071 e49a931256cb0b381a7703cc4fdf9c73 ""
   "Paper.bcf" 0 -1 0 ""
-  "references.bib" 1380215533 26973 0cedeafc524f6e1042449c1419af4815 ""
+  "references.bib" 1383372691 27661 13e43cefda836149efda18ea64cf0746 ""
   "references_crook.bib" 1380215533 3895 5b8e6b9111eb6db5436b1924f94cb58e ""
   "references_ja.bib" 1380215533 188507 f0acf28915216ed1efd0d7ab872a1d5f ""
   "urls.bib" 1380215533 3385 4a39b3dfd2ac5046092f370479f273b6 ""
   (generated)
   "Paper.bbl"
   "Paper.blg"
-["pdflatex"] 1383359658 "Paper.tex" "Paper.pdf" "Paper" 1383359661
+["pdflatex"] 1383372844 "Paper.tex" "Paper.pdf" "Paper" 1383372867
   "/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1303254447 8237 52810bdb4db2270e717422560a104aea ""
@@ -134,11 +134,11 @@
   "/usr/local/texlive/2013/texmf-dist/tex/latex/wrapfig/wrapfig.sty" 1137111090 26220 3701aebf80ccdef248c0c20dd062fea9 ""
   "/usr/local/texlive/2013/texmf-dist/tex/latex/xcolor/xcolor.sty" 1169481954 55224 a43bab84e0ac5e6efcaf9a98bde73a94 ""
   "/usr/local/texlive/2013/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1350473462 4934 09bb8eb3760faa4ffb6107a36e5b3d76 ""
-  "Paper.aux" 1383359660 11447 fe685666c23fb0c1b496cac7640c586f ""
-  "Paper.bbl" 1383359642 6009 e1bf984c2fb174f53a4eb811de1a8379 "bibtex Paper"
-  "Paper.out" 1383359660 1835 2eef14686ac6acf723efb4ec3b3dba84 ""
-  "Paper.tex" 1383359649 45405 891b38979835c711973b89f626ad69fb ""
-  "diagram1.pdf" 1383353303 24982 f39b47d97ce85b586e3a767a995cda6c ""
+  "Paper.aux" 1383372864 12071 e49a931256cb0b381a7703cc4fdf9c73 ""
+  "Paper.bbl" 1383372843 6327 98e1a0b6e98ea3e29df26d1d662f04a6 "bibtex Paper"
+  "Paper.out" 1383372864 1980 faaeb62a00a6477733c9a034543cd9c1 ""
+  "Paper.tex" 1383372757 46730 1d464b5f57615352f169260600590137 ""
+  "diagram1.pdf" 1383371359 31355 112880438d2a6e8ad7146aff21ec8a23 ""
   "python_syntax.sty" 1380215533 1526 a5cb595985ef319f0047e2174a62da83 ""
   "scidash_github.png" 1380215533 32293 c4a90f7f90d85719be208b35df224919 ""
   "table.png" 1380215533 28547 9f1d2dbe983aeecb8d3ec7cdbee2b7e9 ""

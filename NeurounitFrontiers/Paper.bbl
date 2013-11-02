@@ -1,5 +1,16 @@
 \begin{thebibliography}{10}
 
+\bibitem{jinha_article_2010}
+Arif~E. Jinha.
+\newblock Article 50 million: an estimate of the number of scholarly articles
+  in existence.
+\newblock {\em Learned Publishing}, 23(3):258--263, July 2010.
+
+\bibitem{beck2003}
+Kent Beck.
+\newblock {\em Test Driven Development: By Example}.
+\newblock Addison Wesley, 2003.
+
 \bibitem{jolivet_quantitative_2008}
 Renaud Jolivet, Felix Schürmann, Thomas Berger, Richard Naud, Wulfram
   Gerstner, and Arnd Roth.
@@ -23,11 +34,14 @@ J~J Hopfield and C~D Brody.
 \bibitem{dream_url}
 \url{http://www.the-dream-project.org/}.
 
-\bibitem{sciunit_url}
-\url{http://github.com/scidash/sciunit}.
+\bibitem{osb_url}
+\url{http://www.opensourcebrain.org}.
 
 \bibitem{neuroelectro_url}
 \url{http://www.neuroelectro.org/}.
+
+\bibitem{sciunit_url}
+\url{http://github.com/scidash/sciunit}.
 
 \bibitem{fisher_statistical_1925}
 Ronald~A Fisher.
@@ -58,9 +72,6 @@ Padraig Gleeson, Volker Steuber, and R~Angus Silver.
   space.
 \newblock {\em Neuron}, 54(2):219--235, April 2007.
 \newblock {PMID:} 17442244.
-
-\bibitem{osb_url}
-\url{http://www.opensourcebrain.org}.
 
 \bibitem{neuron_url}
 \url{http://www.neuron.yale.edu/neuron}.
