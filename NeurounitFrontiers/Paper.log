@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  1 NOV 2013 22:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  2 NOV 2013 02:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1016,7 +1016,7 @@ Package natbib Warning: Citation `tdd' on page 1 undefined on input line 80.
 [1
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<diagram1.pdf, id=122, 794.97pt x 614.295pt>
+<diagram1.pdf, id=130, 794.97pt x 614.295pt>
 File: diagram1.pdf Graphic file (type pdf)
  <use diagram1.pdf>
 Package pdftex.def Info: diagram1.pdf used on input line 107.
@@ -1046,85 +1046,72 @@ LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
  [2 <./diagram1.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 169.
- [3]
-! Too many }'s.
-l.224 ...e capability in Fig. \ref{fig:capability}
-                                                   as well as another capabi...
-You've closed more groups than you opened.
-Such booboos are generally harmless, so keep going.
+ [3] [4] [5]
+LaTeX Font Info:    Try loading font information for U+msa on input line 343.
 
-
-Overfull \hbox (79.30266pt too wide) in paragraph at lines 224--228
-[]\OT1/ptm/m/n/10.95 A sim-ple fam-ily of mod-els, []\OT1/pcr/m/n/10.95 LinearM
-odel}, implementing the capability in Fig. \ref\OT1/ptm/m/n/10.95 fig:capabilit
-y
- []
-
-[4] [5]
-LaTeX Font Info:    Try loading font information for U+msa on input line 336.
- (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 336.
+LaTeX Font Info:    Try loading font information for U+msb on input line 343.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<scidash_github.png, id=304, 277.035pt x 268.00125pt>
+<scidash_github.png, id=323, 277.035pt x 268.00125pt>
 File: scidash_github.png Graphic file (type png)
  <use scidash_github.png>
-Package pdftex.def Info: scidash_github.png used on input line 353.
+Package pdftex.def Info: scidash_github.png used on input line 360.
 (pdftex.def)             Requested size: 199.46504pt x 192.96074pt.
 
-[6 <./scidash_github.png>] <table.png, id=330, 698.61pt x 207.77625pt>
+[6 <./scidash_github.png>] <table.png, id=348, 698.61pt x 207.77625pt>
 File: table.png Graphic file (type png)
 
 <use table.png>
-Package pdftex.def Info: table.png used on input line 372.
+Package pdftex.def Info: table.png used on input line 379.
 (pdftex.def)             Requested size: 454.09113pt x 135.05295pt.
 
 
 LaTeX Warning: Reference `sec:broader_impacts' on page 7 undefined on input lin
-e 417.
+e 424.
 
 [7 <./table.png>]
-Overfull \hbox (2.12212pt too wide) in paragraph at lines 421--429
+Overfull \hbox (2.12212pt too wide) in paragraph at lines 428--436
 [] []|\OT1/ptm/b/n/12 5.2.1 Col-lab-o-ra-tion[] \OT1/ptm/m/n/10.95 Community-mo
 derated com-ments on GitHub will al-low test-makers and test-takers
  []
 
 
 LaTeX Warning: Reference `sec:existing_efforts' on page 8 undefined on input li
-ne 440.
+ne 447.
 
 [8]
 
 LaTeX Warning: Reference `table:record_matrix' on page 9 undefined on input lin
-e 489.
+e 496.
 
-[9] (./Paper.bbl [10])
+[9] (./Paper.bbl [10] [11])
 
 Package natbib Warning: There were undefined citations.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 508.
-[11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 508.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 515.
+[12]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 515.
  (./Paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 508.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 508.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 515.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 515.
 Package rerunfilecheck Info: File `Paper.out' has not changed.
-(rerunfilecheck)             Checksum: 2EEF14686AC6ACF723EFB4EC3B3DBA84;1835.
+(rerunfilecheck)             Checksum: FAAEB62A00A6477733C9A034543CD9C1;1980.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 508.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 515.
  ) 
 Here is how much of TeX's memory you used:
- 19856 strings out of 493315
- 339119 string characters out of 6137904
- 567844 words of memory out of 5000000
- 22779 multiletter control sequences out of 15000+600000
+ 19873 strings out of 493315
+ 339418 string characters out of 6137904
+ 569843 words of memory out of 5000000
+ 22790 multiletter control sequences out of 15000+600000
  26572 words of font info for 63 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  63i,9n,92p,1288b,1509s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1138,10 +1125,10 @@ nts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/
 urw/times/utmbi8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times
 /utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.p
 fb>
-Output written on Paper.pdf (11 pages, 220342 bytes).
+Output written on Paper.pdf (12 pages, 227067 bytes).
 PDF statistics:
- 494 PDF objects out of 1000 (max. 8388607)
- 453 compressed objects within 5 object streams
- 169 named destinations out of 1000 (max. 500000)
- 220 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 519 PDF objects out of 1000 (max. 8388607)
+ 475 compressed objects within 5 object streams
+ 175 named destinations out of 1000 (max. 500000)
+ 236 words of extra memory for PDF output out of 10000 (max. 10000000)
 

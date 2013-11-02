@@ -4,21 +4,23 @@
 \BOOKMARK [2][-]{subsection.3.1}{Example: Quantitative Single Neuron Modeling Competition}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Implementing a Validation Test in SciUnit}{section.3}% 5
 \BOOKMARK [2][-]{subsection.3.3}{Models}{section.3}% 6
-\BOOKMARK [1][-]{section.4}{Results}{}% 7
-\BOOKMARK [2][-]{subsection.4.1}{NeuronUnit: A Suite of Tests for Neurophysiology}{section.4}% 8
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Models from NeuroML}{subsection.4.1}% 9
-\BOOKMARK [3][-]{subsubsection.4.1.2}{Capabilities from NeuroTools}{subsection.4.1}% 10
-\BOOKMARK [3][-]{subsubsection.4.1.3}{Reference Data for Tests from NeuroElectro}{subsection.4.1}% 11
-\BOOKMARK [2][-]{subsection.4.2}{SciDash: A community web application}{section.4}% 12
-\BOOKMARK [1][-]{section.5}{Discussion}{}% 13
-\BOOKMARK [2][-]{subsection.5.1}{A Complete Pipeline}{section.5}% 14
-\BOOKMARK [2][-]{subsection.5.2}{Creating New Models, Capabilities, and Tests}{section.5}% 15
-\BOOKMARK [3][-]{subsubsection.5.2.1}{Collaboration}{subsection.5.2}% 16
-\BOOKMARK [2][-]{subsection.5.3}{Participation from Modeling Communities}{section.5}% 17
-\BOOKMARK [2][-]{subsection.5.4}{Participation from Experimental Communities}{section.5}% 18
-\BOOKMARK [2][-]{subsection.5.5}{Diversity of Levels and Kinds of Models and Data}{section.5}% 19
-\BOOKMARK [2][-]{subsection.5.6}{Arbitrary Scoring Criteria for Tests}{section.5}% 20
-\BOOKMARK [2][-]{subsection.5.7}{Reliability of Data Underlying Tests}{section.5}% 21
-\BOOKMARK [2][-]{subsection.5.8}{Occam's Razor}{section.5}% 22
-\BOOKMARK [2][-]{subsection.5.9}{Expansion Into Other Areas of Biology}{section.5}% 23
-\BOOKMARK [1][-]{section.6}{Acknowledgements}{}% 24
+\BOOKMARK [2][-]{subsection.3.4}{Executing Tests}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.5}{Test Suites and Score Matrices}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Results}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{NeuronUnit: A Suite of Tests for Neurophysiology}{section.4}% 10
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Models from NeuroML}{subsection.4.1}% 11
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Capabilities from NeuroTools}{subsection.4.1}% 12
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Reference Data for Tests from NeuroElectro}{subsection.4.1}% 13
+\BOOKMARK [2][-]{subsection.4.2}{SciDash: A community web application}{section.4}% 14
+\BOOKMARK [1][-]{section.5}{Discussion}{}% 15
+\BOOKMARK [2][-]{subsection.5.1}{A Complete Pipeline}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.2}{Creating New Models, Capabilities, and Tests}{section.5}% 17
+\BOOKMARK [3][-]{subsubsection.5.2.1}{Collaboration}{subsection.5.2}% 18
+\BOOKMARK [2][-]{subsection.5.3}{Participation from Modeling Communities}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.4}{Participation from Experimental Communities}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.5}{Diversity of Levels and Kinds of Models and Data}{section.5}% 21
+\BOOKMARK [2][-]{subsection.5.6}{Arbitrary Scoring Criteria for Tests}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.7}{Reliability of Data Underlying Tests}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.8}{Occam's Razor}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.9}{Expansion Into Other Areas of Biology}{section.5}% 25
+\BOOKMARK [1][-]{section.6}{Acknowledgements}{}% 26
