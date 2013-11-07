@@ -78,12 +78,12 @@ Rigorously validating a scientific model's explanatory power requires comparing 
 However, model validation remains an informal and incomplete process, especially in fields like neuroscience where the available data is growing rapidly.   
 This has made it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models, to determine the state-of-the-art, and to precisely identify open modeling problems.
 
-Software engineers validate software by developing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. 
-Suites of such unit tests that collectively capture the desired program behavior provide evidence for its validity and correctness. 
-Drawing inspiration from this practice, we developed the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
-executable functions, here written in Python, that compare model predictions against single empirical observations to produce a score indicating agreement between the model and the data. 
+Software engineers validate software by writing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. 
+Suites of such unit tests can collectively provide evidence for its validity and correctness. 
+Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
+executable functions, here written in Python, that compare model predictions against a single empirical observation to produce a score indicating agreement between the model and the data. 
 Suites of such validation tests are used as a summary of modeling progress within a scientific community. 
-Building on this framework, we describe here \textit{NeuronUnit}, a library that supports validation testing for neurophysiology.
+As a first application of this framework, we describe \textit{NeuronUnit}, a library that supports validation testing for neurophysiology and integrates with several existing neuroinformatics resources.
 
 \tiny
  \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
