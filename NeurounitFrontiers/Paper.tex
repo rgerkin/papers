@@ -118,9 +118,9 @@ Unfortunately, there are few alternatives to a comprehensive literature review a
 %A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
 
 Professional software developers face similar issues. 
-They must understand the scope of each component of a software project and validate it by measuring how well each component achieves its stated goals. 
+They must understand the scope of each component of a complex software project and validate it by measuring how well each component achieves its specified input/output behavior. 
 But software developers do not validate components by simply choosing a few interesting inputs and presenting the outputs to reviewers. 
-Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that collectively specify the scope of each component and validate the functionality of its implementation as it is being developed and modified \citep{beck2003}. 
+Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that serve to specify each component's scope and validate its implementation as it is being developed and modified \citep{beck2003}. 
 Each test individually checks that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. 
 Collectively, the test results serve as a summary of the validity of the project as it progresses through its development cycle. 
 Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. 
@@ -170,7 +170,7 @@ Here we describe \textit{NeuronUnit\-}, which builds upon \textit{SciUnit}, allo
 
 % Section 2.
 \section{Validation Testing with \textit{SciUnit}}
-\subsection{Example: Quantitative Single Neuron Modeling Competition}
+\subsection{Example: The Quantitative Single Neuron Modeling Competition}
 \begin{figure}
 \small
 \begin{python}
@@ -212,16 +212,16 @@ Suppose we have collected data from an experiment where current stimuli (measure
 A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
 One simple validation test would ask candidate models to predict the number of action potentials (a.k.a. spikes) generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials using the same stimulus. 
-In our example, we will determine goodness-of-fit by first calculating a p-value from a chi-squared statistic for each prediction and then combining these p-values using Fisher's method \citep{fisher_statistical_1925}. 
+For data of this type, goodness-of-fit can be measured by first calculating a p-value from a chi-squared statistic for each prediction and then combining these p-values using Fisher's method \citep{fisher_statistical_1925}. 
 
-Alongside this \emph{spike count test}, a number of other tests capturing different features of the data can be specified to produce a more comprehensive suite. 
+Alongside this \emph{spike count test}, we might also specify a number of other tests capturing different features of the data  to produce a more comprehensive suite. 
 For data of this sort, the QSNMC defined 17 other validation criteria in addition to one based on the overall spike count, capturing features like spike latencies (SL), mean subthreshold voltage (SV), interspike intervals (ISI) and interspike minima (ISM) that can be extracted from the data \citep{jolivet_quantitative_2008}. 
 They then defined a combined metric favoring models that broadly succeeded at meeting these criteria, to produce an overall ranking. 
 Such combined criteria are simply validation tests that invoke other tests to produce a result.
  
 %In many cases, models require no modifications to take the new tests because the same type of model output is being requested.
 \subsection{Implementing a Validation Test in \textit{SciUnit}}
-Fig. \ref{fig:rate_test} shows how a scientist would implement spike count tests such as the one described above using \textit{SciUnit}. 
+Fig. \ref{fig:rate_test} shows how a scientist can implement spike count tests such as the one described above using \textit{SciUnit}. 
 A \textit{SciUnit} validation test is an {instance} (i.e. an object) of a Python class implementing the \verbx{sciunit.Test} interface (cf. line 1). 
 Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in its constructor (constructors are named \verbx{__init__} in Python, lines 9-10). 
 The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
@@ -237,13 +237,13 @@ For single-neuron test families like \verbx{SpikeCountTest}, we have developed s
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{_judge} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
 To specify the interface between the test and the model (that is, to specify an appropriate scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
-Capabilities are simply collections of methods that a test may need to invoke to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
-In Python, they are written as classes with unimplemented members. 
+Capabilities are simply collections of methods that a test will need to invoke in order to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
+In Python, capabilities are written as classes with unimplemented members. 
 The capability required by the test in Fig. \ref{fig:rate_test} is shown in Fig. \ref{fig:capability}. 
 In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
 
-The remainder of the \verbx{run_test} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} included with \textit{SciUnit}. In addition to the score itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for  those who may wish to examine the result in more detail. 
-In this case we save the input currents, the model outputs and the observed means and standard deviations alongside the score (line 24). A \verbx{sciunit.judge} function executes the test's \verbx{_judge} method on the model, and then on the returned \verbx{sciunit.Score} object sets attributes referring to the model and test instances themselves, producing a complete record of the test result (Fig. \ref{fig:neuronunit_example}).    
+The remainder of the \verbx{_judge} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} that is included with \textit{SciUnit}. In addition to the $p$-value itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for  scientists who may wish to examine the result in more detail later. 
+In this case we save the input currents, the model outputs and the observed means and standard deviations (line 24). 
 %We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
 
 \begin{figure}
@@ -276,7 +276,7 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
 \subsection{Models}
 Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. Like tests, the class itself represents a family of models, parameterized by the arguments of the constructor. A particular model is an instance of such a class.
 
-Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, discussed below. 
+Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, which we will discuss below. 
 Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
 To create a \emph{particular} linear model, a modeler can provide particular parameter values, just as with test families:
 \begin{python}
@@ -285,10 +285,10 @@ CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
 Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
 An alternative test design would add a training phase where these parameters were fit to data using the capability shown in Fig. \ref{fig:training}. 
 This test could thus only be used for those models for which parameters can be adjusted without human involvement. 
-Whether to build a training phase into the test protocol is a choice left to each modeler. 
-For example, Fig. \ref{fig:rate_test} does not include a training phase. 
+Whether to build a training phase into the test protocol is a choice left to each test development community. 
 
-If training data is externally available, then models that nevertheless do implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
+Fig. \ref{fig:rate_test} does not include a training phase. 
+If training data is externally available, models that nevertheless do implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
 \begin{python}
 CA1_linear_model_fit = LinearModel()
 CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
@@ -317,10 +317,10 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
 score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{python}
 
-This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. A reference to the test and model are added to the score for convenience before it is ultimately returned to the user.
+This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
 \subsection{Test Suites and Score Matrices} A collection of tests intended to be run on the same model can be put together to form a test suite.
-The following is a test suite that could be used for a simplified version of the QSNMC:  
+The following is a test suite that could be used for a simplified version of the QSNMC, as described above:  
 \begin{python}
 CA1_suite = sciunit.TestSuite([CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_ism_test])
 \end{python}
