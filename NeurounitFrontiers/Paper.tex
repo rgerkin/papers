@@ -331,15 +331,15 @@ CA1_matrix = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 A simple summary of the scores in a score matrix can be printed to the console or  visualized by other tools, such as the web application \textit{SciDash} described in Sec. \ref{sec:scidash}.
 
 % Section 3.
-\section{Results}
+\section{Integrating With Neuroinformatics Tools and Infrastructure}
+In the examples above, tests were parameterized by data explicitly, and models implemented capabilities directly. In practice, however, both models and data are being published in specialized repositories. These repositories standardize the data according to emerging standards, making them available in a uniform manner. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
 
-\subsection{\textit{NeuronUnit}: A Suite of Tests for Neurophysiology}\label{sec:neuronunit}
-By using machine-readable models from \textit{OSB}, and machine-readable data from resources like \textit{NeuroElectro}, we have produced a suite of data-driven validation tests in \textit{NeuronUnit}, as well as tools for capability implementation, and model interfaces for a representative set of canonical neurophysiology models, all publicly available. 
+\subsection{\textit{NeuronUnit}: Neurophysiology-Specific Testing Tools}\label{sec:neuronunit}\label{sec:neuronunit_acitivities}
+In particular, we will focus on neurophysiology in this paper as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from resources like \textit{NeuroElectro}. Functions that conveniently link these tools to \textit{SciUnit}, along with collection of relevant model and test families and associated capabilities are available in a package called \textit{NeuronUnit}, collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. \todo{Sentence about how great github is for collaboratively doing things, particularly in science?} Scientists can use these tools to create test suites tailored to specific systems of interest (for example, scientists interested specifically in models of cells in the hippocampus would use \textit{NeuronUnit} to create a suite, \textit{HippocampusSuite}, parameterized by relevant data from \textit{NeuroElectro}).
 
-\label{sec:neuronunit_acitivities}
-Here we describe standard neuroinformatics tools we have adopted to develop \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}.  
+We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop similar repositories that synergistically link \textit{SciUnit} to relevant ongoing standardization efforts and provide a common, collaboratively-developed vocabulary of test families, model families and capabilities relevant to their domain.
 
-\subsubsection{Models from NeuroML}\label{sec:neuroml_models}
+\subsection{Models from NeuroML}\label{sec:neuroml_models}
 NeuroML is a standardized model description language for neuroscience \citep{gleeson_neuroml:_2010}. 
 It permits many neurophysiological/neuroanatomical models to be described in a simulator-independent fashion, and executed across many popular simulators due to inter-conversion capabilities of the NeuroML API. 
 Because NeuroML is an XML specification, model descriptions can be validated for correctness and queried for model properties and components, exposing potential capabilities. 
@@ -380,7 +380,7 @@ class CA1PyramidalCellModel(NeuroConstructModel):
 \vspace{-15px}
 \end{figure}
 
-\subsubsection{Capabilities from NeuroTools}
+\subsection{Capabilities from NeuroTools}
 NeuroTools (\url{http://neuralensemble.org/NeuroTools}) is a Python library supporting tasks associated with analysis of neural data (or model output), such as membrane potential time series, spike trains, etc. 
 It is an open source and actively developed project, containing reliable algorithms on which to base neurophysiology tests.
 
@@ -391,7 +391,7 @@ A \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that the method 
 Many such NeuroTools objects are similarly exchanged between \verbx{NeuroConstructModel} methods. 
 This simplifies test writing, since basic model output properties are obtained trivially using NeuroTools object methods, and these NeuroTools objects are easily extracted from model output using candidate models subclassing \verbx{NeuroConstructModel}.  
 
-\subsubsection{Reference Data for Tests from NeuroElectro}
+\subsection{Reference Data for Tests from NeuroElectro}
 Answering \textit{how well} requires validation testing against data. 
 The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to curate all published single cell neurophysiology data \citep{tripathy_neuroelectro:_2012}.  
 Currently, up to 27 electrophysiological properties are reported for 93 cell types, spanning $>$ 2000 single pieces of published data extracted from article tables. 
@@ -402,7 +402,7 @@ Associated statistics of that data (e.g mean, standard error, and sample size) a
 While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
 As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
 
-\subsection{\textit{SciDash}: A community web application}\label{sec:scidash}
+\section{\textit{SciDash}: A community web application}\label{sec:scidash}
 A collection of tests, models, and test records can summarize the current state of modeling in a research area.  
 Community-oriented cyberinfrastructure to support the creation and summarization of such collections is essential.
 We used a service called \textit{SciDash} (\url{http://www.scidash.org}) for coordinated development of software repositories.
