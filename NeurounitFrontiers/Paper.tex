@@ -141,9 +141,7 @@ examples from other subfields of biology abound (\url{http://www.the-dream-proje
 % \caption{Proposal overview. 
 % \small{i) The \textit{SciUnit} framework can generate discipline-specific libraries for tests generation and model interfacing.  
 % \textit{NeuronUnit} is proposed and described here.  Experimental data guides test development; model generation informs and is informed by these \textit{SciUnit} libraries.  
-% Each \text{SciUnit} test suite repository on GitHub is indexed by the \textit{SciDash} web application.  
 % Test suites for OSB and QSNMC (described in the text) are being built. 
-% \textit{SciDash} automatically runs the test collections in each suite and publicly displays the results.}}
 % %\vspace{-10px}
 % \label{fig:sciunit_overview}
 % \end{figure}
@@ -155,8 +153,7 @@ examples from other subfields of biology abound (\url{http://www.the-dream-proje
 \includegraphics[scale=0.6]{diagram1.pdf}
 \vspace{-55px}
 \caption{NeuronUnit overview. NeuronUnit is set of testing tools built upon the discipline-agnostic SciUnit framework. 
-NeuronUnit can in principle test arbitrary neurophysiology models using arbitrary data but we provide here an example using models described in NeuroML as part of the \textit{Open Source Brain Project} (OSB, \citep{gleeson_open_2012}, \url{http://www.opensourcebrain.org}), and single neuron electrophysiology data available as part of the NeuroElectro Project (Neuroelectro, \citep{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}).  
-Records of test results for various model/test combinations are accessible via SciDash, which indexes GitHub repositories of these records, models, and tests so they can be searched and filtered by the community.}  
+NeuronUnit can in principle test arbitrary neurophysiology models using arbitrary data but we provide here an example using models described in NeuroML as part of the \textit{Open Source Brain Project} (OSB, \citep{gleeson_open_2012}, \url{http://www.opensourcebrain.org}), and single neuron electrophysiology data available as part of the NeuroElectro Project (Neuroelectro, \citep{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}).}  
 \label{fig:sciunit_overview}
 \end{figure}
 \leavevmode
@@ -244,7 +241,6 @@ In \textit{SciUnit}, classes defining capabilities are tagged as such by inherit
 
 The remainder of the \verbx{_judge} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} that is included with \textit{SciUnit}. In addition to the $p$-value itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for  scientists who may wish to examine the result in more detail later. 
 In this case we save the input currents, the model outputs and the observed means and standard deviations (line 24). 
-%We discuss visualization of results in Secs. \ref{sec:scidash_activities} and \ref{sec:scidash_visualization}.
 
 \begin{figure}
 \begin{python}
@@ -328,7 +324,7 @@ Like a single test, a test suite is capable of judging one or more models. The r
 \begin{python}
 CA1_matrix = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or  visualized by other tools, such as the web application \textit{SciDash} described in Sec. \ref{sec:scidash}.
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}
@@ -402,35 +398,9 @@ Associated statistics of that data (e.g mean, standard error, and sample size) a
 While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
 As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
 
-\section{\textit{SciDash}: A community web application}\label{sec:scidash}
-A collection of tests, models, and test records can summarize the current state of modeling in a research area.  
-Community-oriented cyberinfrastructure to support the creation and summarization of such collections is essential.
-We used a service called \textit{SciDash} (\url{http://www.scidash.org}) for coordinated development of software repositories.
-
-\begin{wrapfigure}[18]{r}{0.45\textwidth}
-\center
-\vspace{-10px}
-\includegraphics[scale=0.72]{scidash_github.png}
-\caption{A \textit{SciDash} repository on GitHub}
-\label{fig:scidash_repo}
-\end{wrapfigure}
-\vspace{-10px}
-\leavevmode
-
-\textit{SciDash} exists in three layers.
-The \textbf{first layer} is completely under the control of individual developer communities, and consists of git repositories \citep{ram_git_2013} stored on GitHub \url{http://github.com}. 
-\textit{SciDash} identifies all similarly structured repositories (by tracking the lineage of a vanilla \textit{SciDash} repository above using the GitHub API).
-This list of repositories is indexed by \textit{SciDash} to form the \textbf{second layer}, an overview of the state of all \textit{SciDash} repositories on GitHub.  
-This index is searchable and filterable on the \textit{SciDash} website to identify repositories of interest to a particular research community.  
-The \textbf{third layer} is a ``dashboard'' view of the state of a field, visible through a matrix of records for model/test combinations in a GitHub repository (Fig. \ref{fig:scidash_repo}). 
-Test records are visualized as a ``record matrix'' composed of large numbers of model/test combinations (Fig. \ref{fig:scidash_matrix}).  
-Each row in this matrix contains results for all tests taken by one model and serve as clear evidence of that model's scope and validity.  
-Hyperlinks in the record matrix point to models, tests, and records available on GitHub. 
-Each record links to test records (stored in the repository), displaying line-by-line the executed code and intermediate output statements, as well as the underlying models and tests.   
-
 \begin{figure}%[18]{r}{1\textwidth}
 \includegraphics[scale=0.65]{table.png}
-\caption{A \textit{SciDash} record matrix}
+\caption{A record matrix for SciUnit tests}
 \label{fig:scidash_matrix}
 \vspace{-15px}
 \end{figure}
@@ -474,16 +444,6 @@ a Test could be initialized using empirical spike rates collected in the lab.
 While this does not meet our idealized vision of development and testing, in practice this may be a common scenario. 
 Adoption of \textit{SciUnit} into traditional, custom workflows would be reflected in the Methods sections of articles.  
 
-\subsubsection{Collaboration}
-Community-moderated comments on GitHub will allow test-makers and test-takers to discuss issues associated with test suites. 
-On GitHub, these takes the form of ``issues,'' commit messages, and comments surrounding merge requests from forked repositories. 
-Thus, disagreements about the appropriateness of a test can be openly aired and in many cases resolved. 
-The \textit{SciDash} website itself can also support public comment to extend the features of GitHub. 
-More importantly, we will enable sorting and filtering of \textit{SciDash} results by repository statistics, e.g. the volume of activity and the number of followers, via the GitHub API. 
-This will allow the most important test suites, as judged by each community, to be featured prominently on \textit{SciDash}. 
-Simple tagging should enable filtering by subject matter. 
-We also will support open authentication via existing web applications (Google, Twitter, etc.), lowering the barrier to participation.  
-
 \subsection{Participation from Modeling Communities}
 Modelers may not want to expose model capabilities, a requirement of test-taking.  
 We anticipate four solutions: \textbf{First}, interfacing a model to \textit{SciUnit} requires only implementing selected model capabilities. 
@@ -522,19 +482,19 @@ A test first assesses goodness-of-fit, and applies a normalization (e.g. pass/fa
 Arbitrary choices at both stages may benefit some models over others.  \textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
 For example, given a data mean and variance, ordering model output by Z-score or p-value will yield the same relative ranking of models. 
 Indeed, rank ordering of models may prove more valuable than test scores themselves. 
-\textbf{Second}, suite repositories are open (e.g. Fig. \ref{fig:scidash_repo}), so tests can be cloned and new statistical choices implemented. 
+\textbf{Second}, suite repositories should be open, so tests can be cloned and new statistical choices implemented. 
 Statistics as applied to neuroscience have been notoriously ``fast and loose''; 
 identification and correction of flawed methodology is becoming increasingly common (\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010}, \url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg}), and is accelerated by an open framework. 
 The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
 Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. 
-A community consensus will slowly emerge in the form a commonly-accepted test suite (see Sec. \ref{sec:scidash}). 
-This community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used on GitHub -- and the \textit{SciUnit} framework determines whether the model \textit{does} it.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).  
+A community consensus will slowly emerge in the form a commonly-accepted test suite. 
+This community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).  
 
 \subsection{Reliability of Data Underlying Tests}
 Unreliable data can undermine model validation. 
 \textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
 GitHub supports community moderation, permitting users to comment on tests, indicating their concerns. 
-Suite repository popularity, by which \textit{SciDash} results can be filtered, can reflect consensus. 
+Suite repository popularity can reflect consensus. 
 Experimental metadata also constrains a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
 Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
 Such capabilities require no implementation, so the model definition must only inherit them. 
@@ -546,7 +506,7 @@ The degree of such ``self-validation'' represents the upper limit of what a mode
 All things being equal, simpler models are better. 
 Model complexity has many definitions, so \textit{SciDash} will report several complexity metrics \citep{mccabe_complexity_1976}, including: 
 1) model length; 2) memory use; 3) CPU load; 4) \# of capabilities. 
-\textit{SciDash} will report the model validity vs complexity tradeoff in tabular form (e.g. Table \ref{fig:scidash_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
+Future \textit{SciUnit} tools will report the model validity vs complexity tradeoff in tabular form (e.g. Table \ref{fig:scidash_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
 The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot, a visualization familiar from the symbolic regression package Eureqa \citep{schmidt_distilling_2009}.  
 
 \subsection{Expansion Into Other Areas of Biology}
