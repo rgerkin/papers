@@ -63,7 +63,7 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \onecolumn
 \firstpage{1}
 
-\title[Running Title]{NeuronUnit: Validation Tests for Neurophysiology Models}
+\title[Running Title]{NeuronUnit: Collaborative Validation Testing of Neurophysiological Models}
 \author[\firstAuthorLast ]{\Authors}
 \address{}
 \correspondance{}
@@ -76,9 +76,9 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \begin{abstract}
 Rigorously validating a scientific model's explanatory power requires comparing its predictions against empirical data on an ongoing basis. 
 However, model validation remains an informal and incomplete process, especially in fields like neuroscience where the available data is growing rapidly.   
-This has made it difficult to develop a contemporary understanding of a model's strengths and weaknesses, to adequately compare competing models, to determine the state-of-the-art, and to precisely identify open modeling problems.
+This has made it difficult to develop compare competing models, to determine the state-of-the-art, and to precisely identify open modeling problems.
 
-Software engineers validate software by writing simple executable tests, called ``unit tests'', that individually check a portion of a program against a single correctness criterion. 
+Software engineers validate software by writing simple executable tests, called ``unit tests''. 
 Suites of such unit tests can collectively provide evidence for its validity and correctness. 
 Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
 executable functions, here written in Python, that compare model predictions against a single empirical observation to produce a score indicating agreement between the model and the data. 
@@ -332,10 +332,10 @@ A simple summary of the scores in a score matrix can be printed to the console o
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}
-In the examples above, tests were parameterized by data explicitly, and models implemented capabilities directly. In practice, however, both models and data are being published in specialized repositories. These repositories standardize the data according to emerging standards, making them available in a uniform manner. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
+In the examples above, tests were parameterized by data explicitly, and models implemented capabilities directly. In many cases, however, both models and data can be accessed from specialized repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
 
 \subsection{\textit{NeuronUnit}: Neurophysiology-Specific Testing Tools}\label{sec:neuronunit}\label{sec:neuronunit_acitivities}
-In particular, we will focus on neurophysiology in this paper as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from resources like \textit{NeuroElectro}. Functions that conveniently link these tools to \textit{SciUnit}, along with collection of relevant model and test families and associated capabilities are available in a package called \textit{NeuronUnit}, collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. \todo{Sentence about how great github is for collaboratively doing things, particularly in science?} Scientists can use these tools to create test suites tailored to specific systems of interest (for example, scientists interested specifically in models of cells in the hippocampus would use \textit{NeuronUnit} to create a suite, \textit{HippocampusSuite}, parameterized by relevant data from \textit{NeuroElectro}).
+In particular, we will focus on neurophysiology in this paper as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from resources like \textit{NeuroElectro}. We will provide functions that  link these tools to \textit{SciUnit}, as a collection of relevant model and test families and associated capabilities, in a package called \textit{NeuronUnit}, collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. \todo{Sentence about how great github is for collaboratively doing things, particularly in science?} Scientists can use these tools to create test suites tailored to specific systems of interest (for example, scientists interested specifically in models of cells in the hippocampus would use \textit{NeuronUnit} to create a suite, \textit{HippocampusSuite}, parameterized by relevant data from \textit{NeuroElectro}).
 
 We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop similar repositories that synergistically link \textit{SciUnit} to relevant ongoing standardization efforts and provide a common, collaboratively-developed vocabulary of test families, model families and capabilities relevant to their domain.
 

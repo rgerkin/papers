@@ -1,49 +1,71 @@
-This is BibTeX, Version 0.99d (TeX Live 2013)
+This is BibTeX, Version 0.99d (TeX Live 2011)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: Paper.aux
-The style file: unsrt.bst
+The style file: frontiersinSCNS&ENG.bst
 Database file #1: references.bib
 Database file #2: references_crook.bib
 Database file #3: urls.bib
 Database file #4: references_ja.bib
-You've used 40 entries,
-            1791 wiz_defined-function locations,
-            673 strings with 10458 characters,
-and the built_in function-call counts, 6609 in all, are:
-= -- 493
-> -- 339
-< -- 0
-+ -- 136
-- -- 96
-* -- 411
-:= -- 920
-add.period$ -- 82
-call.type$ -- 40
-change.case$ -- 14
-chr.to.int$ -- 0
-cite$ -- 40
-duplicate$ -- 265
-empty$ -- 791
-format.name$ -- 96
-if$ -- 1509
-int.to.chr$ -- 0
-int.to.str$ -- 40
-missing$ -- 18
-newline$ -- 165
-num.names$ -- 16
-pop$ -- 163
+Name 1 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 2901 of file frontiersinSCNS&ENG.bst
+Name 1 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 2901 of file frontiersinSCNS&ENG.bst
+Name 2 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 2901 of file frontiersinSCNS&ENG.bst
+Name 3 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 2901 of file frontiersinSCNS&ENG.bst
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Name 1 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+Name 2 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+Name 3 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+Name 1 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+Name 2 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+Name 3 in "Subhasis Ray, and Raamesh Deshpande, and Niraj Dudani, and Upinder S Bhalla" has a comma at the end for entry ray_moose_2008
+while executing---line 3077 of file frontiersinSCNS&ENG.bst
+You've used 22 entries,
+            3038 wiz_defined-function locations,
+            836 strings with 11737 characters,
+and the built_in function-call counts, 15116 in all, are:
+= -- 1152
+> -- 787
+< -- 11
++ -- 396
+- -- 214
+* -- 1253
+:= -- 2077
+add.period$ -- 0
+call.type$ -- 22
+change.case$ -- 178
+chr.to.int$ -- 23
+cite$ -- 22
+duplicate$ -- 1108
+empty$ -- 1138
+format.name$ -- 277
+if$ -- 3018
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 230
+newline$ -- 74
+num.names$ -- 88
+pop$ -- 466
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 159
 quote$ -- 0
-skip$ -- 239
+skip$ -- 617
 stack$ -- 0
-substring$ -- 298
-swap$ -- 40
+substring$ -- 640
+swap$ -- 611
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 189
 warning$ -- 0
-while$ -- 39
-width$ -- 42
-write$ -- 316
+while$ -- 95
+width$ -- 0
+write$ -- 268
+(There were 10 error messages)

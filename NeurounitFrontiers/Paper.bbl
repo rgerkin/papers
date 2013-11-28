@@ -1,188 +1,137 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{22}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\selectlanguage}[1]{\relax}
 
-\bibitem{jinha_article_2010}
-Arif~E. Jinha.
-\newblock Article 50 million: an estimate of the number of scholarly articles
-  in existence.
-\newblock {\em Learned Publishing}, 23(3):258--263, July 2010.
+\bibitem[{\textbf{A.P.}(2012)}]{sumatra_davison_2012}
+A.P., D. (2012), Automated capture of experiment context for easier
+  reproducibility in computational research environment, \emph{Computing in
+  Science and Engineering}, 14, 48--56
 
-\bibitem{beck2003}
-Kent Beck.
-\newblock {\em Test Driven Development: By Example}.
-\newblock Addison Wesley, 2003.
+\bibitem[{\textbf{Beck}(2003)}]{beck2003}
+Beck, K. (2003), Test Driven Development: By Example (Addison Wesley)
 
-\bibitem{jolivet_quantitative_2008}
-Renaud Jolivet, Felix Schürmann, Thomas Berger, Richard Naud, Wulfram
-  Gerstner, and Arnd Roth.
-\newblock The quantitative single-neuron modeling competition.
-\newblock {\em Biological Cybernetics}, 99(4):417--426, November 2008.
+\bibitem[{\textbf{Bower and Beeman}(2007)}]{bower_genesis_2007}
+Bower, J.~M. and Beeman, D. (2007), {{C}onstructing realistic neural
+  simulations with {G}{E}{N}{E}{S}{I}{S}}, \emph{Methods Mol. Biol.}, 401,
+  103--125
 
-\bibitem{hopfield_what_2000}
-J~J Hopfield and C~D Brody.
-\newblock What is a moment? {"Cortical"} sensory integration over a brief
-  interval.
-\newblock {\em Proceedings of the National Academy of Sciences of the United
-  States of America}, 97(25):13919--13924, December 2000.
-\newblock {PMID:} 11095747.
+\bibitem[{\textbf{Button et~al.}(2013)\textbf{Button, Ioannidis, Mokrysz,
+  Nosek, Flint, Robinson et~al.}}]{button_power_2013}
+Button, K.~S., Ioannidis, J. P.~A., Mokrysz, C., Nosek, B.~A., Flint, J.,
+  Robinson, E. S.~J., et~al. (2013), {\selectlanguage{english}Power failure:
+  why small sample size undermines the reliability of neuroscience},
+  \emph{Nature reviews. Neuroscience}, 14, 5, 365--376, \doi{10.1038/nrn3475},
+  {PMID:} 23571845
 
-\bibitem{neural_prediction_url}
-\url{http://neuralprediction.berkeley.edu/}.
+\bibitem[{\textbf{Carnevale and Hines}(2006)}]{carnevale_neuron_2006}
+Carnevale, N. and Hines, M. (2006), The {NEURON} Book (Cambridge University
+  Press, Cambridge, {UK})
 
-\bibitem{diadem_url}
-\url{http://www.diademchallenge.org}.
+\bibitem[{\textbf{Fisher}(1925)}]{fisher_statistical_1925}
+Fisher, R.~A. (1925), Statistical Methods for Research Workers (Oliver and
+  Boyd, Edinburgh)
 
-\bibitem{dream_url}
-\url{http://www.the-dream-project.org/}.
+\bibitem[{\textbf{Galbraith et~al.}(2010)\textbf{Galbraith, Daniel, and
+  Vissel}}]{galbraith_study_2010}
+Galbraith, S., Daniel, J.~A., and Vissel, B. (2010), {\selectlanguage{english}A
+  study of clustered data and approaches to its analysis}, \emph{The Journal of
+  Neuroscience}, 30, 32, 10601--10608, \doi{10.1523/JNEUROSCI.0362-10.2010},
+  {PMID:} 20702692
 
-\bibitem{osb_url}
-\url{http://www.opensourcebrain.org}.
+\bibitem[{\textbf{Gewaltig and Diesmann}(2007)}]{gewaltig_nest_2007}
+Gewaltig, M.-O. and Diesmann, M. (2007), Nest (neural simulation tool),
+  \emph{Scholarpedia}, 2, 4, 1430
 
-\bibitem{neuroelectro_url}
-\url{http://www.neuroelectro.org/}.
+\bibitem[{\textbf{Gleeson et~al.}(2010)\textbf{Gleeson, Crook, Cannon, Hines,
+  Billings, Farinella et~al.}}]{gleeson_neuroml:_2010}
+Gleeson, P., Crook, S., Cannon, R.~C., Hines, M.~L., Billings, G.~O.,
+  Farinella, M., et~al. (2010), {\selectlanguage{english}{NeuroML:} a language
+  for describing data driven models of neurons and networks with a high degree
+  of biological detail}, \emph{{PLoS} computational biology}, 6, 6, e1000815,
+  \doi{10.1371/journal.pcbi.1000815}, {PMID:} 20585541
 
-\bibitem{sciunit_url}
-\url{http://github.com/scidash/sciunit}.
+\bibitem[{\textbf{Gleeson et~al.}(2012)\textbf{Gleeson, Piasini, Crook, Cannon,
+  Steuber, Jaeger et~al.}}]{gleeson_open_2012}
+Gleeson, P., Piasini, E., Crook, S., Cannon, R., Steuber, V., Jaeger, D.,
+  et~al. (2012), The open source brain initiative: enabling collaborative
+  modelling in computational neuroscience, \emph{{BMC} Neuroscience}, 13, Suppl
+  1, O7, \doi{10.1186/1471-2202-13-S1-O7}, {PMID:} null {PMCID:} {PMC3403499}
 
-\bibitem{fisher_statistical_1925}
-Ronald~A Fisher.
-\newblock {\em Statistical Methods for Research Workers}.
-\newblock Oliver and Boyd, Edinburgh, 1925.
+\bibitem[{\textbf{Gleeson et~al.}(2007)\textbf{Gleeson, Steuber, and
+  Silver}}]{gleeson_neuroconstruct:_2007}
+Gleeson, P., Steuber, V., and Silver, R.~A. (2007),
+  {\selectlanguage{english}{neuroConstruct:} a tool for modeling networks of
+  neurons in {3D} space}, \emph{Neuron}, 54, 2, 219--235,
+  \doi{10.1016/j.neuron.2007.03.025}, {PMID:} 17442244
 
-\bibitem{neurounit_url}
-\url{http://github.com/scidash/neurounit}.
+\bibitem[{\textbf{Hopfield and Brody}(2000)}]{hopfield_what_2000}
+Hopfield, J.~J. and Brody, C.~D. (2000), {\selectlanguage{english}What is a
+  moment? {"Cortical"} sensory integration over a brief interval},
+  \emph{Proceedings of the National Academy of Sciences of the United States of
+  America}, 97, 25, 13919--13924, \doi{10.1073/pnas.250483697}, {PMID:}
+  11095747
 
-\bibitem{java_interfaces_url}
-\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}.
+\bibitem[{\textbf{Hucka et~al.}(2003)\textbf{Hucka, Finney, Sauro, Bolouri,
+  Doyle, Kitano et~al.}}]{hucka_systems_2003}
+Hucka, M., Finney, A., Sauro, H.~M., Bolouri, H., Doyle, J.~C., Kitano, H.,
+  et~al. (2003), {\selectlanguage{english}The systems biology markup language
+  ({SBML):} a medium for representation and exchange of biochemical network
+  models}, \emph{Bioinformatics (Oxford, England)}, 19, 4, 524--531, {PMID:}
+  12611808
 
-\bibitem{gleeson_neuroml:_2010}
-Padraig Gleeson, Sharon Crook, Robert~C Cannon, Michael~L Hines, Guy~O
-  Billings, Matteo Farinella, Thomas~M Morse, Andrew~P Davison, Subhasis Ray,
-  Upinder~S Bhalla, Simon~R Barnes, Yoana~D Dimitrova, and R~Angus Silver.
-\newblock {NeuroML:} a language for describing data driven models of neurons
-  and networks with a high degree of biological detail.
-\newblock {\em {PLoS} computational biology}, 6(6):e1000815, June 2010.
-\newblock {PMID:} 20585541.
+\bibitem[{\textbf{Jinha}(2010)}]{jinha_article_2010}
+Jinha, A.~E. (2010), Article 50 million: an estimate of the number of scholarly
+  articles in existence, \emph{Learned Publishing}, 23, 3, 258--263,
+  \doi{10.1087/20100308}
 
-\bibitem{neuroconstruct_url}
-\url{http://www.neuroconstruct.org}.
+\bibitem[{\textbf{Jolivet et~al.}(2008)\textbf{Jolivet, Schürmann, Berger,
+  Naud, Gerstner, and Roth}}]{jolivet_quantitative_2008}
+Jolivet, R., Schürmann, F., Berger, T., Naud, R., Gerstner, W., and Roth, A.
+  (2008), The quantitative single-neuron modeling competition, \emph{Biological
+  Cybernetics}, 99, 4, 417--426, \doi{10.1007/s00422-008-0261-x}
 
-\bibitem{gleeson_neuroconstruct:_2007}
-Padraig Gleeson, Volker Steuber, and R~Angus Silver.
-\newblock {neuroConstruct:} a tool for modeling networks of neurons in {3D}
-  space.
-\newblock {\em Neuron}, 54(2):219--235, April 2007.
-\newblock {PMID:} 17442244.
+\bibitem[{\textbf{Kriegeskorte et~al.}(2008)\textbf{Kriegeskorte, Mur, and
+  Bandettini}}]{kriegeskorte_representational_2008}
+Kriegeskorte, N., Mur, M., and Bandettini, P. (2008),
+  {\selectlanguage{english}Representational similarity analysis - connecting
+  the branches of systems neuroscience}, \emph{Frontiers in systems
+  neuroscience}, 2, 4, \doi{10.3389/neuro.06.004.2008}, {PMID:} 19104670
 
-\bibitem{neuron_url}
-\url{http://www.neuron.yale.edu/neuron}.
+\bibitem[{\textbf{Kriegeskorte et~al.}(2009)\textbf{Kriegeskorte, Simmons,
+  Bellgowan, and Baker}}]{kriegeskorte_circular_2009}
+Kriegeskorte, N., Simmons, W.~K., Bellgowan, P. S.~F., and Baker, C.~I. (2009),
+  {\selectlanguage{english}Circular analysis in systems neuroscience: the
+  dangers of double dipping}, \emph{Nature neuroscience}, 12, 5, 535--540,
+  \doi{10.1038/nn.2303}, {PMID:} 19396166
 
-\bibitem{genesis_url}
-\url{http://genesis-sim.org/}.
+\bibitem[{\textbf{{McCabe}}(1976)}]{mccabe_complexity_1976}
+{McCabe}, T. (1976), A complexity measure, \emph{{IEEE} Transactions on
+  Software Engineering}, 2, 4, 308--320
 
-\bibitem{nest_url}
-\url{http://www.nest-initiative.org/}.
+\bibitem[{\textbf{Ram}(2013)}]{ram_git_2013}
+Ram, K. (2013), {\selectlanguage{english}Git can facilitate greater
+  reproducibility and increased transparency in science}, \emph{Source code for
+  biology and medicine}, 8, 1, 7, \doi{10.1186/1751-0473-8-7}, {PMID:} 23448176
 
-\bibitem{moose_url}
-\url{http://moose.ncbs.res.in/}.
+\bibitem[{\textbf{Ray et~al.}(2008)\textbf{Ray, Deshpande, Dudani, and
+  Bhalla}}]{ray_moose_2008}
+Ray, S., Deshpande, R., Dudani, N., and Bhalla, U.~S. (2008), A general
+  biological simulator: the multiscale object oriented simulation environment,
+  moose, \emph{BMC Neuroscience}, 9, Suppl. 1, 93
 
-\bibitem{osb_ca1_url}
-\url{http://opensourcebrain.org/projects/ca1pyramidalcell}.
+\bibitem[{\textbf{Schmidt and Lipson}(2009)}]{schmidt_distilling_2009}
+Schmidt, M. and Lipson, H. (2009), {\selectlanguage{english}Distilling
+  free-form natural laws from experimental data}, \emph{Science (New York,
+  {N.Y.)}}, 324, 5923, 81--85, \doi{10.1126/science.1165893}, {PMID:} 19342586
 
-\bibitem{neuroconstruct_rgerkin_url}
-\url{http://github.com/rgerkin/neuroConstruct}.
-
-\bibitem{neuralensemble_url}
-\url{http://neuralensemble.org}.
-
-\bibitem{tripathy_neuroelectro:_2012}
-{SJ} Tripathy, J~Saviskaya, {RC} Gerkin, and {NN} Urban.
-\newblock {NeuroElectro:} a database describing the electrophysiology
-  properties of different neuron types.
-\newblock {\em Neuroinformatics Meeting}, 2012.
-
-\bibitem{neuroelectro_dev_url}
-\url{http://bitbucket.org/rgerkin/neuroelectro_org}.
-
-\bibitem{scidash_url}
-\url{http://www.scidash.org}.
-
-\bibitem{ram_git_2013}
-Karthik Ram.
-\newblock Git can facilitate greater reproducibility and increased transparency
-  in science.
-\newblock {\em Source code for biology and medicine}, 8(1):7, 2013.
-\newblock {PMID:} 23448176.
-
-\bibitem{github_url}
-\url{http://www.neuron.yale.edu/neuron}.
-
-\bibitem{sbml_url}
-\url{http://sbml.org/}.
-
-\bibitem{hucka_systems_2003}
-M~Hucka, A~Finney, H~M Sauro, H~Bolouri, J~C Doyle, H~Kitano, A~P Arkin, B~J
-  Bornstein, D~Bray, A~Cornish-Bowden, A~A Cuellar, S~Dronov, E~D Gilles,
-  M~Ginkel, V~Gor, I~I Goryanin, W~J Hedley, T~C Hodgman, J-H Hofmeyr, P~J
-  Hunter, N~S Juty, J~L Kasberger, A~Kremling, U~Kummer, N~Le~Novère, L~M
-  Loew, D~Lucio, P~Mendes, E~Minch, E~D Mjolsness, Y~Nakayama, M~R Nelson, P~F
-  Nielsen, T~Sakurada, J~C Schaff, B~E Shapiro, T~S Shimizu, H~D Spence,
-  J~Stelling, K~Takahashi, M~Tomita, J~Wagner, J~Wang, and {{SBML} Forum}.
-\newblock The systems biology markup language ({SBML):} a medium for
-  representation and exchange of biochemical network models.
-\newblock {\em Bioinformatics (Oxford, England)}, 19(4):524--531, March 2003.
-\newblock {PMID:} 12611808.
-
-\bibitem{kriegeskorte_representational_2008}
-Nikolaus Kriegeskorte, Marieke Mur, and Peter Bandettini.
-\newblock Representational similarity analysis - connecting the branches of
-  systems neuroscience.
-\newblock {\em Frontiers in systems neuroscience}, 2:4, 2008.
-\newblock {PMID:} 19104670.
-
-\bibitem{button_power_2013}
-Katherine~S Button, John P~A Ioannidis, Claire Mokrysz, Brian~A Nosek, Jonathan
-  Flint, Emma S~J Robinson, and Marcus~R Munafò.
-\newblock Power failure: why small sample size undermines the reliability of
-  neuroscience.
-\newblock {\em Nature reviews. Neuroscience}, 14(5):365--376, May 2013.
-\newblock {PMID:} 23571845.
-
-\bibitem{kriegeskorte_circular_2009}
-Nikolaus Kriegeskorte, W~Kyle Simmons, Patrick S~F Bellgowan, and Chris~I
-  Baker.
-\newblock Circular analysis in systems neuroscience: the dangers of double
-  dipping.
-\newblock {\em Nature neuroscience}, 12(5):535--540, May 2009.
-\newblock {PMID:} 19396166.
-
-\bibitem{galbraith_study_2010}
-Sally Galbraith, James~A. Daniel, and Bryce Vissel.
-\newblock A study of clustered data and approaches to its analysis.
-\newblock {\em The Journal of Neuroscience}, 30(32):10601--10608, August 2010.
-\newblock {PMID:} 20702692.
-
-\bibitem{fish_fmri_url}
-\url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg/}.
-
-\bibitem{mccabe_complexity_1976}
-{TJ} {McCabe}.
-\newblock A complexity measure.
-\newblock {\em {IEEE} Transactions on Software Engineering}, 2(4):308--320,
-  1976.
-
-\bibitem{schmidt_distilling_2009}
-Michael Schmidt and Hod Lipson.
-\newblock Distilling free-form natural laws from experimental data.
-\newblock {\em Science (New York, {N.Y.)}}, 324(5923):81--85, April 2009.
-\newblock {PMID:} 19342586.
-
-\bibitem{nibabel_url}
-\url{http://nipy.org/nibabel}.
-
-\bibitem{neurohdf_url}
-\url{http://neurohdf.readthedocs.org}.
-
-\bibitem{open_worm_url}
-\url{http://www.openworm.org/}.
+\bibitem[{\textbf{Tripathy et~al.}(2012)\textbf{Tripathy, Saviskaya, Gerkin,
+  and Urban}}]{tripathy_neuroelectro:_2012}
+Tripathy, S., Saviskaya, J., Gerkin, R., and Urban, N. (2012), {NeuroElectro:}
+  a database describing the electrophysiology properties of different neuron
+  types, \emph{Neuroinformatics Meeting}
 
 \end{thebibliography}
