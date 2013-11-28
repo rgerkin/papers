@@ -63,7 +63,7 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \onecolumn
 \firstpage{1}
 
-\title[Running Title]{NeuronUnit: Collaborative Validation Testing of Neurophysiological Models}
+\title[Running Title]{NeuronUnit: Collaborative Validation Testing of Neuroscientific Models}
 \author[\firstAuthorLast ]{\Authors}
 \address{}
 \correspondance{}
@@ -74,19 +74,19 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \maketitle
 
 \begin{abstract}
-Rigorously validating a scientific model's explanatory power requires comparing its predictions against empirical data on an ongoing basis. 
-However, model validation remains an informal and incomplete process, especially in fields like neuroscience where the available data is growing rapidly.   
-This has made it difficult to develop compare competing models, to determine the state-of-the-art, and to precisely identify open modeling problems.
+Rigorously validating a quantitative scientific model requires comparing its predictions against an unbiased selection of experimental observations according to sound statistical criteria. Developing new models thus requires a comprehensive and contemporary understanding of competing models, relevant data and statistical best practices. Today, this can only be achieved by developing an encyclopedic knowledge of the literature. 
+Unfortunately, in rapidly-growing fields like neuroscience, this has become increasingly untenable, even for the most conscientious scientists.
 
-Software engineers validate software by writing simple executable tests, called ``unit tests''. 
-Suites of such unit tests can collectively provide evidence for its validity and correctness. 
-Drawing inspiration from this practice, we develop the \textit{SciUnit} framework for developing suites of ``model validation tests'' -- 
-executable functions, here written in Python, that compare model predictions against a single empirical observation to produce a score indicating agreement between the model and the data. 
-Suites of such validation tests are used as a summary of modeling progress within a scientific community. 
-As a first application of this framework, we describe \textit{NeuronUnit}, a library that supports validation testing for neurophysiology and integrates with several existing neuroinformatics resources.
+%However, today's model validation process is based on one-time peer review of a scientific publication. , and thus remains an informal and incomplete process, particularly in fields like neuroscience where the number of competing models and the volume of relevant data is growing rapidly.   
+%This makes it difficult to determine community-accepted validation criteria, compare competing models,  determine the state-of-the-art given the latest experimental data, and to precisely identify open modeling problems.
+
+Software engineers seeking to verify, validate and contribute to a complex software project rely not only on peer review, but on suites of simple executable tests, called ``unit tests''. 
+Drawing inspiration from this practice, we have developed \textit{SciUnit}, a framework for developing ``model validation tests'' -- 
+executable functions, here written in Python, that compare a quantitative model's predictions against a single experimental  observation to produce a score indicating agreement between the model and the data, as determined by a statistical test. 
+Suites of such validation tests are collaboratively developed by a scientific community and can be used as a  summary of the state-of-the-art in a scientific community. In this paper, we aim to introduce this test-driven workflow to the neuroscience community. We proceed by describing \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics standards and resources to support validation testing of single-neuron models using data gathered by neurophysiologists. 
 
 \tiny
- \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
+ \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling\todo{is this the right format for this?} } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
 \end{abstract}
 
 % Section 1.
