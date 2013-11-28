@@ -74,16 +74,16 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \maketitle
 
 \begin{abstract}
-Rigorously validating a quantitative scientific model requires comparing its predictions against an unbiased selection of experimental observations according to sound statistical criteria. Developing new models thus requires a comprehensive and contemporary understanding of competing models, relevant data and statistical best practices. Today, this can only be achieved by developing an encyclopedic knowledge of the literature. 
-Unfortunately, in rapidly-growing fields like neuroscience, this has become increasingly untenable, even for the most conscientious scientists.
+Rigorously validating a quantitative scientific model requires comparing its predictions against an unbiased selection of experimental observations according to sound statistical criteria. Developing new models thus requires a comprehensive and contemporary understanding of competing models, relevant data and statistical best practices. Today, developing such an understanding requires an encyclopedic knowledge of the literature. 
+Unfortunately, in rapidly-growing fields like neuroscience, this is becoming increasingly untenable, even for the most conscientious scientists. For new scientists, this can be a significant barrier to entry.
 
 %However, today's model validation process is based on one-time peer review of a scientific publication. , and thus remains an informal and incomplete process, particularly in fields like neuroscience where the number of competing models and the volume of relevant data is growing rapidly.   
 %This makes it difficult to determine community-accepted validation criteria, compare competing models,  determine the state-of-the-art given the latest experimental data, and to precisely identify open modeling problems.
 
-Software engineers seeking to verify, validate and contribute to a complex software project rely not only on peer review, but on suites of simple executable tests, called ``unit tests''. 
-Drawing inspiration from this practice, we have developed \textit{SciUnit}, a framework for developing ``model validation tests'' -- 
-executable functions, here written in Python, that compare a quantitative model's predictions against a single experimental  observation to produce a score indicating agreement between the model and the data, as determined by a statistical test. 
-Suites of such validation tests are collaboratively developed by a scientific community and can be used as a  summary of the state-of-the-art in a scientific community. In this paper, we aim to introduce this test-driven workflow to the neuroscience community. We proceed by describing \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics standards and resources to support validation testing of single-neuron models using data gathered by neurophysiologists. 
+Software engineers seeking to verify, validate and contribute to a complex software project rely not only on volumes of human documentation, but on suites of simple executable tests, called ``unit tests''. 
+Drawing inspiration from this practice, we have developed \textit{SciUnit}, an easy-to-use framework for developing ``model validation tests'' -- 
+executable functions, here written in Python, that generate predictions from a quantitative model and statistically validate these predictions against a relevant experimental observation to produce a score indicating agreement between the model and the data. 
+Suites of such validation tests are collaboratively developed by a scientific community in common repositories  to produce up-to-date statistical summaries of the state-of-the-art in a scientific community. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. To be concrete, we describe \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics resources to support validating single-neuron models using data gathered by neurophysiologists. 
 
 \tiny
  \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling\todo{is this the right format for this?} } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
