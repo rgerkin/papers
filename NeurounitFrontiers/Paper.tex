@@ -207,8 +207,8 @@ class SpikeCountTest(sciunit.Test):
 \end{figure}
 
 %Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  
-We first illustrate the form of a generic example \textit{SciUnit} test suite that could be used in neurophysiology. 
-Suppose we have collected data from an experiment where current stimuli (measured in pA) are delivered to neurons in some brain region, while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
+We begin by building an example \textit{SciUnit} test suite that could be used in neurophysiology. 
+Suppose we have collected data from an experiment where current stimuli (measured in pA) was delivered to neurons in some brain region, while the somatic membrane potential of each stimulated cell (in mV) was recorded and stored.  
 A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
 One simple validation test would ask candidate models to predict the number of action potentials (a.k.a. spikes) generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials using the same stimulus. 
@@ -227,17 +227,17 @@ Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in i
 The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
-For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
+For example, given observations from CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{python}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). 
+For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{_judge} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
-To specify the interface between the test and the model (that is, to specify an appropriate scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
-Capabilities are simply collections of methods that a test will need to invoke in order to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
+To specify the interface between the test and the model, the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
+Capabilities are simply collections of methods that a test needs a model to implement so that it can provide inputs and generate relevant predictions, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
 In Python, capabilities are written as classes with unimplemented members. 
 The capability required by the test in Fig. \ref{fig:rate_test} is shown in Fig. \ref{fig:capability}. 
 In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
@@ -277,17 +277,16 @@ Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are i
 
 Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, which we will discuss below. 
 Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
-To create a \emph{particular} linear model, a modeler can provide particular parameter values, just as with test families:
+To create a \emph{particular} linear model, a modeler provides parameter values, just as with test families:
 \begin{python}
 CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
 \end{python}
 Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
 An alternative test design would add a training phase where these parameters were fit to data using the capability shown in Fig. \ref{fig:training}. 
-This test could thus only be used for those models for which parameters can be adjusted without human involvement. 
+This alternative test could thus only be used for those models for which parameters can be adjusted without human involvement. 
 Whether to build a training phase into the test protocol is a choice left to each test development community. 
-
 Fig. \ref{fig:rate_test} does not include a training phase. 
-If training data is externally available, models that nevertheless do implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
+If training data is externally available, models that nevertheless are capable of being automatically trained (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
 \begin{python}
 CA1_linear_model_fit = LinearModel()
 CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
@@ -327,7 +326,7 @@ Like a single test, a test suite is capable of judging one or more models. The r
 \begin{python}
 CA1_matrix = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development\todo{mention use within iPython to generate an HTML table}.
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
