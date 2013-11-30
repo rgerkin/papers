@@ -82,15 +82,17 @@ Unfortunately, in rapidly-growing fields like neuroscience, this is becoming inc
 
 Software engineers seeking to verify, validate and contribute to a complex software project rely not only on volumes of human documentation, but on suites of simple executable tests, called ``unit tests''. 
 Drawing inspiration from this practice, we have developed \textit{SciUnit}, an easy-to-use framework for developing ``model validation tests'' -- 
-executable functions, here written in Python, that generate and statistically validate predictions from a specified class of scientific models against one relevant empirical observation to produce a score indicating agreement between the model and the data. 
+executable functions, here written in Python. 
+These tests generate and statistically validate predictions from a specified class of scientific models against one relevant empirical observation to produce a score indicating agreement between the model and the data. 
 Suites of such validation tests, collaboratively developed by a scientific community in common repositories, produce up-to-date statistical summaries of the state of the field. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. As an initial example, we describe \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics resources to support validating single-neuron models using data gathered by neurophysiologists. 
 
 \tiny
- \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling Validation\todo{is this the right format for these?} } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
+ \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling Validation } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
 \end{abstract}
 
 % Section 1.
 \section{Introduction}
+\label{sec:introduction}
 Neuroscientists construct quantitative models to coherently explain experimental observations of neurons, circuits, brain regions and behavior. 
 A model can be characterized by its \textit{scope}: the set of observable quantities that it can generate predictions about, and by its \textit{validity}: the extent to which its predictions agree with available experimental  observations of those quantities.
 
@@ -101,7 +103,7 @@ Because publications are the sole vehicle for knowledge about model scope and va
 \begin{itemize}
 \item Which models are capable of predicting the quantities I am interested in?
 \item What are the best practices for evaluating the goodness-of-fit between these models and  data?
-\item How well do these models perform, as judged to these metrics, given currently available data?
+\item How well do these models perform, as judged by these metrics, given currently available data?
 \item What other quantities can and can't these models predict?
 \item What observations have not yet been adequately explained by any available model?
 \end{itemize}
@@ -119,21 +121,21 @@ In some fields, like neuroscience, where the number of relevant publications bei
 %A strength of publications are their focused descriptions of new data and models. 
 %A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
 
-Professional software developers face similar issues\todo{probably cite our in submission paper here??}. 
+Professional software developers face similar issues\citep{omar_sciunit_2013}\todo{probably cite our in submission paper here??}. 
 They must understand the scope of each component of a complex software project and verify that each component achieves desired input/output behavior. 
-But software developers do not verify components by simply documenting a few interesting inputs and corresponding outputs and presenting them to other developers for one-time review leading to an archived document. 
+But software developers do not verify components by simply documenting a few interesting inputs and corresponding outputs and then presenting them to other developers for one-time review leading to an archived document. 
 Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that serve to specify each component's scope and verify its implementation on an ongoing basis as it is being developed and modified \citep{beck2003}. 
 Each test individually checks that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. 
 Collectively, the test results serve as a summary of the project as it progresses through its development cycle. 
 Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. 
-This methodology is widely adopted in practice.
+This methodology is widely adopted in practice \citep{beck2003}.
 
 %publications would be analagous to user manuals, rather than rigorous justifications that a program meets a specific specification. Unit tests serve this purpose for software, so we argue that the validation of neuroscience models by means of executable tests would be useful to scientists as a supplement the publication system.
 
 Test-driven methodologies have started to see success in neuroscience as well, in the form of \emph{modeling competitions}. 
-During these competitions, competitors develop and parameterize models based on publicly-available training data and submit them to a central server. There, submitted model are provided hidden testing data which they must use to produce predictions. These predictions are validated using publicly available criteria to produce summaries of the relative merits of different models, just as a test suite summarizes the state of a software project. 
+During these competitions, competitors develop and parameterize models based on publicly-available training data and submit them to a central server. There, submitted models are provided hidden testing data which they must use to produce predictions. These predictions are validated using publicly available criteria to produce summaries of the relative merits of different models, just as a test suite summarizes the state of a software project. 
 Such competitions continue to drive important advances and improve scientists' understanding of their fields. 
-For example, the quantitative single neuron modeling competition (QSNMC) \citep{jolivet_quantitative_2008} investigates the complexity-accuracy tradeoff among reduced models of excitable membranes; 
+For example, the quantitative single neuron modeling competition (QSNMC) \citep{jolivet_quantitative_2008} investigated the complexity-accuracy tradeoff among reduced models of excitable membranes; 
 the ``Hopfield'' challenge \citep{hopfield_what_2000} tested techniques for generating neuronal network form given its function; 
 the Neural Prediction Challenge sought the best stimulus reconstructions, given neuronal activity (\url{http://neuralprediction.berkeley.edu}); the Diadem challenge is advancing the art of neurite reconstruction (\url{http://www.diademchallenge.org}); and 
 examples from other areas of biomedical research abound (e.g. \url{http://www.the-dream-project.org}).
@@ -163,10 +165,18 @@ NeuronUnit can in principle test arbitrary neurophysiology models using arbitrar
 
 Each of these examples has leveraged \emph{ad hoc} infrastructure to support model validation. 
 While the specific criteria used to evaluate models can vary widely between modeling domains, the underlying methodology is common and could be implemented once. 
-Recognizing this, and inspired by unit testing practices, we have developed a discipline-agnostic framework for developing \emph{model validation test suites} called \textit{SciUnit} (available from \url{http://sciunit.scidash.org}) \todo{cite sciunit paper again here?}. 
+Recognizing this, and inspired by unit testing practices, we have developed a discipline-agnostic framework for developing \emph{model validation test suites} called \textit{SciUnit} \citep{omar_sciunit_2013} (available from \url{http://sciunit.scidash.org}) \todo{cite sciunit paper again here?}. 
 In this paper, we will begin by detailing \textit{SciUnit}, focusing on examples from single-neuron physiology (Sec. \ref{sec:sciunit}). 
 
-\textit{SciUnit} contains validation logic common across scientific disciplines, but a particular discipline, such as neurophysiology, might have more specialized logic associated with it that can be shared amongst its sub-disciplines (e.g. hippocampal neurophysiology). We anticipate a collaborative workflow where this common logic is developed in common repositories on a social coding service, here \textit{Github}. For neurophysiology, we have developed such a repository, called \textit{NeuronUnit}. This repository contains common testing logic as well as bridges to existing informatics infrastructure to make it easy to import existing data and models. In particular, we will show how models described using \text{NeuroML} and provided freely by the \textit{Open Source Brain Project} (OSB, \cite{gleeson_open_2012}, \url{http://www.opensourcebrain.org}) can be tested in a fully automated fashion using published data curated by the \textit{NeuroElectro Project} (NeuroElectro, \cite{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}), leveraging facilities from the \textit{NeuroTools} library (\url{http://neuralensemble.org/NeuroTools}) to extract features from model outputs (Sec. \ref{sec:neuronunit}). Particular sub-disciplines, like hippocampal neurophysiologists, can use this common logic to select relevant models and tests, forming particular test suites in common repositories. The end result of this workflow is a table like the one shown in Figure \ref{fig:sciunit_overview}, where submitted models can be compared based on the scores they achieve on different selected tests. These tables serve as a summary of the status of a modeling community, just as the results from a suite of unit tests serve as a summary of the status of a software project, and help scientists answer the questions mentioned above more easily and accurately.
+\textit{SciUnit} contains validation logic common across scientific disciplines.
+But a particular discipline, such as neurophysiology, might have more specialized logic associated with it that can be shared amongst its sub-disciplines (e.g. hippocampal neurophysiology). 
+We anticipate a collaborative workflow where this common logic is developed in common repositories on a social coding service, here \textit{Github}. 
+For neurophysiology, we have developed such a repository, called \textit{NeuronUnit}. 
+This repository contains common testing logic as well as bridges to existing informatics infrastructure to make it easy to import existing data and models. 
+In particular, we will show how models described using \text{NeuroML} and provided freely by the \textit{Open Source Brain Project} (OSB, \cite{gleeson_open_2012}, \url{http://www.opensourcebrain.org}) can be tested in a fully automated fashion using published data curated by the \textit{NeuroElectro Project} (NeuroElectro, \cite{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}), leveraging facilities from the \textit{NeuroTools} library (\url{http://neuralensemble.org/NeuroTools}) to extract features from model outputs (Sec. \ref{sec:neuronunit}). 
+Scientists in particular sub-disciplines, like hippocampal neurophysiologists, can use this common logic to select relevant models and tests, forming focused test suites in common repositories. 
+The end result of this workflow is a table like the one shown in Figure \ref{fig:sciunit_overview}, where submitted models can be compared based on the scores they achieve on different selected tests. 
+These tables serve as a summary of the status of a modeling community, just as the results from a suite of unit tests serve as a summary of the status of a software project, and help scientists answer the questions mentioned in section \ref{sec:introduction} more easily and accurately.
 
 % Section 2.
 \section{Validation Testing with \textit{SciUnit}}\label{sec:sciunit}
@@ -208,8 +218,8 @@ class SpikeCountTest(sciunit.Test):
 
 %Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  
 We begin by building an example \textit{SciUnit} test suite that could be used in neurophysiology. 
-Suppose we have collected data from an experiment where current stimuli (measured in pA) was delivered to neurons in some brain region, while the somatic membrane potential of each stimulated cell (in mV) was recorded and stored.  
-A model claiming to capture this cell type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
+Suppose we have collected data from an experiment where current stimuli (measured in pA) are delivered to neurons of a particular subtype, while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
+A model claiming to capture this neuron type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
 One simple validation test would ask candidate models to predict the number of action potentials (a.k.a. spikes) generated in response to a stimulus (e.g. white noise), and compare these \emph{spike count} predictions to the distribution observed in repeated experimental trials using the same stimulus. 
 For data of this type, goodness-of-fit can be measured by first calculating a p-value from a chi-squared statistic for each prediction and then combining these p-values using Fisher's method \citep{fisher_statistical_1925}. 
@@ -317,7 +327,7 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
 score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{python}
 
-This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
+This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. \todo{judge vs \_judge} A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
 \subsection{Test Suites and Score Matrices} A collection of tests intended to be run on the same model can be put together to form a test suite.
 The following is a test suite that could be used for a simplified version of the QSNMC, as described above:  
