@@ -382,7 +382,7 @@ It has proven ideal for model sharing, curation, and for answering both question
 
 NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off simulation to supported simulators. 
 \textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, parameterized by a path to a NeuroML model.  
-NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that have capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}. It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
+NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable point neurons (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
 
 \textit{OSB} curates many models described in NeuroML. 
 OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators such as NEURON (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
