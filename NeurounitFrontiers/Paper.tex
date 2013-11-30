@@ -338,11 +338,12 @@ Like a single test, a test suite is capable of judging one or more models. The r
 \begin{python}
 scores = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as an HTML table inside an IPython notebook recording the execution of the test suite.  
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as a hyperlinked table inside an IPython notebook containing the specification and execution of the test suite (Fig. \ref{fig:scidash_matrix}). Such notebooks are stored in test repositories like \textit{hippocampus\_tests}.
 
 \begin{figure}%[18]{r}{1\textwidth}
-\includegraphics[scale=0.65]{table.png}
-\caption{A record matrix for SciUnit tests}
+\centering
+\includegraphics[scale=0.55]{table-ipy.pdf}
+\caption{A score matrix for a SciUnit test suite, visualized as a hyperlinked table inside an IPython notebook stored in a test repository like \textit{hippocampus\_tests}.}
 \label{fig:scidash_matrix}
 \vspace{-5px}
 \end{figure}
