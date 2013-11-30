@@ -176,7 +176,7 @@ This repository contains common testing logic as well as bridges to existing inf
 In particular, we will show how models described using \text{NeuroML} and provided freely by the \textit{Open Source Brain Project} (OSB, \cite{gleeson_open_2012}, \url{http://www.opensourcebrain.org}) can be tested in a fully automated fashion using published data curated by the \textit{NeuroElectro Project} (NeuroElectro, \cite{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}), leveraging facilities from the \textit{NeuroTools} library (\url{http://neuralensemble.org/NeuroTools}) to extract features from model outputs (Sec. \ref{sec:neuronunit}). 
 Scientists in particular sub-disciplines, like hippocampal neurophysiologists, can use this common logic to select relevant models and tests, forming focused test suites in common repositories. 
 The end result of this workflow is a table like the one shown in Figure \ref{fig:sciunit_overview}, where submitted models can be compared based on the scores they achieve on different selected tests. 
-These tables serve as a summary of the status of a modeling community, just as the results from a suite of unit tests serve as a summary of the status of a software project, and help scientists answer the questions mentioned in section \ref{sec:introduction} more easily and accurately.
+These tables serve as a summary of the status of a modeling community, just as the results from a suite of unit tests serve as a summary of the status of a software project, and help scientists answer the questions mentioned earlier in this section more easily and accurately.
 
 % Section 2.
 \section{Validation Testing with \textit{SciUnit}}\label{sec:sciunit}
@@ -351,20 +351,39 @@ A simple summary of the scores in a score matrix can be printed to the console o
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
-In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
+In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
 
-\subsection{\textit{NeuronUnit}: Neurophysiology-Specific Testing Tools}\label{sec:neuronunit_acitivities}
-In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
-We implement functions bridging this infrastructure with \textit{SciUnit}, as a collection of relevant model and test families and associated capabilities, in a package called \textit{NeuronUnit}. 
-This package is collaboratively developed on \textit{GitHub} (\url{http://github.com/scidash/neuronunit}). 
-Scientists can use these tools to easily create test suites tailored to specific systems of interest. 
-For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository called \textit{hippocampus\_tests}, parameterized by relevant data from \textit{NeuroElectro}. 
-To submit a new model for testing, a scientist can fork this repository, add their models, test it locally, and when satisfied, submit a pull request to the common repository. 
-Each community can develop suitable quality standards for merging pull requests. 
-Similarly, statisticians interested in improving the methods by which goodness-of-fit are tested can follow the same procedure, rather than attempting to convince scientists socially that the methods used in canonical papers need to be changed.
+\subsection{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
+The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as the tests used in the QSNMC, and is collaboratively developed on GitHub (\url{http://github.com/scidash/neuronunit}). 
+Scientists can use these tools to easily create test suites tailored to specific neuronal systems of interest. 
+For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository called \textit{hippocampus\_tests}, parameterizing them by relevant data from \textit{NeuroElectro}. 
+To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
+
+Statisticians interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
+Rather than attempting to convince a large number of scientists socially that the methods used in canonical papers need to be changed, statisticians need only propagate a change to the testing logic used by the community. 
+Once the testing logic has been changed, all models, past and future, will be immediately re-evaluated against the new metrics. 
+Scientists wanting to determine statistical best-practices for measuring goodness-of-fit need only refer to the tests in these repositories.
+
+To submit a new model for testing, a scientist can similarly fork the \textit{hippocampus\_tests} repository, add a new model to the relevant suite using the simple \textit{NeuroML}-\textit{NeuronUnit} bridge described in Sec. \ref{sec:neuroml_models} and test the model against available tests locally. 
+When satisfied with parameter choices, the scientist can submit the model to \textit{OSB} and use the common \textit{OSB-NeuronUnit} bridge, also described in Sec. \ref{sec:neuroml_models}, to refer to it, and finally submit a pull request to the common repository. 
+Once a model is in the repository, it will be evaluated on an ongoing basis against the latest accepted collections of tests, which use accepted statistical best practices, without needing the participation of the original modeler, assuming that the capabilities that need to be exposed by models stay stable.  
 GitHub is an excellent platform for this kind of activity, and is becoming a force for scientific collaboration, reproducibility, and transparency \citep{ram_git_2013}.  
 
-We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop repositories similar to \textit{NeuronUnit} that provide a common, collaboratively-developed vocabulary of test families, model families and capabilities relevant to their domain, and bridge with relevant standardization efforts and infrastructure. Using these common repositories, small groups of scientists interested in particular systems of interest will develop tests and curate models in test repositories like \textit{HippocampusTests}. The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that help scientists understand, precisely, the state-of-the-art in their field.
+We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop repositories similar to \textit{NeuronUnit} that provide a common, collaboratively-developed vocabulary of test families and capabilities relevant to their domain, and bridge with relevant standardization efforts and infrastructure. 
+Using these common repositories, small groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
+Each research community can develop suitable quality standards and processes for merging these pull requests. 
+
+The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that allow scientists to understand, precisely, the state-of-the-art in their field. We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies mentioned above.
+
+\subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
+The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to gather all published data on single cell neurophysiology into machine-readable formats \citep{tripathy_neuroelectro:_2012}.  
+Currently, up to 27 electrophysiological properties are reported for 93 cell types, spanning more than 2000 single pieces of published data extracted from tables in published papers. 
+We have made it easy to parameterize \textit{NeuronUnit} tests using data extracted from the NeuroElectro API. 
+Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
+The former is illustrated in Figure \ref{fig:neuronunit_example}. 
+Associated statistics of that data (e.g mean, standard error, and sample size) are attached and enable judgement of model output according to a chosen scoring mechanism. 
+While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
+As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
 
 \subsection{Models from NeuroML}\label{sec:neuroml_models}
 NeuroML is a standardized model description language for neuroscience \citep{gleeson_neuroml:_2010}. 
@@ -416,17 +435,6 @@ Meanwhile, a \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that 
 \verbx{NeuroConstructModel} does so by placing the object method \verbx{AnalogSignal.threshold_detection} inside \verbx{getSpikeTrain}. 
 Many such NeuroTools objects are similarly exchanged between \verbx{NeuroConstructModel} methods. 
 This simplifies test writing, since basic model output properties are obtained trivially using the methods of NeuroTools objects, and these NeuroTools objects are easily extracted from model output, especially when the models subclass \verbx{NeuroConstructModel}.  
-
-\subsection{Reference Data for Tests from NeuroElectro}
-Answering \textit{how well} requires validation testing against data. 
-The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to curate all published single cell neurophysiology data \citep{tripathy_neuroelectro:_2012}.  
-Currently, up to 27 electrophysiological properties are reported for 93 cell types, spanning $>$ 2000 single pieces of published data extracted from journal article tables. 
-We have made it easy to construct \textit{NeuronUnit} tests using the NeuroElectro API to get reference data. 
-Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
-The latter is illustrated in Figure \ref{fig:neuronunit_example}. 
-Associated statistics of that data (e.g mean, standard error, and sample size) are attached and enable judgement of model output according to a chosen scoring mechanism. 
-While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
-As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
 
 \section{Discussion}\label{sec:discussion}
 
