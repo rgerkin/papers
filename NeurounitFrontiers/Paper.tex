@@ -327,7 +327,7 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
 score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{python}
 
-This method proceeds by first checking that the provided model implements all required capabilities. It then calls the test's \verbx{_judge} method to produce a score. \todo{judge vs \_judge} A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
+\verbx{judge} is a stock \verbx{sciunit.Test} method that proceeds by first checking that the provided model implements all required capabilities. It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
 \subsection{Test Suites and Score Matrices} A collection of tests intended to be run on the same model can be put together to form a test suite.
 The following is a test suite that could be used for a simplified version of the QSNMC, as described above:  
@@ -338,7 +338,16 @@ Like a single test, a test suite is capable of judging one or more models. The r
 \begin{python}
 scores = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development\todo{mention use within iPython to generate an HTML table}.
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as an HTML table inside an IPython notebook recording the execution of the test suite.  
+
+\begin{figure}%[18]{r}{1\textwidth}
+\includegraphics[scale=0.65]{table.png}
+\caption{A record matrix for SciUnit tests}
+\label{fig:scidash_matrix}
+\vspace{-5px}
+\end{figure}
+\vspace{-10px}
+\leavevmode
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
@@ -375,9 +384,9 @@ NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstr
 \textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, parameterized by a path to a NeuroML model.  
 NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that have capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}. It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
 
-\textit{OSB} curates many models described using NeuroML. 
-OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators including Neuron (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
-Concordance between model output (beginning with the NeuroML description) and reference output (from native simulator source files) is reported for each model. 
+\textit{OSB} curates many models described in NeuroML. 
+OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators such as NEURON (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
+Concordance between model output (beginning with the NeuroML description) and reference output (from native simulator source files or published figures) is reported for each model. 
 Thus, OSB is an excellent source of models that, in addition to being open source, are sufficiently described to enable validation. 
 The hippocampal CA1 pyramidal cell is commonly modeled, and we implement one such model hosted on OSB (\url{http://opensourcebrain.org/projects/ca1pyramidalcell}) by simply declaring a \verbx{CA1PyramidalCellModel} class, inheriting from \verbx{NeuroConstructModel}.  
 This basic implementation simply ``wraps'' the components of the existing model, with simulator interaction taken care of by \verbx{NeuroConstructModel} methods; 
@@ -388,7 +397,7 @@ Spanning a range of scales and original development environments, all OSB models
 These models are regularly executed on OSB servers to ensure that their output remains consistent as they are updated. 
 Therefore, OSB can confirm that they \textit{do} work, while linked journal articles, on-site wiki, and code inspection can establish \textit{how} they work. 
 However, there is no mechanism for establishing \textit{how well} they work, i.e. how well the models accord with data. 
-\textit{NeuronUnit} fills this gap by helping OSB (and the larger biology community) assess models using data-driven tests. 
+\textit{NeuronUnit} fills this gap by helping OSB (and the larger neuroscience community) assess models using data-driven tests. 
 \textit{SciUnit} can be applied similarly to other neuroscience (or biology) sub-disciplines using \textit{NeuronUnit} analogues written by the corresponding communities.    
 
 \begin{figure}
@@ -411,28 +420,19 @@ It is an open source and actively developed project, containing reliable algorit
 
 We use NeuroTools to implement \textit{SciUnit} capabilities in \textit{NeuronUnit}. 
 For example, an \verbx{AnalogSignal} object (e.g. a membrane potential time series) from NeuroTools has a threshold detection method that returns a NeuroTools \verbx{SpikeTrain} object. 
-A \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that the method \verbx{getSpikeTrain} be implemented. 
+Meanwhile, a \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that the method \verbx{getSpikeTrain} be implemented. 
 \verbx{NeuroConstructModel} does so by placing the object method \verbx{AnalogSignal.threshold_detection} inside \verbx{getSpikeTrain}. 
 Many such NeuroTools objects are similarly exchanged between \verbx{NeuroConstructModel} methods. 
-This simplifies test writing, since basic model output properties are obtained trivially using NeuroTools object methods, and these NeuroTools objects are easily extracted from model output using candidate models subclassing \verbx{NeuroConstructModel}.  
+This simplifies test writing, since basic model output properties are obtained trivially using the methods of NeuroTools objects, and these NeuroTools objects are easily extracted from model output, especially when the models subclass \verbx{NeuroConstructModel}.  
 
-
-\begin{figure}%[18]{r}{1\textwidth}
-\includegraphics[scale=0.65]{table.png}
-\caption{A record matrix for SciUnit tests}
-\label{fig:scidash_matrix}
-\vspace{-25px}
-\end{figure}
-\vspace{-10px}
-\leavevmode
 \section{Discussion}\label{sec:discussion}
 
 \subsection{A Complete Pipeline}
-Although the tools described in Sec. \ref{sec:neuronunit_acitivities} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
+Although the tools described in Sec. \ref{sec:neuronunit} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
 In the \textit{NeuronUnit} repository (\url{http://github.com/scidash/neuronunit}) is a runnable script (\textit{examples.py}) demonstrating a complete testing pipeline. 
 It (1) selects an OSB model; 
 (2) simulates it using NeuroConstruct; 
-(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; 
+(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; \todo{Update this with current examples.py content}
 and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
 
 \begin{figure}
@@ -459,7 +459,6 @@ However these objects can also be created from scratch, requiring only adherence
 For example, a Model could implement an \verbx{integrate} capability method by wrapping execution of a MATLAB script and a \verbx{get_spikes} capability method by parsing a .csv file on disk; 
 a Test could be initialized using empirical spike rates collected in the lab.  
 While this does not meet our idealized vision of development and testing, in practice this may be a common scenario. 
-Adoption of \textit{SciUnit} into traditional, custom workflows would be reflected in the Methods sections of articles.  
 
 \subsection{Participation from Modeling Communities}
 Modelers may not want to expose model capabilities, a requirement of test-taking.  
@@ -468,7 +467,7 @@ Often this means identifying native model procedures that satisfy a capability, 
 This can require as little as one line of code. 
 Importantly, the modeler is not required to expose or rewrite any model flow control. 
 \textbf{Second}, we support multiple environments automatically by using NeuroML \citep{gleeson_neuroml:_2010}, and other simulator-independent model descriptions are possible for other domains. 
-Automated generation of NeuroML from native model source code is in development (Gleeson, personal communication); for the popular NEURON simulator (\cite{carnevale_neuron_2006}), this functionality is already mature and in use. 
+Automated generation of NeuroML from native model source code is in development (Gleeson, personal communication); for the popular NEURON simulator (\cite{carnevale_neuron_2006}), this functionality is already implemented in use. 
 This minimizes modeler effort for a large (at least 1000, \url{http://www.neuron.yale.edu/neuron/node/69}) and growing number of neuronal models. 
 \textbf{Third}, modelers have an incentive to demonstrate publicly their models' validity. 
 Participation in public modeling competitions demonstrates this incentive. 
@@ -478,13 +477,13 @@ A popular test suite can represent a ``gold standard'' by which progress during 
 \subsection{Participation from Experimental Communities}
 Experimentalists may not want to write tests derived from their data.  We anticipate four solutions: \textbf{First}, tests require no special data formatting; only a list of required  capabilities (for selecting eligible models), optional metadata (as run-time arguments), and a statistical data summary (for scoring tests) are required.  A unit test is focused and does not require arbitrary computations on data.  For example, suppose intracellular current injection evokes 100 action potentials, the width of which is of interest.  Writing the test consists of selecting \verbx{ReceivesCurrent} and \verbx{ProducesActionPotentialShape} capabilities (one line of code each), computing the mean and variance of action potential widths (one line of code), specifying current injection parameters, e.g. amplitude and duration (two lines of code), and selecting a scoring mechanism from \verbx{sciunit.scores}, e.g. (colloquially) ``Must be $<$ 1 standard deviation of the mean'' (one line of code).  This example can be found in \verbx{NeuronUnit.tests.SpikeWidthTest}; heavy-lifting is done by the interface.
 \textbf{Second}, data-sharing is becoming accepted, and test-writing can be distributed across scientists, including non-experimentalists with other aims such as analysis or modeling. 
-\textbf{Third}, many tests can be automatically generated using the NeuroElectro API, and the continued emergence of such data-aggregation initiatives will expand these possibilities. 
+\textbf{Third}, many tests can be automatically generated using NeuronUnit, and the continued emergence of data-aggregation initiatives such as NeuroElectro will expand these possibilities. 
 \textbf{Fourth}, an incentive to write tests for one's data exists: the ability to identify models that give the data clear context and impact. 
 
 \subsection{Diversity of Levels and Kinds of Models and Data}
 The diversity of topics in biology is vast. 
 \textbf{First}, we address this by providing an interface allowing modelers to express specific capabilities.  
-This capability set determines the range of eligible tests.  Scale hierarchies are embedded in capability inheritance.  =
+This capability set determines the range of eligible tests.  Scale hierarchies are embedded in capability inheritance. 
 For example, \verbx{HasActionPotentials} inherits from \verbx{HasNeurons}, and \verbx{HodgkinHuxley} inherits from \verbx{VoltageGated}. 
 Thus, incompatibility of a test-requiring-action-potentials for a model-lacking-neurons is known without explicit tagging. 
 \textbf{Second}, NeuroML naturally addresses diversity of scales because it is organized hierarchically, in ``levels.''  
@@ -504,15 +503,15 @@ Statistics as applied to neuroscience have been notoriously ``fast and loose'';
 identification and correction of flawed methodology is becoming increasingly common (\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010}, \url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg}), and is accelerated by an open framework. 
 The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
 Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. 
-A community consensus will slowly emerge in the form a commonly-accepted test suite. 
-This community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).  
+A community consensus will slowly emerge in the form of commonly-accepted test suites. 
+Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).\todo{Fix Sumatra reference}  
 
 \subsection{Reliability of Data Underlying Tests}
 Unreliable data can undermine model validation. 
 \textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
-GitHub supports community moderation, permitting users to comment on tests, indicating their concerns. 
+Open source version control services such as GitHub support community moderation, permitting users to comment on tests, indicating their concerns. 
 Suite repository popularity can reflect consensus. 
-Experimental metadata also constrains a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
+Experimental metadata also constrain a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. Using the NeuroElectro API, for example, it is possible to select only data corresponding to specific experimental conditions, for example recording electrode type.  
 Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
 Such capabilities require no implementation, so the model definition must only inherit them. 
 \textbf{Second}, models cannot perfectly reproduce data that is itself a random draw from a ``true'' distribution. 
@@ -521,13 +520,13 @@ The degree of such ``self-validation'' represents the upper limit of what a mode
 
 \subsection{Occam's Razor}
 All things being equal, simpler models are better. 
-Model complexity has many definitions, so \textit{SciDash} will report several complexity metrics \citep{mccabe_complexity_1976}, including: 
+Model complexity has many definitions \citep{mccabe_complexity_1976}, including: 
 1) model length; 2) memory use; 3) CPU load; 4) \# of capabilities. 
-Future \textit{SciUnit} tools will report the model validity vs complexity tradeoff in tabular form (e.g. Table \ref{fig:scidash_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
+Future \textit{SciUnit} tools will report the model validity vs complexity tradeoff in tabular form (e.g. Figure \ref{fig:scidash_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
 The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot, a visualization familiar from the symbolic regression package Eureqa \citep{schmidt_distilling_2009}.  
 
 \subsection{Expansion Into Other Areas of Biology}
-After covering neurophysiology, we would like \textit{SciUnit} to be applied across neuroscience and in other biological sciences. 
+After covering neurophysiology with continued development of \textit{NeuronUnit}, we would like \textit{SciUnit} to be applied across neuroscience and in other biological sciences. 
 The framework is discipline-agnostic, so community participation and model description are the only obstacles. 
 Community participation begins with enumerating the capabilities relevant to a sub-discipline, and then writing tests. 
 Model description can expand within NeuroML (which already covers multiple levels within neuroscience) and tools for capability implementation can incorporate libraries for neuroimaging (NiBabel, \url{http://nipy.org/nibabel}), neuroanatomy (NeuroHDF, \url{http://neurohdf.readthedocs.org}) and other sub-disciplines. 
