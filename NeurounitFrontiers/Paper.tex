@@ -121,7 +121,7 @@ In some fields, like neuroscience, where the number of relevant publications bei
 %A strength of publications are their focused descriptions of new data and models. 
 %A weakness, however, is that evaluating the scope and validity of models against known data is intractable using a body of publications alone.
 
-Professional software developers face similar issues\citep{omar_sciunit_2013}\todo{probably cite our in submission paper here??}. 
+Professional software developers face similar issues \citep{omar_sciunit_2013}. 
 They must understand the scope of each component of a complex software project and verify that each component achieves desired input/output behavior. 
 But software developers do not verify components by simply documenting a few interesting inputs and corresponding outputs and then presenting them to other developers for one-time review leading to an archived document. 
 Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that serve to specify each component's scope and verify its implementation on an ongoing basis as it is being developed and modified \citep{beck2003}. 
@@ -165,12 +165,12 @@ NeuronUnit can in principle test arbitrary neurophysiology models using arbitrar
 
 Each of these examples has leveraged \emph{ad hoc} infrastructure to support model validation. 
 While the specific criteria used to evaluate models can vary widely between modeling domains, the underlying methodology is common and could be implemented once. 
-Recognizing this, and inspired by unit testing practices, we have developed a discipline-agnostic framework for developing \emph{model validation test suites} called \textit{SciUnit} \citep{omar_sciunit_2013} (available from \url{http://sciunit.scidash.org}) \todo{cite sciunit paper again here?}. 
+Recognizing this, and inspired by unit testing practices, we have developed a discipline-agnostic framework for developing \emph{model validation test suites} called \textit{SciUnit} \citep{omar_sciunit_2013} (available from \url{http://sciunit.scidash.org}). 
 In this paper, we will begin by detailing \textit{SciUnit}, focusing on examples from single-neuron physiology (Sec. \ref{sec:sciunit}). 
 
 \textit{SciUnit} contains validation logic common across scientific disciplines.
 But a particular discipline, such as neurophysiology, might have more specialized logic associated with it that can be shared amongst its sub-disciplines (e.g. hippocampal neurophysiology). 
-We anticipate a collaborative workflow where this common logic is developed in common repositories on a social coding service, here \textit{Github}. 
+We anticipate a collaborative workflow where this common logic is developed in common repositories on a social coding service, here \textit{GitHub}. 
 For neurophysiology, we have developed such a repository, called \textit{NeuronUnit}. 
 This repository contains common testing logic as well as bridges to existing informatics infrastructure to make it easy to import existing data and models. 
 In particular, we will show how models described using \text{NeuroML} and provided freely by the \textit{Open Source Brain Project} (OSB, \cite{gleeson_open_2012}, \url{http://www.opensourcebrain.org}) can be tested in a fully automated fashion using published data curated by the \textit{NeuroElectro Project} (NeuroElectro, \cite{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}), leveraging facilities from the \textit{NeuroTools} library (\url{http://neuralensemble.org/NeuroTools}) to extract features from model outputs (Sec. \ref{sec:neuronunit}). 
@@ -240,7 +240,7 @@ To create a \emph{particular} spike count test, we instantiate this class with p
 For example, given observations from CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
-\end{python}\todo{decrease vertical space after python}
+\end{python}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
 For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
@@ -356,13 +356,13 @@ In the examples in the previous section, tests were generated from data explicit
 \subsection{\textit{NeuronUnit}: Neurophysiology-Specific Testing Tools}\label{sec:neuronunit_acitivities}
 In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
 We implement functions bridging this infrastructure with \textit{SciUnit}, as a collection of relevant model and test families and associated capabilities, in a package called \textit{NeuronUnit}. 
-This package is collaboratively developed on Github (\url{http://github.com/scidash/neuronunit})\todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. 
+This package is collaboratively developed on \textit{GitHub} (\url{http://github.com/scidash/neuronunit}). 
 Scientists can use these tools to easily create test suites tailored to specific systems of interest. 
-For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a Github repository called \textit{hippocampus_tests}, parameterized by relevant data from \textit{NeuroElectro}. 
+For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository called \textit{hippocampus\_tests}, parameterized by relevant data from \textit{NeuroElectro}. 
 To submit a new model for testing, a scientist can fork this repository, add their models, test it locally, and when satisfied, submit a pull request to the common repository. 
 Each community can develop suitable quality standards for merging pull requests. 
 Similarly, statisticians interested in improving the methods by which goodness-of-fit are tested can follow the same procedure, rather than attempting to convince scientists socially that the methods used in canonical papers need to be changed.
-\todo{Sentence about how great github is for collaboratively doing things, particularly in science?}
+GitHub is an excellent platform for this kind of activity, and is becoming a force for scientific collaboration, reproducibility, and transparency \citep{ram_git_2013}.  
 
 We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop repositories similar to \textit{NeuronUnit} that provide a common, collaboratively-developed vocabulary of test families, model families and capabilities relevant to their domain, and bridge with relevant standardization efforts and infrastructure. Using these common repositories, small groups of scientists interested in particular systems of interest will develop tests and curate models in test repositories like \textit{HippocampusTests}. The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that help scientists understand, precisely, the state-of-the-art in their field.
 
@@ -441,7 +441,9 @@ and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
 \begin{figure}
 \begin{python}
 # Interface with neuroelectro.org to search for spike widths of CA1 Pyramidal cells. 
-reference_data = NeuroElectroSummary(neuron={'id':85}, ephysprop={'id':23})
+reference_data = neuroelectro.NeuroElectroSummary(
+  neuron = {'name':'Hippocampus CA1 pyramidal cell'}, # Neuron type.  
+  ephysprop = {'name':'Spike Width'}) # Electrophysiological property name.
 reference_data.get_values()  # Get summary data for the above. 
 model = CA1PyramidalCellModel(population_name="CG_CML_0") # Initialize the model with some parameters.
 test = SpikeWidthTestDynamic( # Initialize the test.    
@@ -507,7 +509,7 @@ identification and correction of flawed methodology is becoming increasingly com
 The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
 Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. 
 A community consensus will slowly emerge in the form of commonly-accepted test suites. 
-Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).\todo{Fix Sumatra reference}  
+Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).
 
 \subsection{Reliability of Data Underlying Tests}
 Unreliable data can undermine model validation. 
