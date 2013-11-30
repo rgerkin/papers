@@ -353,7 +353,8 @@ A reference to the test and model are added to the score for convenience (access
 \subsection{Test Suites and Score Matrices}\label{sec:visualization} A collection of tests intended to be run on the same model can be put together to form a test suite.
 The following test suite could be used for a simplified version of the QSNMC, as described in Sec. \ref{sec:example}:  
 \begin{ipy}
-  In [5]: CA1_suite = sciunit.TestSuite([CA1_overall_test, CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_imi_test])
+  In [5]: CA1_suite = sciunit.TestSuite([CA1_overall_test, CA1_sc_test, CA1_sl_test, CA1_sv_test, 
+              CA1_isi_test, CA1_imi_test])
 \end{ipy}
 Like a single test, a test suite is capable of judging one or more models. 
 The models must possess the union of the capabilities of the tests in a suite to be fully capable of running the suite, though partial results can also be generated. 
@@ -379,7 +380,7 @@ For example, the score matrix can be visualized as a hyperlinked table inside an
 The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as those described in the previous section. 
 It is collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}). 
 Scientists can use this package to easily create test suites tailored to specific neuronal systems of interest. 
-For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an iPython notebook called \textit{hippocampus\_tests}, parameterized by data from the hippocampus.%, parameterizing them by relevant data from \textit{NeuroElectro}. 
+For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an IPython notebook called \textit{hippocampus\_tests}, parameterized by data from the hippocampus.%, parameterizing them by relevant data from \textit{NeuroElectro}. 
 %To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
 
 Statisticians interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
@@ -402,9 +403,9 @@ We are developing a lightweight portal, \textit{SciDash}, that directs scientist
 We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies, below.
 
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
-In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. 
-In many fields, however, both models and data are available from existing  repositories in standardized formats. 
-In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. 
+In the examples in the previous sections, tests were provided data explicitly, and models implemented capabilities directly. 
+In many fields, however, both models and data are available from existing  community resources in standardized formats. 
+In this section, we will show how to use this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. 
 In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
 
 \subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
@@ -422,8 +423,7 @@ test = SpikeWidthTest( # Initialize the test.
 	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics.
 	model_args = {'current':40.0*pA}, # Somatic current injection in pA.  
 	comparator = ZComparator), # A comparison class that implements a Z-score.  
-record = test.judge(model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
-record.summarize() # Summarize the result.  
+score = test.judge(model)
 \end{python}
 \vspace{-15px}
 \caption{Working example of testing in \textit{NeuronUnit}. Imports excluded for clarity.}
@@ -432,22 +432,19 @@ record.summarize() # Summarize the result.
 \end{figure}
 The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to make all published data on single cell neurophysiology available in a machine-readable format \citep{tripathy_neuroelectro:_2012}.  
 Currently, up to 27 electrophysiological properties are available for 93 cell types, gathered from over 2000 single pieces of published data extracted from tables in published papers. 
-We have made it easy to parameterize \textit{NeuronUnit} tests using data extracted from the NeuroElectro API. 
+We have made it easy to parameterize the test families in \textit{Neuron\-Unit}  using data extracted from the NeuroElectro API. 
 Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
-The former is illustrated in Figure \ref{fig:neuronunit_example}. 
-Associated statistics of that data (e.g mean, standard error, and sample size) are attached and enable judgement of model output according to a chosen scoring mechanism. 
-While NeuroElectro alone cannot judge all model aspects, it can serve to validate basic features of many neurophysiology models, such as resting membrane potential, action potential width, after-hyperpolarization amplitude, etc. 
-As NeuroElectro is the only publicly curated source of such data, it represents a key component for \textit{NeuronUnit} test constuction.  
+The latter is illustrated in Figure \ref{fig:neuronunit_example}, on lines 1-4. Once data has been retrieved from NeuroElectro, associated statistics (e.g. mean, standard error and sample size) can be extracted to parameterize tests (e.g. a test of spike widths on line 10). Data from NeuroElectro is can be used to validate a variety of basic electrophysiological features of neuron models, including spike width, resting membrane potential, after-hyperpolarization amplitude, etc. 
+As NeuroElectro is the only publicly curated source of such data, it represents a key resource facilitating test construction.  
 
-\subsection{Models from NeuroML}\label{sec:neuroml_models}
+\subsection{Models from NeuroML and OpenSourceBrain}\label{sec:neuroml_models}
 NeuroML is a standardized model description language for neuroscience \citep{gleeson_neuroml:_2010}. 
-It allows many neurophysiological and neuroanatomical models to be described in a simulator-independent fashion. 
-Because NeuroML is an XML specification, model descriptions can be validated for correctness and queried for model properties and components. We use these facilities to expose capabilities automatically. 
-It has proven ideal for model sharing, curation, and for answering both questions about \textit{what a model does} and \textit{how to do it} programatically.  
+It allows many neurophysiological and neuroanatomical models to be described in a simulator-independent fashion. Some simulators, notably the popular NEURON package\todo{cite NEURON}, can seamlessly export model specifications in the NeuroML format. 
+Because NeuroML is an XML specification, model descriptions can be verified for correctness and queried for model properties and components. We leverage the latter facilities to expose model capabilities automatically. %NeuroML has proven ideal for model sharing, curation, and for answering both questions about \textit{what a model does} and \textit{how to do it} programatically.  
 
-NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off simulation to supported simulators. 
-\textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, parameterized by a path to a NeuroML model.  
-NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable neurons with membrane potentials (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). 
+NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off them off to a supported simulator for execution. 
+\textit{NeuronUnit} provides a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel} that takes a path to a NeuroML model as a parameter.  
+NeuroML can describe a wide range of models, but our \verbx{NeuroConstructModel} class currently supports only  time-integrable point neurons (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential} at minimum). 
 It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
 
 \textit{OSB} curates many models described in NeuroML. 
@@ -469,10 +466,10 @@ However, there is no mechanism for establishing \textit{how well} they work, i.e
 \begin{figure}
 \begin{python}
 class CA1PyramidalCellModel(NeuroConstructModel):
-	"""CA1 Pyramidal Cell model from Open Source Brain."""
-	def __init__(self,**kwargs):
+	"""CA1 Pyramidal Cell model in the local file system."""
+	def __init__(self):
 		project_path = neuroconstruct.get_path("hippocampus","CA1_pyramidal_neuron","CA1PyramidalCell","neuroConstruct")
-		NeuroConstructModel.__init__(self,project_path,**kwargs)
+		NeuroConstructModel.__init__(self,project_path)
 \end{python}
 \vspace{-5px}
 \caption{A model class corresponding to a CA1 Pyramidal Cell model from Open Source Brain}
