@@ -63,7 +63,7 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \onecolumn
 \firstpage{1}
 
-\title[Running Title]{NeuronUnit: Collaboratively Testing the Validity of Neuroscientific Models}
+\title[Running Title]{Collaboratively Testing the Validity of Neuroscientific Models}
 \author[\firstAuthorLast ]{\Authors}
 \address{}
 \correspondance{}
@@ -156,8 +156,7 @@ examples from other areas of biomedical research abound (e.g. \url{http://www.th
 \centering
 \includegraphics[scale=0.6]{diagram1.pdf}
 \vspace{-65px}
-\caption{NeuronUnit overview. NeuronUnit is set of testing tools built upon the discipline-agnostic SciUnit framework. 
-NeuronUnit can in principle test arbitrary neurophysiology models using arbitrary data but we provide here an example using models described in NeuroML as part of the \textit{Open Source Brain Project} (OSB, \citep{gleeson_open_2012}, \url{http://www.opensourcebrain.org}), and single neuron electrophysiology data available as part of the NeuroElectro Project (Neuroelectro, \citep{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}).}  
+\caption{Paper overview. NeuronUnit is set of neurophysiology-specific testing tools built upon the domain-agnostic SciUnit framework. Scientists interested in testing neurophysiological models of particular systems, like the hippocampus, against relevant experimental data can construct test suites in a repository called \textit{hippocampus\_tests}. Models and data can be added directly or imported, via NeuronUnit, from model repositories like Open Source Brain (OSB) and data repositories like NeuroElectro. Testing tools and test repositories are developed collaboratively using Github.}  
 \label{fig:sciunit_overview}\vspace{-10px}
 \end{figure}
 \leavevmode
@@ -180,7 +179,7 @@ These tables serve as a summary of the status of a modeling community, just as t
 
 % Section 2.
 \section{Validation Testing with \textit{SciUnit}}\label{sec:sciunit}
-\subsection{Example: The Quantitative Single Neuron Modeling Competition}
+\subsection{Example: The Quantitative Single Neuron Modeling Competition}\label{sec:example}
 \begin{figure}
 \small
 \begin{python}
@@ -238,9 +237,9 @@ The meaning of each parameter along with a description of the goodness-of-fit me
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
 For example, given observations from CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
-\begin{python}
-  CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
-\end{python}
+\begin{ipy}
+  In [0]: CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
+\end{ipy}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
 For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
@@ -289,19 +288,19 @@ Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are i
 Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, which we will discuss below. 
 Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
 To create a \emph{particular} linear model, a modeler provides parameter values, just as with test families:
-\begin{python}
-CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
-\end{python}
+\begin{ipy}
+  In [1]: CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
+\end{ipy}
 Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
 An alternative test design would add a training phase where these parameters were fit to data using the capability shown in Fig. \ref{fig:training}. 
 This alternative test could thus only be used for those models for which parameters can be adjusted without human involvement. 
 Whether to build a training phase into the test protocol is a choice left to each test development community. 
 Fig. \ref{fig:rate_test} does not include a training phase. 
 If training data is externally available, models that nevertheless are capable of being automatically trained (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
-\begin{python}
-CA1_linear_model_fit = LinearModel()
-CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
-\end{python}
+\begin{ipy}
+  In [2]: CA1_linear_model_fit = LinearModel()
+  In [3]: CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
+\end{ipy}
 \begin{figure}
 \begin{python}
 class LinearModel(sciunit.Model, SpikeCountFromCurrent, 
@@ -323,58 +322,60 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
 \end{figure}
 
 \subsection{Executing Tests} A test is executed against a model using the \verbx{judge} method:
-\begin{python}
-score = CA1_sc_test.judge(CA1_linear_model_heuristic)
-\end{python}
+\begin{ipy}
+  In [4]: score = CA1_sc_test.judge(CA1_linear_model_heuristic)
+\end{ipy}
 
 \verbx{judge} is a stock \verbx{sciunit.Test} method that proceeds by first checking that the provided model implements all required capabilities. It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
-\subsection{Test Suites and Score Matrices} A collection of tests intended to be run on the same model can be put together to form a test suite.
-The following is a test suite that could be used for a simplified version of the QSNMC, as described above:  
-\begin{python}
-CA1_suite = sciunit.TestSuite([CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_ism_test])
-\end{python}
-Like a single test, a test suite is capable of judging one or more models. The result is a score matrix much like the one diagramed in Fig. \ref{fig:sciunit_overview}.
-\begin{python}
-scores = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
-\end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as a hyperlinked table inside an IPython notebook \todo{reference to ipython nb docs/paper?} containing the specification and execution of the test suite (Fig. \ref{fig:scidash_matrix}). Such notebooks are stored in test repositories like \textit{hippocampus\_tests}.
+\subsection{Test Suites and Score Matrices}\label{sec:visualization} A collection of tests intended to be run on the same model can be put together to form a test suite.
+The following test suite could be used for a simplified version of the QSNMC, as described in Sec. \ref{sec:example}:  
+\begin{ipy}
+  In [5]: CA1_suite = sciunit.TestSuite([CA1_overall_test, CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_imi_test])
+\end{ipy}
+Like a single test, a test suite is capable of judging one or more models. The models must possess the union of the capabilities of the tests in a suite to be fully capable of running the suite, though partial results can also be generated. When a model cannot take a test because of a missing capability, the \texttt{NotApplicable} score is used (e.g. point processes cannot predict subthreshold voltages). 
+The result is a \emph{score matrix}, like the one diagrammed in Fig. \ref{fig:sciunit_overview}.
+\begin{ipy}
+  In [6]: scores = CA1_suite.judge([ARX_model, AdEx1_model, aSRM_model, PP_model])
+\end{ipy}
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \todo{reference to ipython nb docs/paper?} (Fig. \ref{fig:scidash_matrix}).
+
 
 \begin{figure}%[18]{r}{1\textwidth}
 \centering
 \includegraphics[scale=0.55]{table-ipy.pdf}
+\vspace{-10px}
 \caption{A score matrix for a SciUnit test suite, visualized as a hyperlinked table inside an IPython notebook stored in a test repository like \textit{hippocampus\_tests}.}
 \label{fig:scidash_matrix}
-\vspace{-5px}
+\vspace{5px}
 \end{figure}
-\vspace{-10px}
-\leavevmode
 
-% Section 3.
-\section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
-In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
-
-\subsection{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
-The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as the tests used in the QSNMC, and is collaboratively developed on GitHub (\url{http://github.com/scidash/neuronunit}). 
+\section{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
+The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as those described in the previous section. It is collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}). 
 Scientists can use this package to easily create test suites tailored to specific neuronal systems of interest. 
-For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an iPython notebook, as described above, called \textit{hippocampus\_tests}, parameterizing them by relevant data from \textit{NeuroElectro}. 
-To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
+For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an iPython notebook called \textit{hippocampus\_tests}, parameterized by data from the hippocampus.%, parameterizing them by relevant data from \textit{NeuroElectro}. 
+%To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
 
 Statisticians interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
 Rather than attempting to convince a large number of scientists socially that the methods used in canonical papers need to be changed, statisticians need only propagate a change to the testing logic used by the community. 
-Once the testing logic has been changed, all past models will be immediately evaluated against the new metrics. 
+Once the testing logic has been changed, all models can be immediately evaluated against the new metrics. 
 Scientists wishing to determine statistical best-practices for measuring goodness-of-fit need only refer to the tests in these repositories.
 
-To submit a new model for testing, a scientist can similarly fork the \textit{hippocampus\_tests} repository, add a new model to the relevant suite using the simple \textit{NeuroML}-\textit{NeuronUnit} bridge described in Sec. \ref{sec:neuroml_models} and test the model against available tests locally. 
-When satisfied with parameter choices, the scientist can submit the model to \textit{OSB} and use the common \textit{OSB-NeuronUnit} bridge, also described in Sec. \ref{sec:neuroml_models}, to refer to it, and finally submit a pull request to the common repository. 
-Once a model is in the repository, it will be evaluated on an ongoing basis against the latest accepted collections of tests, which use accepted statistical best practices, without needing the participation of the original modeler, assuming that the capabilities that need to be exposed by models stay stable.  
-GitHub is an excellent platform for this kind of activity, and is becoming a force for scientific collaboration, reproducibility, and transparency \citep{ram_git_2013}.  
+To submit a new model for testing, a scientist can similarly fork the \textit{hippocampus\_tests} repository, add a new model to the relevant suite and test the model against available tests locally. 
+When satisfied with parameter choices, the scientist can submit a pull request to the common repository. 
+Once a model is in the repository, it will be evaluated on an ongoing basis against the latest accepted collections of tests, parameterized by the latest data, using the latest statistical best practices, without the participation of the original modeler, assuming only that the capabilities required by the tests stay stable.  
 
+
+GitHub is an excellent platform for this kind of activity, and is becoming a widely-used tool for scientific collaboration, reproducibility, and transparency \citep{ram_git_2013}.  
 We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop repositories similar to \textit{NeuronUnit} that provide a common, collaboratively-developed vocabulary of test families and capabilities relevant to their domain, and bridge with relevant standardization efforts and infrastructure. 
-Using these common repositories, small groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
+Using these common repositories, smaller groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
 Each research community can develop suitable quality standards and processes for merging these pull requests. 
 
-The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that allow scientists to understand, precisely, the state-of-the-art in their field. We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies.
+The end result of these efforts will be tables, like the one shown in Figure \ref{fig:scidash_matrix}, that allow scientists to understand, precisely, the state-of-the-art in their field. 
+We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies, below.
+
+\section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
+In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
 
 \subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
 \begin{figure}
@@ -392,9 +393,10 @@ test = SpikeWidthTestDynamic( # Initialize the test.
 result = sciunit.judge(test,model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
 result.summarize() # Summarize the result.  
 \end{python}
+\vspace{-15px}
 \caption{Working example of testing in \textit{NeuronUnit}}
 \label{fig:neuronunit_example}
-\vspace{-15px}
+
 \end{figure}
 The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to make all published data on single cell neurophysiology available in a machine-readable format \citep{tripathy_neuroelectro:_2012}.  
 Currently, up to 27 electrophysiological properties are available for 93 cell types, gathered from over 2000 single pieces of published data extracted from tables in published papers. 

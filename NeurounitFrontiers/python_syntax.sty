@@ -46,3 +46,11 @@ emph={self},
 emphstyle={\color{self}\slshape},
 %
 }}{}
+
+\lstnewenvironment{ipy}[1][]{
+\lstset{
+numbers=none,
+frame=none,
+basicstyle=\ttfamily\footnotesize,%\setstretch{1}
+morekeywords={In, Out}
+}}{\vspace{-10pt}}
