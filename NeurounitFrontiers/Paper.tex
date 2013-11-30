@@ -434,34 +434,31 @@ The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to make al
 Currently, up to 27 electrophysiological properties are available for 93 cell types, gathered from over 2000 single pieces of published data extracted from tables in published papers. 
 We have made it easy to parameterize the test families in \textit{Neuron\-Unit}  using data extracted from the NeuroElectro API. 
 Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
-The latter is illustrated in Figure \ref{fig:neuronunit_example}, on lines 1-4. Once data has been retrieved from NeuroElectro, associated statistics (e.g. mean, standard error and sample size) can be extracted to parameterize tests (e.g. a test of spike widths on line 10). Data from NeuroElectro is can be used to validate a variety of basic electrophysiological features of neuron models, including spike width, resting membrane potential, after-hyperpolarization amplitude, etc. 
+The latter is illustrated in Figure \ref{fig:neuronunit_example}, on lines 1-4. Once data has been retrieved from NeuroElectro, associated statistics (e.g. mean, standard error and sample size) can be extracted to parameterize tests (e.g. a test of spike widths on line 10). Data from NeuroElectro is can be used to validate a variety of basic electrophysiological features of neuron models, including spike width, resting membrane potential, after-hyperpolarization amplitude, etc. \todo{write a sentence or two about its use of the NeuroLex repository}
 As NeuroElectro is the only publicly curated source of such data, it represents a key resource facilitating test construction.  
 
 \subsection{Models from NeuroML and OpenSourceBrain}\label{sec:neuroml_models}
 NeuroML is a standardized model description language for neuroscience \citep{gleeson_neuroml:_2010}. 
-It allows many neurophysiological and neuroanatomical models to be described in a simulator-independent fashion. Some simulators, notably the popular NEURON package\todo{cite NEURON}, can seamlessly export model specifications in the NeuroML format. 
+It allows many neurophysiological and neuroanatomical models to be described in a simulator-independent fashion. Some simulators, notably the popular NEURON package (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), can seamlessly export model specifications as NeuroML. 
 Because NeuroML is an XML specification, model descriptions can be verified for correctness and queried for model properties and components. We leverage the latter facilities to expose model capabilities automatically. %NeuroML has proven ideal for model sharing, curation, and for answering both questions about \textit{what a model does} and \textit{how to do it} programatically.  
 
-NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off them off to a supported simulator for execution. 
+NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off them off to a supported simulator for execution. A number of popular simulators support execution of NeuroML models, including NEURON, GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
 \textit{NeuronUnit} provides a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel} that takes a path to a NeuroML model as a parameter.  
-NeuroML can describe a wide range of models, but our \verbx{NeuroConstructModel} class currently supports only  time-integrable point neurons (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential} at minimum). 
-It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
+NeuroML can describe a wide range of models, but our \verbx{NeuroConstructModel} class currently supports only  time-integrable point neurons (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential} at minimum; see Sec. \ref{sec:neurotools}). 
+It can be instantiated directly or subclassed (useful when additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). The underlying simulator can be configured (defaulting to ??\todo{What does it default to in our code??}; not shown). In this example, we simply create a model based on a NeuroML model of CA1 cells downloaded from OpenSourceBrain to the local file system (\url{http://opensourcebrain.org/projects/ca1pyramidalcell}).  
 
 \textit{OSB} curates many models described in NeuroML. 
-OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators such as NEURON (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
-Concordance between model output (beginning with the NeuroML description) and reference output (from native simulator source files or published figures) is reported for each model. 
-Thus, OSB is an excellent source of models that, in addition to being open source, are sufficiently described to enable validation. 
-The hippocampal CA1 pyramidal cell is commonly modeled, and we implement one such model hosted on OSB (\url{http://opensourcebrain.org/projects/ca1pyramidalcell}) by simply declaring a \verbx{CA1PyramidalCellModel} class, inheriting from \verbx{NeuroConstructModel}.  
-This basic implementation simply ``wraps'' the components of the existing model, with simulator interaction taken care of by \verbx{NeuroConstructModel} methods; 
-thus, only the code shown in Fig. \ref{fig:ca1_model} is required. 
-All OSB models, and indeed any NeuroML model, can be tested similarly. 
+OSB-curated projects have been converted from their native format into NeuroML. To ensure that the NeuroML model is faithful to the original simulation, OSB verifies concordance between model output (beginning with the NeuroML description) and reference output (from native simulator source files or published figures) for each model. 
+Thus, OSB is an excellent source of models that, in addition to being open source, are known to be accurately described. This also highlights the distinction between \emph{verification} activities, performed by OSB to ensure that a model description operates correctly, and \emph{validation} activites, performed using SciUnit to check the model's predictions against data. Both are important activities.
 
-Spanning a range of scales and original development environments, all OSB models are formally described using NeuroML, as are all model components and sub-components, such as cells, ion channels, calcium stores, etc. 
-These models are regularly executed on OSB servers to ensure that their output remains consistent as they are updated. 
-Therefore, OSB can confirm that they \textit{do} work, while linked journal articles, on-site wiki, and code inspection can establish \textit{how} they work. 
-However, there is no mechanism for establishing \textit{how well} they work, i.e. how well the models accord with data. 
-\textit{NeuronUnit} fills this gap by helping OSB (and the larger neuroscience community) assess models using data-driven tests. 
-\textit{SciUnit} can be applied similarly to other neuroscience (or biology) sub-disciplines using \textit{NeuronUnit} analogues written by the corresponding communities.    
+To directly test a model in OSB, we can skip the step of downloading it the local file system or adding it to the test repository and simply download it from OSB directly by using the \verbx{OSBModel} class, shown on lines 5-8 of Figure \ref{fig:neuronunit_example}. 
+
+%Spanning a range of scales and original development environments, all OSB models are formally described using NeuroML, as are all model components and sub-components, such as cells, ion channels, calcium stores, etc. 
+%These models are regularly executed on OSB servers to ensure that their output remains consistent as they are updated. 
+%Therefore, OSB can confirm that they \textit{do} work, while linked journal articles, on-site wiki, and code inspection can establish \textit{how} they work. 
+%However, there is no mechanism for establishing \textit{how well} they work, i.e. how well the models accord with data. 
+%\textit{NeuronUnit} fills this gap by helping OSB (and the larger neuroscience community) assess models using data-driven tests. 
+%\textit{SciUnit} can be applied similarly to other neuroscience (or biology) sub-disciplines using \textit{NeuronUnit} analogues written by the corresponding communities.    
 
 \begin{figure}
 \begin{python}
@@ -471,22 +468,22 @@ class CA1PyramidalCellModel(NeuroConstructModel):
 		project_path = neuroconstruct.get_path("hippocampus","CA1_pyramidal_neuron","CA1PyramidalCell","neuroConstruct")
 		NeuroConstructModel.__init__(self,project_path)
 \end{python}
-\vspace{-5px}
+\vspace{-15px}
 \caption{A model class corresponding to a CA1 Pyramidal Cell model from Open Source Brain}
 \label{fig:ca1_model}
-\vspace{-15px}
+\vspace{-10px}
 \end{figure}
 
-\subsection{Capabilities from NeuroTools}
+\subsection{Data Formats and Capabilities from NeuroTools}\label{sec:neurotools}
 NeuroTools (\url{http://neuralensemble.org/NeuroTools}) is a Python library supporting tasks associated with analysis of neural data (or model output), such as membrane potential time series, spike trains, etc. 
 It is an open source and actively developed project, containing reliable algorithms on which to base neurophysiology tests.
 
-We use NeuroTools to implement \textit{SciUnit} capabilities in \textit{NeuronUnit}. 
+We use NeuroTools to implement a variety of \textit{SciUnit} capabilities in \textit{NeuronUnit}. 
 For example, an \verbx{AnalogSignal} object (e.g. a membrane potential time series) from NeuroTools has a threshold detection method that returns a NeuroTools \verbx{SpikeTrain} object. 
-Meanwhile, a \textit{NeuronUnit} \verbx{HasSpikeTrain} Capability requires that the method \verbx{getSpikeTrain} be implemented. 
-\verbx{NeuroConstructModel} does so by placing the object method \verbx{AnalogSignal.threshold_detection} inside \verbx{getSpikeTrain}. 
-Many such NeuroTools objects are similarly exchanged between \verbx{NeuroConstructModel} methods. 
-This simplifies test writing, since basic model output properties are obtained trivially using the methods of NeuroTools objects, and these NeuroTools objects are easily extracted from model output, especially when the models subclass \verbx{NeuroConstructModel}.  
+The \textit{NeuronUnit} capability \verbx{HasSpikeTrain}  requires that a method named \verbx{get_spike_train} be implemented, returning a \verbx{SpikeTrain} object. 
+\verbx{NeuroConstructModel} implements this by default by calling the NeuroTools method \verbx{AnalogSignal.threshold_detection}, retrieving the membrane potential by calling the \verbx{get_membrane_potential} method implemented by the \verbx{HasMembranePotential} capability that all supported NeuroML models implement.
+NeuroTools is used in this manner to implement a wide variety of capabilities for \verbx{NeuroConstructModel}s, without requiring that the model developer do so explicitly (though they can overwrite these if they wish). 
+This also helps scientists by directing them to a set of common utility functions and data formats that they can use, knowing that they are accepted by the community around NeuronUnit.\todo{do you have a list of capabilities that neuroconstructmodels can automatically implement?}
 
 \section{Discussion}\label{sec:discussion}
 
