@@ -158,10 +158,10 @@ examples from other areas of biomedical research abound (e.g. \url{http://www.th
 \vspace{-65px}
 \caption{NeuronUnit overview. NeuronUnit is set of testing tools built upon the discipline-agnostic SciUnit framework. 
 NeuronUnit can in principle test arbitrary neurophysiology models using arbitrary data but we provide here an example using models described in NeuroML as part of the \textit{Open Source Brain Project} (OSB, \citep{gleeson_open_2012}, \url{http://www.opensourcebrain.org}), and single neuron electrophysiology data available as part of the NeuroElectro Project (Neuroelectro, \citep{tripathy_neuroelectro:_2012}, \url{http://neuroelectro.org}).}  
-\label{fig:sciunit_overview}
+\label{fig:sciunit_overview}\vspace{-10px}
 \end{figure}
 \leavevmode
-\vspace{-0px}
+
 
 Each of these examples has leveraged \emph{ad hoc} infrastructure to support model validation. 
 While the specific criteria used to evaluate models can vary widely between modeling domains, the underlying methodology is common and could be implemented once. 
@@ -210,14 +210,14 @@ class SpikeCountTest(sciunit.Test):
       "inputs": inputs, "counts": counts, "obs_means": means, "obs_stds": stds
     })
 \end{python}
-\vspace{-5px}
+\vspace{-15px}
 \caption{An example single neuron spike count test class implemented using \textit{SciUnit}. Because this implementation contains logic common to many different systems, \textit{NeuronUnit} was developed to provide a simpler means to deliver it (see Sec. \ref{sec:neuronunit}).}
 \label{fig:rate_test}
-\vspace{-15px}
+\vspace{-10px}
 \end{figure}
 
 %Simple executable \emph{validation tests} that compute agreement between a model prediction and an experimental observation.  
-We first illustrate the form of a generic example \textit{SciUnit} test suite that could be used in neurophysiology. 
+We begin by building an example \textit{SciUnit} test suite that could be used in neurophysiology. 
 Suppose we have collected data from an experiment where current stimuli (measured in pA) are delivered to neurons of a particular subtype, while the somatic membrane potential of each stimulated cell (in mV) is recorded and stored.  
 A model claiming to capture this neuron type's membrane potential dynamics must be able to accurately predict a variety of features observed in these data.
 
@@ -237,17 +237,17 @@ Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in i
 The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
-For example, given observations from hippocampal CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
+For example, given observations from CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
 \begin{python}
   CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
-\end{python}
+\end{python}\todo{decrease vertical space after python}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). 
+For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{_judge} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
-To specify the interface between the test and the model (that is, to specify an appropriate scope), the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
-Capabilities are simply collections of methods that a test will need to invoke in order to receive relevant data, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
+To specify the interface between the test and the model, the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
+Capabilities are simply collections of methods that a test needs a model to implement so that it can provide inputs and generate relevant predictions, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
 In Python, capabilities are written as classes with unimplemented members. 
 The capability required by the test in Fig. \ref{fig:rate_test} is shown in Fig. \ref{fig:capability}. 
 In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
@@ -263,11 +263,11 @@ class SpikeCountFromCurrent(sciunit.Capability):
     produces an integer spike count. Can be called multiple times."""
     raise NotImplementedError("Model does not implement capability.")
 \end{python}
+\vspace{-15px}
 \caption{An example capability specifying a single required method (used by the test in Figure \ref{fig:rate_test}).}
 \label{fig:capability}
 \vspace{-10px}
 \end{figure}
-
 \begin{figure}
 \begin{python}
 class TrainSpikeCountFromCurrent(sciunit.Capability):
@@ -277,9 +277,10 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
     training data."""
     raise NotImplementedError("Model does not implement capability.")
 \end{python}
+\vspace{-15px}
 \caption{Another capability specifying a training protocol (not used by the test in Figure \ref{fig:rate_test}).}
 \label{fig:training}
-\vspace{-15px}
+\vspace{-10px}
 \end{figure}
 
 \subsection{Models}
@@ -287,17 +288,16 @@ Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are i
 
 Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, which we will discuss below. 
 Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
-To create a \emph{particular} linear model, a modeler can provide particular parameter values, just as with test families:
+To create a \emph{particular} linear model, a modeler provides parameter values, just as with test families:
 \begin{python}
 CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
 \end{python}
 Here, the parameters to the model were picked by the modeler heuristically, or based on externally-available knowledge. 
 An alternative test design would add a training phase where these parameters were fit to data using the capability shown in Fig. \ref{fig:training}. 
-This latter test could thus only be used for those models for which parameters can be adjusted without human involvement. 
+This alternative test could thus only be used for those models for which parameters can be adjusted without human involvement. 
 Whether to build a training phase into the test protocol is a choice left to each test development community. 
-
 Fig. \ref{fig:rate_test} does not include a training phase. 
-If training data is externally available, models that nevertheless do implement a training capability (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
+If training data is externally available, models that nevertheless are capable of being automatically trained (like \verb|LinearModel|) can simply be trained explicitly by calling the capability method just like any other Python method:
 \begin{python}
 CA1_linear_model_fit = LinearModel()
 CA1_linear_model_fit.train_with_currents(CA1_training_in, CA1_training_out)
@@ -316,9 +316,10 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
     means = [numpy.mean(c) for c in currents]
     [self.offset, self.scale] = numpy.polyfit(means, counts, deg=1)    
 \end{python}
+\vspace{-15px}
 \caption{A model that returns a spike count by applying a linear transformation to the mean input current. The parameters can be provided manually or learned from data provided by a test or user (see text).}
 \label{fig:simple_model}
-\vspace{-15px}
+\vspace{-10px}
 \end{figure}
 
 \subsection{Executing Tests} A test is executed against a model using the \verbx{judge} method:
@@ -335,16 +336,16 @@ CA1_suite = sciunit.TestSuite([CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_te
 \end{python}
 Like a single test, a test suite is capable of judging one or more models. The result is a score matrix much like the one diagramed in Fig. \ref{fig:sciunit_overview}.
 \begin{python}
-CA1_matrix = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
+scores = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development\todo{mention use within iPython to generate an HTML table}.
 
 % Section 3.
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
-In the examples above, tests were parameterized by data explicitly, and models implemented capabilities directly. In many cases, however, both models and data can be accessed from specialized repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
+In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic.
 
 \subsection{\textit{NeuronUnit}: Neurophysiology-Specific Testing Tools}\label{sec:neuronunit_acitivities}
-In particular, we will focus on neurophysiology in this paper as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from resources like \textit{NeuroElectro}. We will provide functions that  link these tools to \textit{SciUnit}, as a collection of relevant model and test families and associated capabilities, in a package called \textit{NeuronUnit}, collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. \todo{Sentence about how great github is for collaboratively doing things, particularly in science?} Scientists can use these tools to create test suites tailored to specific systems of interest (for example, scientists interested specifically in models of cells in the hippocampus would use \textit{NeuronUnit} to create a suite, \textit{HippocampusSuite}, parameterized by relevant data from \textit{NeuroElectro}).
+In particular, we will continue to focus on neurophysiology in this paper as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from resources like \textit{NeuroElectro}. We provide functions that  link these tools to \textit{SciUnit}, as a collection of relevant model and test families and associated capabilities, in a package called \textit{NeuronUnit}, collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}) \todo{Must change name of repository on github to neuronunit (after I am sure grant has been reviewed)}. \todo{Sentence about how great github is for collaboratively doing things, particularly in science?} Scientists can use these tools to create test suites tailored to specific systems of interest (for example, scientists interested specifically in models of cells in the hippocampus would use \textit{NeuronUnit} to create a suite, \textit{HippocampusSuite}, parameterized by relevant data from \textit{NeuroElectro}).
 
 We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop similar repositories that synergistically link \textit{SciUnit} to relevant ongoing standardization efforts and provide a common, collaboratively-developed vocabulary of test families, model families and capabilities relevant to their domain.
 
