@@ -236,7 +236,7 @@ Here, we show a class \verbx{SpikeCountTest} taking three \emph{parameters} in i
 The meaning of each parameter along with a description of the goodness-of-fit metric used by the test is documented on lines 4-7. 
 %For convenience, we also make use of functions provided by the popular NumPy\cite{numpy_url} and SciPy\cite{scipy_url} libraries, although these are not required by \textit{SciUnit}.  
 To create a \emph{particular} spike count test, we instantiate this class with particular experimental observations. 
-For example, given observations from CA1 cells (not shown), we can instantiate a test as follows\todo{use iPython style In[0] notation?}:
+For example, given observations from CA1 cells (not shown), we can instantiate a test as follows:
 \begin{ipy}
   In [0]: CA1_sc_test = SpikeCountTest(CA1_inputs, CA1_means, CA1_stds)
 \end{ipy}
@@ -338,7 +338,7 @@ The result is a \emph{score matrix}, like the one diagrammed in Fig. \ref{fig:sc
 \begin{ipy}
   In [6]: scores = CA1_suite.judge([ARX_model, AdEx1_model, aSRM_model, PP_model])
 \end{ipy}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \todo{reference to ipython nb docs/paper?} (Fig. \ref{fig:scidash_matrix}).
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \citep{perez_ipython_2007} (Fig. \ref{fig:scidash_matrix}).
 
 
 \begin{figure}%[18]{r}{1\textwidth}
@@ -415,7 +415,7 @@ It has proven ideal for model sharing, curation, and for answering both question
 
 NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off simulation to supported simulators. 
 \textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, parameterized by a path to a NeuroML model.  
-NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable point neurons (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
+NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable neurons with membrane potentials (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
 
 \textit{OSB} curates many models described in NeuroML. 
 OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators such as NEURON (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
@@ -465,7 +465,7 @@ Although the tools described in Sec. \ref{sec:neuronunit} do not exhaust the pos
 In the \textit{NeuronUnit} repository (\url{http://github.com/scidash/neuronunit}) is a runnable script (\textit{examples.py}) demonstrating a complete testing pipeline. 
 It (1) selects an OSB model; 
 (2) simulates it using NeuroConstruct; 
-(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; \todo{Update this with current examples.py content}
+(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; \todo{Update this with current examples.py content, and changed to ipython notebook notation}
 and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
 
 
