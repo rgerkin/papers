@@ -211,7 +211,7 @@ class SpikeCountTest(sciunit.Test):
     })
 \end{python}
 \vspace{-15px}
-\caption{An example single neuron spike count test class implemented using \textit{SciUnit}. Because this implementation contains logic common to many different systems, \textit{NeuronUnit} was developed to provide a simpler means to deliver it (see Sec. \ref{sec:neuronunit}).}
+\caption{\texttt{[neuronunit.SpikeCountTest]} An example single neuron spike count test class implemented using \textit{SciUnit}. Because this implementation contains logic common to many different systems, \textit{NeuronUnit} was developed to provide a simpler means to deliver it (see Sec. \ref{sec:neuronunit}).}
 \label{fig:rate_test}
 \vspace{-10px}
 \end{figure}
@@ -264,7 +264,7 @@ class SpikeCountFromCurrent(sciunit.Capability):
     raise NotImplementedError("Model does not implement capability.")
 \end{python}
 \vspace{-15px}
-\caption{An example capability specifying a single required method (used by the test in Figure \ref{fig:rate_test}).}
+\caption{\texttt{[neuronunit.SpikeCountFromCurrent]} An example capability specifying a single required method (used by the test in Figure \ref{fig:rate_test}).}
 \label{fig:capability}
 \vspace{-10px}
 \end{figure}
@@ -278,7 +278,7 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
     raise NotImplementedError("Model does not implement capability.")
 \end{python}
 \vspace{-15px}
-\caption{Another capability specifying a training protocol (not used by the test in Figure \ref{fig:rate_test}).}
+\caption{\texttt{[neuronunit.TrainSpikeCountFromCurrent]} Another capability specifying a training protocol (not used by the test in Figure \ref{fig:rate_test}).}
 \label{fig:training}
 \vspace{-10px}
 \end{figure}
@@ -317,7 +317,7 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
     [self.offset, self.scale] = numpy.polyfit(means, counts, deg=1)    
 \end{python}
 \vspace{-15px}
-\caption{A model that returns a spike count by applying a linear transformation to the mean input current. The parameters can be provided manually or learned from data provided by a test or user (see text).}
+\caption{\texttt{[neuronunit.LinearModel]} A model that returns a spike count by applying a linear transformation to the mean input current. The parameters can be provided manually or learned from data provided by a test or user (see text).}
 \label{fig:simple_model}
 \vspace{-10px}
 \end{figure}
@@ -338,7 +338,7 @@ Like a single test, a test suite is capable of judging one or more models. The r
 \begin{python}
 scores = CA1_suite.judge([CA1_linear_model_heuristic, CA1_linear_model_fit])
 \end{python}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as a hyperlinked table inside an IPython notebook containing the specification and execution of the test suite (Fig. \ref{fig:scidash_matrix}). Such notebooks are stored in test repositories like \textit{hippocampus\_tests}.
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools in development.  For example, the score matrix might be visualized as a hyperlinked table inside an IPython notebook \todo{reference to ipython nb docs/paper?} containing the specification and execution of the test suite (Fig. \ref{fig:scidash_matrix}). Such notebooks are stored in test repositories like \textit{hippocampus\_tests}.
 
 \begin{figure}%[18]{r}{1\textwidth}
 \centering
@@ -356,14 +356,14 @@ In the examples in the previous section, tests were generated from data explicit
 
 \subsection{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
 The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as the tests used in the QSNMC, and is collaboratively developed on GitHub (\url{http://github.com/scidash/neuronunit}). 
-Scientists can use these tools to easily create test suites tailored to specific neuronal systems of interest. 
-For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository called \textit{hippocampus\_tests}, parameterizing them by relevant data from \textit{NeuroElectro}. 
+Scientists can use this package to easily create test suites tailored to specific neuronal systems of interest. 
+For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an iPython notebook, as described above, called \textit{hippocampus\_tests}, parameterizing them by relevant data from \textit{NeuroElectro}. 
 To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
 
 Statisticians interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
 Rather than attempting to convince a large number of scientists socially that the methods used in canonical papers need to be changed, statisticians need only propagate a change to the testing logic used by the community. 
-Once the testing logic has been changed, all models, past and future, will be immediately re-evaluated against the new metrics. 
-Scientists wanting to determine statistical best-practices for measuring goodness-of-fit need only refer to the tests in these repositories.
+Once the testing logic has been changed, all past models will be immediately evaluated against the new metrics. 
+Scientists wishing to determine statistical best-practices for measuring goodness-of-fit need only refer to the tests in these repositories.
 
 To submit a new model for testing, a scientist can similarly fork the \textit{hippocampus\_tests} repository, add a new model to the relevant suite using the simple \textit{NeuroML}-\textit{NeuronUnit} bridge described in Sec. \ref{sec:neuroml_models} and test the model against available tests locally. 
 When satisfied with parameter choices, the scientist can submit the model to \textit{OSB} and use the common \textit{OSB-NeuronUnit} bridge, also described in Sec. \ref{sec:neuroml_models}, to refer to it, and finally submit a pull request to the common repository. 
