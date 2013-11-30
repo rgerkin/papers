@@ -373,11 +373,30 @@ We anticipate that other communities within neuroscience (and indeed, within sci
 Using these common repositories, small groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
 Each research community can develop suitable quality standards and processes for merging these pull requests. 
 
-The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that allow scientists to understand, precisely, the state-of-the-art in their field. We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies mentioned above.
+The end result of these efforts will be tables, like the one shown in Figure \ref{fig:sciunit_overview}, that allow scientists to understand, precisely, the state-of-the-art in their field. We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies.
 
 \subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
-The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to gather all published data on single cell neurophysiology into machine-readable formats \citep{tripathy_neuroelectro:_2012}.  
-Currently, up to 27 electrophysiological properties are reported for 93 cell types, spanning more than 2000 single pieces of published data extracted from tables in published papers. 
+\begin{figure}
+\begin{python}
+# Interface with neuroelectro.org to search for spike widths of CA1 Pyramidal cells. 
+reference_data = neuroelectro.NeuroElectroSummary(
+  neuron = {'name':'Hippocampus CA1 pyramidal cell'}, # Neuron type.  
+  ephysprop = {'name':'Spike Width'}) # Electrophysiological property name.
+reference_data.get_values()  # Get summary data for the above. 
+model = CA1PyramidalCellModel(population_name="CG_CML_0") # Initialize the model with some parameters.
+test = SpikeWidthTestDynamic( # Initialize the test.    
+	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics from the reference data
+	model_args = {'current':40.0}, # Somatic current injection in pA.  
+	comparator = ZComparator), # A comparison class that implements a Z-score.  
+result = sciunit.judge(test,model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
+result.summarize() # Summarize the result.  
+\end{python}
+\caption{Working example of testing in \textit{NeuronUnit}}
+\label{fig:neuronunit_example}
+\vspace{-15px}
+\end{figure}
+The NeuroElectro project (\url{http://neuroelectro.org}) is an effort to make all published data on single cell neurophysiology available in a machine-readable format \citep{tripathy_neuroelectro:_2012}.  
+Currently, up to 27 electrophysiological properties are available for 93 cell types, gathered from over 2000 single pieces of published data extracted from tables in published papers. 
 We have made it easy to parameterize \textit{NeuronUnit} tests using data extracted from the NeuroElectro API. 
 Tests can be based upon data from single journal articles, or from ensembles of articles with a common theme (e.g. about a particular neuron type). 
 The former is illustrated in Figure \ref{fig:neuronunit_example}. 
@@ -446,25 +465,6 @@ It (1) selects an OSB model;
 (3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; \todo{Update this with current examples.py content}
 and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
 
-\begin{figure}
-\begin{python}
-# Interface with neuroelectro.org to search for spike widths of CA1 Pyramidal cells. 
-reference_data = neuroelectro.NeuroElectroSummary(
-  neuron = {'name':'Hippocampus CA1 pyramidal cell'}, # Neuron type.  
-  ephysprop = {'name':'Spike Width'}) # Electrophysiological property name.
-reference_data.get_values()  # Get summary data for the above. 
-model = CA1PyramidalCellModel(population_name="CG_CML_0") # Initialize the model with some parameters.
-test = SpikeWidthTestDynamic( # Initialize the test.    
-	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics from the reference data
-	model_args = {'current':40.0}, # Somatic current injection in pA.  
-	comparator = ZComparator), # A comparison class that implements a Z-score.  
-result = sciunit.judge(test,model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
-result.summarize() # Summarize the result.  
-\end{python}
-\caption{Working example of testing in \textit{NeuronUnit}}
-\label{fig:neuronunit_example}
-\vspace{-15px}
-\end{figure}
 
 \subsection{Creating New Models, Capabilities, and Tests}
 \textit{NeuronUnit} provides base classes to enable rapid generation of models, capabilities, and tests for neurophysiology data. 
