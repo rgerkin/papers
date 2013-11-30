@@ -75,8 +75,11 @@ $^{2}$Dept. of Computer Science, Carnegie Mellon University, Pittsburgh, PA, USA
 \maketitle
 
 \begin{abstract}
-Rigorously validating a quantitative scientific model requires comparing its predictions against an unbiased selection of experimental observations according to sound statistical criteria. Developing new models thus requires a comprehensive and contemporary understanding of competing models, relevant data and statistical best practices. Today, developing such an understanding requires an encyclopedic knowledge of the literature. 
-Unfortunately, in rapidly-growing fields like neuroscience, this is becoming increasingly untenable, even for the most conscientious scientists. For new scientists, this can be a significant barrier to entry.
+Rigorously validating a quantitative scientific model requires comparing its predictions against an unbiased selection of experimental observations according to sound statistical criteria. 
+Developing new models thus requires a comprehensive and contemporary understanding of competing models, relevant data and statistical best practices. 
+Today, developing such an understanding requires an encyclopedic knowledge of the literature. 
+Unfortunately, in rapidly-growing fields like neuroscience, this is becoming increasingly untenable, even for the most conscientious scientists. 
+For new scientists, this can be a significant barrier to entry.
 
 %However, today's model validation process is based on one-time peer review of a scientific publication. , and thus remains an informal and incomplete process, particularly in fields like neuroscience where the number of competing models and the volume of relevant data is growing rapidly.   
 %This makes it difficult to determine community-accepted validation criteria, compare competing models,  determine the state-of-the-art given the latest experimental data, and to precisely identify open modeling problems.
@@ -85,7 +88,8 @@ Software engineers seeking to verify, validate and contribute to a complex softw
 Drawing inspiration from this practice, we have developed \textit{SciUnit}, an easy-to-use framework for developing ``model validation tests'' -- 
 executable functions, here written in Python. 
 These tests generate and statistically validate predictions from a specified class of scientific models against one relevant empirical observation to produce a score indicating agreement between the model and the data. 
-Suites of such validation tests, collaboratively developed by a scientific community in common repositories, produce up-to-date statistical summaries of the state of the field. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. As an initial example, we describe \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics resources to support validating single-neuron models using data gathered by neurophysiologists. 
+Suites of such validation tests, collaboratively developed by a scientific community in common repositories, produce up-to-date statistical summaries of the state of the field. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. 
+As an initial example, we describe \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics resources to support validating single-neuron models using data gathered by neurophysiologists. 
 
 \tiny
  \keyFont{ \section{Keywords:} Neuroinformatics Simulation Electrophysiology Software Modeling Validation } %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
@@ -98,7 +102,8 @@ Neuroscientists construct quantitative models to coherently explain experimental
 A model can be characterized by its \textit{scope}: the set of observable quantities that it can generate predictions about, and by its \textit{validity}: the extent to which its predictions agree with available experimental  observations of those quantities.
 
 Today, scientists contribute a new model to the research community by submitting a paper containing a description of the model's structure and scope along with text and figures that demonstrate its validity and argue for its novelty.  
-The scientists tasked with reviewing the paper are  responsible for evaluating these claims, discovering competing models and relevant data the paper did not adequately consider, and ensuring that goodness-of-fit was measured in a statistically sound manner, drawing on their knowledge of prior literature. Once a modeling paper is published, it is frozen and cited as-is in perpetuity. 
+The scientists tasked with reviewing the paper are  responsible for evaluating these claims, discovering competing models and relevant data the paper did not adequately consider, and ensuring that goodness-of-fit was measured in a statistically sound manner, drawing on their knowledge of prior literature. 
+Once a modeling paper is published, it is frozen and cited as-is in perpetuity. 
 
 Because publications are the sole vehicle for knowledge about model scope and validity, scientists must rely on an encyclopedic knowledge of the literature to answer \emph{summary questions} like the following:
 \begin{itemize}
@@ -109,7 +114,8 @@ Because publications are the sole vehicle for knowledge about model scope and va
 \item What observations have not yet been adequately explained by any available model?
 \end{itemize}
 
-In some fields, like neuroscience, where the number of relevant publications being generated every year is growing rapidly \citep{jinha_article_2010}, these questions can be difficult for even conscientious senior scientists to answer comprehensively. For new scientists, this represents a serious barrier to entry. 
+In some fields, like neuroscience, where the number of relevant publications being generated every year is growing rapidly \citep{jinha_article_2010}, these questions can be difficult for even conscientious senior scientists to answer comprehensively. 
+For new scientists, this represents a serious barrier to entry. 
 
 %This suggests that tools that help researchers answer questions like these could help readers and reviewers develop a more comprehensive understanding of the state-of-the-art and improve the quality of the research being published as a result: to renewed calls for tools that help researchers . 
 
@@ -126,7 +132,8 @@ Professional software developers face similar issues \citep{omar_sciunit_2013}.
 They must understand the scope of each component of a complex software project and verify that each component achieves desired input/output behavior. 
 But software developers do not verify components by simply documenting a few interesting inputs and corresponding outputs and then presenting them to other developers for one-time review leading to an archived document. 
 Rather, they typically follow a \emph{test-driven development} methodology by creating a suite of executable \emph{unit tests} that serve to specify each component's scope and verify its implementation on an ongoing basis as it is being developed and modified \citep{beck2003}. 
-Each test individually checks that a small portion of the program meets a single correctness criterion. For example, a unit test might verify that one function within the program correctly handles malformed inputs. 
+Each test individually checks that a small portion of the program meets a single correctness criterion. 
+For example, a unit test might verify that one function within the program correctly handles malformed inputs. 
 Collectively, the test results serve as a summary of the project as it progresses through its development cycle. 
 Developers can determine which features are unimplemented or buggy by examining the set of failed tests, and progress can be measured in terms of how many tests the program passes over time. 
 This methodology is widely adopted in practice \citep{beck2003}.
@@ -134,7 +141,9 @@ This methodology is widely adopted in practice \citep{beck2003}.
 %publications would be analagous to user manuals, rather than rigorous justifications that a program meets a specific specification. Unit tests serve this purpose for software, so we argue that the validation of neuroscience models by means of executable tests would be useful to scientists as a supplement the publication system.
 
 Test-driven methodologies have started to see success in neuroscience as well, in the form of \emph{modeling competitions}. 
-During these competitions, competitors develop and parameterize models based on publicly-available training data and submit them to a central server. There, submitted models are provided hidden testing data which they must use to produce predictions. These predictions are validated using publicly available criteria to produce summaries of the relative merits of different models, just as a test suite summarizes the state of a software project. 
+During these competitions, competitors develop and parameterize models based on publicly-available training data and submit them to a central server. 
+There, submitted models are provided hidden testing data which they must use to produce predictions. 
+These predictions are validated using publicly available criteria to produce summaries of the relative merits of different models, just as a test suite summarizes the state of a software project. 
 Such competitions continue to drive important advances and improve scientists' understanding of their fields. 
 For example, the quantitative single neuron modeling competition (QSNMC) \citep{jolivet_quantitative_2008} investigated the complexity-accuracy tradeoff among reduced models of excitable membranes; 
 the ``Hopfield'' challenge \citep{hopfield_what_2000} tested techniques for generating neuronal network form given its function; 
@@ -157,7 +166,10 @@ examples from other areas of biomedical research abound (e.g. \url{http://www.th
 \centering
 \includegraphics[scale=0.6]{diagram1.pdf}
 \vspace{-65px}
-\caption{Paper overview. NeuronUnit is set of neurophysiology-specific testing tools built upon the domain-agnostic SciUnit framework. Scientists interested in testing neurophysiological models of particular systems, like the hippocampus, against relevant experimental data can construct test suites in a repository called \textit{hippocampus\_tests}. Models and data can be added directly or imported, via NeuronUnit, from model repositories like Open Source Brain (OSB) and data repositories like NeuroElectro. Testing tools and test repositories are developed collaboratively using Github.}  
+\caption{Paper overview. NeuronUnit is set of neurophysiology-specific testing tools built upon the domain-agnostic SciUnit framework. 
+Scientists interested in testing neurophysiological models of particular systems, like the hippocampus, against relevant experimental data can construct test suites in a repository called \textit{hippocampus\_tests}. 
+Models and data can be added directly or imported, via NeuronUnit, from model repositories like Open Source Brain (OSB) and data repositories like NeuroElectro. 
+Testing tools and test repositories are developed collaboratively using Github.}  
 \label{fig:sciunit_overview}\vspace{-10px}
 \end{figure}
 \leavevmode
@@ -243,16 +255,19 @@ For example, given observations from CA1 cells (not shown), we can instantiate a
 \end{ipy}
 We emphasize the crucial distinction between the \textit{class} \verbx{SpikeCountTest}, which defines a \emph{parameterized family} of validation tests, and the particular \textit{instance} \verbx{CA1_sc_test}, which is an individual validation test because the necessary parameters, derived from data, have been provided. 
 As we will describe below, we expect communities to build repositories of such families capturing the criteria used in their subfields of neuroscience so that test generation for a particular system of interest will often require simply instantiating a previously-developed family with particular experimental parameters and data. 
-For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
+For single-neuron test families like \verbx{SpikeCountTest}, we have developed such a library, called \textit{NeuronUnit} (\url{http://github.com/scidash/neuronunit}) (Sec. \ref{sec:neuronunit}). 
+Particular tests, like \verbx{CA1_sc_test}, will be derived from these families in suite repositories (e.g. \verbx{HippocampusTests}, as shown in Figure \ref{fig:sciunit_overview}).
 
 Classes that implement the \verbx{sciunit.Test} interface must contain a \verbx{_judge} method that receives a candidate \emph{model} as input and produces a \textit{score} as output. 
 To specify the interface between the test and the model, the test author provides a list of \emph{capabilities} in the \verbx{required_capabilities} attribute, seen on line 12 of Fig. \ref{fig:rate_test}. 
 Capabilities are simply collections of methods that a test needs a model to implement so that it can provide inputs and generate relevant predictions, and are analogous to \emph{interfaces} in e.g. Java (\url{http://docs.oracle.com/javase/tutorial/java/concepts/interface.html}). 
 In Python, capabilities are written as classes with unimplemented members. 
 The capability required by the test in Fig. \ref{fig:rate_test} is shown in Fig. \ref{fig:capability}. 
-In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
+In \textit{SciUnit}, classes defining capabilities are tagged as such by inheriting from \verbx{sciunit.Capability}. 
+The test in Figure \ref{fig:rate_test} uses this capability on line 19 to produce a spike count prediction for each input current. 
 
-The remainder of the \verbx{_judge} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} that is included with \textit{SciUnit}. In addition to the $p$-value itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for  scientists who may wish to examine the result in more detail later. 
+The remainder of the \verbx{_judge} method implements the goodness-of-fit metric described above, returning an instance of \verbx{sciunit.PValue}, a subclass of \verbx{sciunit.Score} that is included with \textit{SciUnit}. 
+In addition to the $p$-value itself, the returned score object also contains metadata, via the \verbx{related_data} parameter, for scientists who may wish to examine the result in more detail later. 
 In this case we save the input currents, the model outputs and the observed means and standard deviations (line 24). 
 
 \begin{figure}
@@ -284,10 +299,14 @@ class TrainSpikeCountFromCurrent(sciunit.Capability):
 \end{figure}
 
 \subsection{Models}
-Capabilities are \emph{implemented} by models. In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. Like tests, the class itself represents a family of models, parameterized by the arguments of the constructor. A particular model is an instance of such a class.
+Capabilities are \emph{implemented} by models. 
+In \textit{SciUnit}, models are instances of Python classes that inherit from \verbx{sciunit.Model}. 
+Like tests, the class itself represents a family of models, parameterized by the arguments of the constructor. 
+A particular model is an instance of such a class.
 
 Figure \ref{fig:simple_model} shows how to write a simple {family} of models, \verbx{LinearModel}, that implement the capability in Fig. \ref{fig:capability} as well as another capability shown in Fig. \ref{fig:training}, which we will discuss below. 
-Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
+Models in this family generate a spike count by applying a linear transformation to the mean of the provided input current. 
+The family is parameterized by the scale factor and the offset of the transformation, both scalars. 
 To create a \emph{particular} linear model, a modeler provides parameter values, just as with test families:
 \begin{ipy}
   In [1]: CA1_linear_model_heuristic = LinearModel(3.0, 1.0)
@@ -327,19 +346,24 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
   In [4]: score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{ipy}
 
-\verbx{judge} is a stock \verbx{sciunit.Test} method that proceeds by first checking that the provided model implements all required capabilities. It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
+\verbx{judge} is a stock \verbx{sciunit.Test} method that proceeds by first checking that the provided model implements all required capabilities. 
+It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. 
+A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
 \subsection{Test Suites and Score Matrices}\label{sec:visualization} A collection of tests intended to be run on the same model can be put together to form a test suite.
 The following test suite could be used for a simplified version of the QSNMC, as described in Sec. \ref{sec:example}:  
 \begin{ipy}
   In [5]: CA1_suite = sciunit.TestSuite([CA1_overall_test, CA1_sc_test, CA1_sl_test, CA1_sv_test, CA1_isi_test, CA1_imi_test])
 \end{ipy}
-Like a single test, a test suite is capable of judging one or more models. The models must possess the union of the capabilities of the tests in a suite to be fully capable of running the suite, though partial results can also be generated. When a model cannot take a test because of a missing capability, the \texttt{NotApplicable} score is used (e.g. point processes cannot predict subthreshold voltages). 
+Like a single test, a test suite is capable of judging one or more models. 
+The models must possess the union of the capabilities of the tests in a suite to be fully capable of running the suite, though partial results can also be generated. 
+When a model cannot take a test because of a missing capability, the \texttt{NotApplicable} score is used (e.g. point processes cannot predict subthreshold voltages). 
 The result is a \emph{score matrix}, like the one diagrammed in Fig. \ref{fig:sciunit_overview}.
 \begin{ipy}
   In [6]: scores = CA1_suite.judge([ARX_model, AdEx1_model, aSRM_model, PP_model])
 \end{ipy}
-A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \citep{perez_ipython_2007} (Fig. \ref{fig:scidash_matrix}).
+A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  
+For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \citep{perez_ipython_2007} (Fig. \ref{fig:scidash_matrix}).
 
 
 \begin{figure}%[18]{r}{1\textwidth}
@@ -352,7 +376,8 @@ A simple summary of the scores in a score matrix can be printed to the console o
 \end{figure}
 
 \section{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
-The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as those described in the previous section. It is collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}). 
+The \textit{NeuronUnit} package contains a collection of test families and associated capabilities relevant to neurophysiology, such as those described in the previous section. 
+It is collaboratively developed on Github (\url{http://github.com/scidash/neuronunit}). 
 Scientists can use this package to easily create test suites tailored to specific neuronal systems of interest. 
 For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an iPython notebook called \textit{hippocampus\_tests}, parameterized by data from the hippocampus.%, parameterizing them by relevant data from \textit{NeuroElectro}. 
 %To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
@@ -366,17 +391,21 @@ To submit a new model for testing, a scientist can similarly fork the \textit{hi
 When satisfied with parameter choices, the scientist can submit a pull request to the common repository. 
 Once a model is in the repository, it will be evaluated on an ongoing basis against the latest accepted collections of tests, parameterized by the latest data, using the latest statistical best practices, without the participation of the original modeler, assuming only that the capabilities required by the tests stay stable.  
 
-
 GitHub is an excellent platform for this kind of activity, and is becoming a widely-used tool for scientific collaboration, reproducibility, and transparency \citep{ram_git_2013}.  
 We anticipate that other communities within neuroscience (and indeed, within science more broadly) will develop repositories similar to \textit{NeuronUnit} that provide a common, collaboratively-developed vocabulary of test families and capabilities relevant to their domain, and bridge with relevant standardization efforts and infrastructure. 
 Using these common repositories, smaller groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
 Each research community can develop suitable quality standards and processes for merging these pull requests. 
 
 The end result of these efforts will be tables, like the one shown in Figure \ref{fig:scidash_matrix}, that allow scientists to understand, precisely, the state-of-the-art in their field. 
-We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies, below.
+We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. 
+\textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. 
+We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies, below.
 
 \section{Integrating With Neuroinformatics Tools and Infrastructure}\label{sec:neuronunit}
-In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. In many fields, however, both models and data are available from existing  repositories in standardized formats. In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
+In the examples in the previous section, tests were generated from data explicitly, and models implemented capabilities directly. 
+In many fields, however, both models and data are available from existing  repositories in standardized formats. 
+In this section, we will show how to leverage this existing infrastructure to make parameterizing tests with published data and generating \textit{SciUnit} models from models implemented in some other manner (even in a language other than Python) nearly automatic. 
+In particular, we will continue to focus on neurophysiology as our initial case study, using machine-readable models written in \textit{NeuroML} available from OpenSourceBrain (\textit{OSB}), and machine-readable data from \textit{NeuroElectro}. 
 
 \subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
 \begin{figure}
@@ -418,7 +447,8 @@ It has proven ideal for model sharing, curation, and for answering both question
 
 NeuroConstruct (\cite{gleeson_neuroconstruct:_2007}, \url{http://www.neuroconstruct.org}) is a simulation manager that takes NeuroML models and hands off simulation to supported simulators. 
 \textit{NeuronUnit} offers a \verbx{sciunit.Model} subclass called \verbx{NeuroConstructModel}, parameterized by a path to a NeuroML model.  
-NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable neurons with membrane potentials (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
+NeuroML can describe a wide range of models, but \verbx{NeuroConstructModel} currently supports only those that are time-integrable neurons with membrane potentials (exposing capabilities \verbx{TimeIntegrable} and \verbx{HasMembranePotential}). 
+It can be instantiated directly or subclassed (useful if additional capabilities need to be manually exposed, for example) to generate a model suitable for testing (Fig. \ref{fig:ca1_model}). 
 
 \textit{OSB} curates many models described in NeuroML. 
 OSB-curated projects are converted from their native format into NeuroML, and run on major neural simulators such as NEURON (\cite{carnevale_neuron_2006}, \url{http://www.neuron.yale.edu/neuron}), GENESIS (\cite{bower_genesis_2007}, \url{http://genesis-sim.org}), NEST (\cite{gewaltig_nest_2007}, \url{http://www.nest-initiative.org}), and MOOSE (\cite{ray_moose_2008}, \url{http://moose.ncbs.res.in}). 
@@ -494,7 +524,13 @@ Participation in public modeling competitions demonstrates this incentive.
 A popular test suite can represent a ``gold standard'' by which progress during development is judged.
 
 \subsection{Participation from Experimental Communities}
-Experimentalists may not want to write tests derived from their data.  We anticipate four solutions: \textbf{First}, tests require no special data formatting; only a list of required  capabilities (for selecting eligible models), optional metadata (as run-time arguments), and a statistical data summary (for scoring tests) are required.  A unit test is focused and does not require arbitrary computations on data.  For example, suppose intracellular current injection evokes 100 action potentials, the width of which is of interest.  Writing the test consists of selecting \verbx{ReceivesCurrent} and \verbx{ProducesActionPotentialShape} capabilities (one line of code each), computing the mean and variance of action potential widths (one line of code), specifying current injection parameters, e.g. amplitude and duration (two lines of code), and selecting a scoring mechanism from \verbx{sciunit.scores}, e.g. (colloquially) ``Must be $<$ 1 standard deviation of the mean'' (one line of code).  This example can be found in \verbx{NeuronUnit.tests.SpikeWidthTest}; heavy-lifting is done by the interface.
+Experimentalists may not want to write tests derived from their data.  
+We anticipate four solutions: 
+\textbf{First}, tests require no special data formatting; only a list of required  capabilities (for selecting eligible models), optional metadata (as run-time arguments), and a statistical data summary (for scoring tests) are required. 
+A unit test is focused and does not require arbitrary computations on data. 
+For example, suppose intracellular current injection evokes 100 action potentials, the width of which is of interest. 
+Writing the test consists of selecting \verbx{ReceivesCurrent} and \verbx{ProducesActionPotentialShape} capabilities (one line of code each), computing the mean and variance of action potential widths (one line of code), specifying current injection parameters, e.g. amplitude and duration (two lines of code), and selecting a scoring mechanism from \verbx{sciunit.scores}, e.g. (colloquially) ``Must be $<$ 1 standard deviation of the mean'' (one line of code). 
+This example can be found in \verbx{NeuronUnit.tests.SpikeWidthTest}; heavy-lifting is done by the interface.
 \textbf{Second}, data-sharing is becoming accepted, and test-writing can be distributed across scientists, including non-experimentalists with other aims such as analysis or modeling. 
 \textbf{Third}, many tests can be automatically generated using NeuronUnit, and the continued emergence of data-aggregation initiatives such as NeuroElectro will expand these possibilities. 
 \textbf{Fourth}, an incentive to write tests for one's data exists: the ability to identify models that give the data clear context and impact. 
@@ -514,7 +550,8 @@ these matrices are independent of model scale because their size depends only on
 
 \subsection{Arbitrary Scoring Criteria for Tests}
 A test first assesses goodness-of-fit, and applies a normalization (e.g. pass/fail, 0.0-1.0) to generate a score. 
-Arbitrary choices at both stages may benefit some models over others.  \textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
+Arbitrary choices at both stages may benefit some models over others. 
+\textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
 For example, given a data mean and variance, ordering model output by Z-score or p-value will yield the same relative ranking of models. 
 Indeed, rank ordering of models may prove more valuable than test scores themselves. 
 \textbf{Second}, suite repositories should be open, so tests can be cloned and new statistical choices implemented. 
@@ -523,14 +560,16 @@ identification and correction of flawed methodology is becoming increasingly com
 The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
 Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. 
 A community consensus will slowly emerge in the form of commonly-accepted test suites. 
-Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub.  This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).
+Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub. 
+This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).
 
 \subsection{Reliability of Data Underlying Tests}
 Unreliable data can undermine model validation. 
 \textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
 Open source version control services such as GitHub support community moderation, permitting users to comment on tests, indicating their concerns. 
 Suite repository popularity can reflect consensus. 
-Experimental metadata also constrain a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. Using the NeuroElectro API, for example, it is possible to select only data corresponding to specific experimental conditions, for example recording electrode type.  
+Experimental metadata also constrain a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
+Using the NeuroElectro API, for example, it is possible to select only data corresponding to specific experimental conditions, for example recording electrode type.  
 Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
 Such capabilities require no implementation, so the model definition must only inherit them. 
 \textbf{Second}, models cannot perfectly reproduce data that is itself a random draw from a ``true'' distribution. 
