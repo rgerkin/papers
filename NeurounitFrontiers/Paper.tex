@@ -15,6 +15,7 @@
 \usepackage{todonotes}
 \usepackage{url}
 \usepackage{lineno}
+\usepackage{upquote}
 %\usepackage{natbib}
 %\usepackage{caption}
 
@@ -380,21 +381,23 @@ In the examples in the previous section, tests were generated from data explicit
 \subsection{Reference Data for Tests from NeuroElectro}\label{sec:neuroelectro} 
 \begin{figure}
 \begin{python}
-# Interface with neuroelectro.org to search for spike widths of CA1 Pyramidal cells. 
-reference_data = neuroelectro.NeuroElectroSummary(
-  neuron = {'name':'Hippocampus CA1 pyramidal cell'}, # Neuron type.  
-  ephysprop = {'name':'Spike Width'}) # Electrophysiological property name.
+reference_data = neuroelectro.NeuroElectroSummary( # Pooled experimental data from  neuroelectro.org. 
+  neuron = {'name':'Hippocampus CA1 pyramidal cell'}, # Neuron type according to NeuroLex ontology.  
+  ephysprop = {'name':'Spike Width'}) # Electrophysiological property name in same.
 reference_data.get_values()  # Get summary data for the above. 
-model = CA1PyramidalCellModel(population_name="CG_CML_0") # Initialize the model with some parameters.
-test = SpikeWidthTestDynamic( # Initialize the test.    
-	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics from the reference data
-	model_args = {'current':40.0}, # Somatic current injection in pA.  
+model = models.OSBModel( # Initialize the model.
+        'hippocampus', # Brain area.  
+        'CA1_pyramidal_neuron', # Neuron type name in OSB.  
+        'CA1PyramidalCell') # Model name (Migliore et al, 2005).
+test = SpikeWidthTest( # Initialize the test.    
+	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics.
+	model_args = {'current':40.0*pA}, # Somatic current injection in pA.  
 	comparator = ZComparator), # A comparison class that implements a Z-score.  
-result = sciunit.judge(test,model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
-result.summarize() # Summarize the result.  
+record = test.judge(model) # (1) Check capabilities, (2) take the test, (3) generate a score and validate it, (4) bind the score to model/test combination. 
+record.summarize() # Summarize the result.  
 \end{python}
 \vspace{-15px}
-\caption{Working example of testing in \textit{NeuronUnit}}
+\caption{Working example of testing in \textit{NeuronUnit}. Imports excluded for clarity.}
 \label{fig:neuronunit_example}
 
 \end{figure}
@@ -465,7 +468,7 @@ Although the tools described in Sec. \ref{sec:neuronunit} do not exhaust the pos
 In the \textit{NeuronUnit} repository (\url{http://github.com/scidash/neuronunit}) is a runnable script (\textit{examples.py}) demonstrating a complete testing pipeline. 
 It (1) selects an OSB model; 
 (2) simulates it using NeuroConstruct; 
-(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTestDynamic}; \todo{Update this with current examples.py content, and changed to ipython notebook notation}
+(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTest}; 
 and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
 
 
