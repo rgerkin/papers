@@ -346,8 +346,8 @@ class LinearModel(sciunit.Model, SpikeCountFromCurrent,
   In [4]: score = CA1_sc_test.judge(CA1_linear_model_heuristic)
 \end{ipy}
 
-\verbx{judge} is a stock \verbx{sciunit.Test} method that proceeds by first checking that the provided model implements all required capabilities. 
-It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. 
+\verbx{judge} is a built-in method of \verbx{sciunit.Test} that proceeds by first checking that the provided model implements all required capabilities. 
+It then calls the test's author-implemented \verbx{_judge} method (note leading underscore) to produce a score. A score is an instance of \verbx{sciunit.Score} and must implement an ordering, to facilitate sorting of scores (e.g. in tabular form, described below). 
 A reference to the test and model are added to the score for convenience (accessible via the \verbx{test} and \verbx{model} attributes, respectively), before it is returned.
 
 \subsection{Test Suites and Score Matrices}\label{sec:visualization} A collection of tests intended to be run on the same model can be put together to form a test suite.
@@ -368,12 +368,13 @@ For example, the score matrix can be visualized as a hyperlinked table inside an
 
 
 \begin{figure}%[18]{r}{1\textwidth}
+\vspace{-5px}
 \centering
 \includegraphics[scale=0.55]{table-ipy.pdf}
 \vspace{-10px}
 \caption{A score matrix for a SciUnit test suite, visualized as a hyperlinked table inside an IPython notebook stored in a test repository like \textit{hippocampus\_tests}.}
 \label{fig:scidash_matrix}
-\vspace{5px}
+\vspace{-5px}
 \end{figure}
 
 \section{A Collaborative Workflow}\label{sec:neuronunit_acitivities}
@@ -383,7 +384,8 @@ Scientists can use this package to easily create test suites tailored to specifi
 For example, scientists interested specifically in testing models of cells in the hippocampus would use \textit{NeuronUnit} to create tests in a GitHub repository containing an IPython notebook called \textit{hippocampus\_tests}, parameterized by data from the hippocampus.%, parameterizing them by relevant data from \textit{NeuroElectro}. 
 %To make this easy, \textit{NeuronUnit} contains \emph{bridge functions} for retrieving data and generating tests from \textit{NeuroElectro} directly (Sec. \ref{sec:neuroelectro}). 
 
-Statisticians interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
+Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and 
+identification and correction of flawed methodology is becoming increasingly common (\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010}). Statisticians and other scientists interested in improving how goodness-of-fit is measured can simply fork the \textit{NeuronUnit} repository, modify the logic in the relevant test families and submit a \emph{pull request} for evaluation by the community. 
 Rather than attempting to convince a large number of scientists socially that the methods used in canonical papers need to be changed, statisticians need only propagate a change to the testing logic used by the community. 
 Once the testing logic has been changed, all models can be immediately evaluated against the new metrics. 
 Scientists wishing to determine statistical best-practices for measuring goodness-of-fit need only refer to the tests in these repositories.
@@ -530,40 +532,39 @@ A ``similarity matrix'' for input responses defines a unique model signature, an
 Goodness-of-fit between similarity matrices for model and experiment determines test scores; 
 these matrices are independent of model scale because their size depends only on test inputs, not system detail.  
 
-\subsection{Arbitrary Scoring Criteria for Tests}
-A test first assesses goodness-of-fit, and applies a normalization (e.g. pass/fail, 0.0-1.0) to generate a score. 
-Arbitrary choices at both stages may benefit some models over others. 
-\textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
-For example, given a data mean and variance, ordering model output by Z-score or p-value will yield the same relative ranking of models. 
-Indeed, rank ordering of models may prove more valuable than test scores themselves. 
-\textbf{Second}, suite repositories should be open, so tests can be cloned and new statistical choices implemented. 
-Statistics as applied to neuroscience have been notoriously ``fast and loose''; 
-identification and correction of flawed methodology is becoming increasingly common (\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010}, \url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg}), and is accelerated by an open framework. 
-The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model. 
-Validation criteria are subject to debate (indeed, the QSNMC criteria changed between 2007 and 2008 due to such debates), and neuroscientists who wish to promote different criteria need only derive alternative tests. 
-A community consensus will slowly emerge in the form of commonly-accepted test suites. 
-Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub. 
-This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).
+%\subsection{Arbitrary Scoring Criteria for Tests}
+%A test first assesses goodness-of-fit, and applies a normalization (e.g. pass/fail, 0.0-1.0) to generate a score. 
+%Arbitrary choices at both stages may benefit some models over others. 
+%\textbf{First}, however, rank-ordering is constant across many goodness-of-fit metrics, meaning that choice of metric will rarely cause an otherwise passing model to fail and vice versa. 
+%For example, given a data mean and variance, ordering model output by Z-score or p-value will yield the same relative ranking of models. 
+%Indeed, rank ordering of models may prove more valuable than test scores themselves. 
+%\textbf{Second}, suite repositories should be open, so tests can be cloned and new statistical choices implemented. 
+%Statistics as applied to neuroscience have been notoriously ``fast and loose''; 
+%identification and correction of flawed methodology is becoming increasingly common (\cite{button_power_2013,kriegeskorte_circular_2009,galbraith_study_2010}, \url{http://prefrontal.org/files/posters/Bennett-Salmon-2009.jpg}), and is accelerated by an open framework. 
+%The validation criteria is made explicit in the specification of a test, so modelers need not guess which criteria are being used to validate or invalidate their model.  
+%A community consensus will slowly emerge in the form of commonly-accepted test suites. 
+%Such a community can judge which test version is most appropriate, i.e. what a model \textit{should} do -- this process documented via standard moderation techiniques used e.g. on GitHub. 
+%This process can be made even more visible by storing the output of test runs using Sage or IPython worksheets, or through optional database backends such as in the Sumatra lab notebook for simulation and analysis (\cite{sumatra_davison_2012}, \url{http://neuralensemble.org/sumatra}).
 
-\subsection{Reliability of Data Underlying Tests}
-Unreliable data can undermine model validation. 
-\textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
-Open source version control services such as GitHub support community moderation, permitting users to comment on tests, indicating their concerns. 
-Suite repository popularity can reflect consensus. 
-Experimental metadata also constrain a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
-Using the NeuroElectro API, for example, it is possible to select only data corresponding to specific experimental conditions, for example recording electrode type.  
-Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
-Such capabilities require no implementation, so the model definition must only inherit them. 
-\textbf{Second}, models cannot perfectly reproduce data that is itself a random draw from a ``true'' distribution. 
-Uncertainty in data must be made explicit, by asking how well a data set validates its own experimental replications \citep{kriegeskorte_representational_2008}. 
-The degree of such ``self-validation'' represents the upper limit of what a model can be expected to achieve, and should represent a ``perfect'' score.  
+%\subsection{Reliability of Data Underlying Tests}
+%Unreliable data can undermine model validation. 
+%\textbf{First}, the community must evaluate experimental design and methods, discounting data produced using questionable techniques. 
+%Open source version control services such as GitHub support community moderation, permitting users to comment on tests, indicating their concerns. 
+%Suite repository popularity can reflect consensus. 
+%Experimental metadata also constrain a test's relevance, so test writers should select data with metadata appropriate to the system being modeled, and attach the metadata to resulting test scores. 
+%Using the NeuroElectro API, for example, it is possible to select only data corresponding to specific experimental conditions, for example recording electrode type.  
+%Metadata can also be expressed as Capabilities, e.g. \verbx{At37Degrees} or \verbx{Calcium3mM}; and tests can require that models express them. 
+%Such capabilities require no implementation, so the model definition must only inherit them. 
+%\textbf{Second}, models cannot perfectly reproduce data that is itself a random draw from a ``true'' distribution. 
+%Uncertainty in data must be made explicit, by asking how well a data set validates its own experimental replications \citep{kriegeskorte_representational_2008}. 
+%The degree of such ``self-validation'' represents the upper limit of what a model can be expected to achieve, and should represent a ``perfect'' score.  
 
 \subsection{Occam's Razor}
 All things being equal, simpler models are better. 
-Model complexity has many definitions \citep{mccabe_complexity_1976}, including: 
+Model complexity, though fundamentally a subjective measure, has many correlates \citep{mccabe_complexity_1976}, including: 
 1) model length; 2) memory use; 3) CPU load; 4) \# of capabilities. 
-Future \textit{SciUnit} tools will report the model validity vs complexity tradeoff in tabular form (e.g. Figure \ref{fig:scidash_matrix}), and in a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
-The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot, a visualization familiar from the symbolic regression package Eureqa \citep{schmidt_distilling_2009}.  
+Future \textit{SciUnit} tools will analyze these factors, and may include tools for gathering community ratings about subjective factors like complexity. As a result of these enhancements, scientists will be able to visualize the model validity vs complexity tradeoff in tabular form (e.g. as a column in Figure \ref{fig:scidash_matrix}), or as a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
+The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot (e.g. as used in the symbolic regression package Eureqa \citep{schmidt_distilling_2009}).  
 
 \subsection{Expansion Into Other Areas of Biology}
 After covering neurophysiology with continued development of \textit{NeuronUnit}, we would like \textit{SciUnit} to be applied across neuroscience and in other biological sciences. 
