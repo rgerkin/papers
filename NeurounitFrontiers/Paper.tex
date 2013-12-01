@@ -422,8 +422,9 @@ model = models.OSBModel( # Initialize the model.
 test = SpikeWidthTest( # Initialize the test.    
 	reference_data = {'mean':reference_data.mean, 'std':reference_data.std}, # Summary statistics.
 	model_args = {'current':40.0*pA}, # Somatic current injection in pA.  
-	comparator = ZComparator), # A comparison class that implements a Z-score.  
+	comparator = ZComparator), # the scoring metric can be part of the test parameters 
 score = test.judge(model)
+print score.summary
 \end{python}
 \vspace{-15px}
 \caption{Working example of testing in \textit{NeuronUnit}. Imports excluded for clarity.}
@@ -482,18 +483,14 @@ We use NeuroTools to implement a variety of \textit{SciUnit} capabilities in \te
 For example, an \verbx{AnalogSignal} object (e.g. a membrane potential time series) from NeuroTools has a threshold detection method that returns a NeuroTools \verbx{SpikeTrain} object. 
 The \textit{NeuronUnit} capability \verbx{HasSpikeTrain}  requires that a method named \verbx{get_spike_train} be implemented, returning a \verbx{SpikeTrain} object. 
 \verbx{NeuroConstructModel} implements this by default by calling the NeuroTools method \verbx{AnalogSignal.threshold_detection}, retrieving the membrane potential by calling the \verbx{get_membrane_potential} method implemented by the \verbx{HasMembranePotential} capability that all supported NeuroML models implement.
-NeuroTools is used in this manner to implement a wide variety of capabilities for \verbx{NeuroConstructModel}s, without requiring that the model developer do so explicitly (though they can overwrite these if they wish). 
+NeuroTools is used in this manner to implement a wide variety of capabilities for \verbx{NeuroConstructModel}s, without requiring that the modeler do so explicitly (though they can overwrite these if they wish). 
 This also helps scientists by directing them to a set of common utility functions and data formats that they can use, knowing that they are accepted by the community around NeuronUnit.\todo{do you have a list of capabilities that neuroconstructmodels can automatically implement?}
 
 \section{Discussion}\label{sec:discussion}
 
 \subsection{A Complete Pipeline}
 Although the tools described in Sec. \ref{sec:neuronunit} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
-In the \textit{NeuronUnit} repository (\url{http://github.com/scidash/neuronunit}) is a runnable script (\textit{examples.py}) demonstrating a complete testing pipeline. 
-It (1) selects an OSB model; 
-(2) simulates it using NeuroConstruct; 
-(3) tests the widths of the resulting action potentials, extracted and computed using NeuroTools, against NeuroElectro data downloaded on-the-fly, using a \textit{NeuronUnit} test class called \verbx{SpikeWidthTest}; 
-and (4) computes and prints a test score (Figure~\ref{fig:neuronunit_example}).
+In the \textit{hippocampus\_tests} repository (\url{http://github.com/scidash/hippocampus\_tests}) is an IPython notebook (\textit{ca1\_suite.ipynb}) demonstrating a complete test suite similar to the \emph{ad hoc} suite used by the QSNMC. Our tests are parameterized by data drawn both from NeuroElectro and entered manually, as well as models drawn both from OSB and implemented manually. New tests, data and models can be added by contributing to these resources and/or submitting pull requests; we anticipate handing control over merging these requests to prominent members of the hippocampal modeling community once our interface stabilizes and this paper is published. This repository represents a template that other groups of systems neuroscientists can use for their system of interest, and a starting point for other research areas in neuroscience, and science more broadly.
 
 
 \subsection{Creating New Models, Capabilities, and Tests}
