@@ -490,41 +490,35 @@ This also helps scientists by directing them to a set of common utility function
 
 \subsection{A Complete Pipeline}
 Although the tools described in Sec. \ref{sec:neuronunit} do not exhaust the possible sources of models, capabilities, and test data, they provide an immediate point of entry into the neurophysiology community and a powerful demonstration of our proposal. 
-In the \textit{hippocampus\_tests} repository (\url{http://github.com/scidash/hippocampus\_tests}) is an IPython notebook (\textit{ca1\_suite.ipynb}) demonstrating a complete test suite similar to the \emph{ad hoc} suite used by the QSNMC. Our tests are parameterized by data drawn both from NeuroElectro and entered manually, as well as models drawn both from OSB and implemented manually. New tests, data and models can be added by contributing to these resources and/or submitting pull requests; we anticipate handing control over merging these requests to prominent members of the hippocampal modeling community once our interface stabilizes and this paper is published. This repository represents a template that other groups of systems neuroscientists can use for their system of interest, and a starting point for other research areas in neuroscience, and science more broadly.
+In the \textit{hippocampus\_tests} repository (\url{http://github.com/scidash/hippocampus\_tests}) is an IPython notebook (\textit{ca1\_suite.ipynb}) demonstrating a complete test suite similar to the \emph{ad hoc} suite used by the QSNMC. Our tests are parameterized by data drawn both from NeuroElectro and entered manually, as well as models drawn both from OSB and implemented manually. New tests, data and models can be added by contributing to these community resources and/or submitting pull requests; we anticipate handing control over merging these requests to members of the hippocampal modeling community once our interface stabilizes and this paper is published. This repository represents a template that other groups of systems neuroscientists can use for their system of interest, and a starting point for other research areas in neuroscience, and science more broadly.
 
 
-\subsection{Creating New Models, Capabilities, and Tests}
+\subsection{Manually Creating New Models, Capabilities, and Tests}
 \textit{NeuronUnit} provides base classes to enable rapid generation of models, capabilities, and tests for neurophysiology data. 
 However these objects can also be created from scratch, requiring only adherence to the \textit{SciUnit} interface. 
 For example, a Model could implement an \verbx{integrate} capability method by wrapping execution of a MATLAB script and a \verbx{get_spikes} capability method by parsing a .csv file on disk; 
 a Test could be initialized using empirical spike rates collected in the lab.  
-While this does not meet our idealized vision of development and testing, in practice this may be a common scenario. 
+While this does not meet our idealized vision of collaborative development and testing, in practice this may be a common scenario. 
 
 \subsection{Participation from Modeling Communities}
-Modelers may not want to expose model capabilities, a requirement of test-taking.  
-We anticipate four solutions: \textbf{First}, interfacing a model to \textit{SciUnit} requires only implementing selected model capabilities. 
-Often this means identifying native model procedures that satisfy a capability, and wrapping their functionality. 
-This can require as little as one line of code. 
-Importantly, the modeler is not required to expose or rewrite any model flow control. 
-\textbf{Second}, we support multiple environments automatically by using NeuroML \citep{gleeson_neuroml:_2010}, and other simulator-independent model descriptions are possible for other domains. 
-Automated generation of NeuroML from native model source code is in development (Gleeson, personal communication); for the popular NEURON simulator (\cite{carnevale_neuron_2006}), this functionality is already implemented in use. 
+Modelers may not want to expose their models to tests via capabilities, a requirement for test-taking.  
+We anticipate four solutions: \textbf{First}, we will emphasize to the community that wrapping existing model code that satisfy a capability is quite simple, requiring as little as one line of code. 
+Importantly, the modeler is not required to expose or rewrite any internal model flow control in almost all cases. 
+\textbf{Second}, we support multiple simulation environments automatically by using NeuroML \citep{gleeson_neuroml:_2010}, and other simulator-independent model descriptions are possible for other domains. 
+Automated generation of NeuroML from native model source code is in development (Gleeson, personal communication); for the popular NEURON simulator (\cite{carnevale_neuron_2006}), this functionality is already implemented and in use. 
 This minimizes modeler effort for a large (at least 1000, \url{http://www.neuron.yale.edu/neuron/node/69}) and growing number of neuronal models. 
 \textbf{Third}, modelers have an incentive to demonstrate publicly their models' validity. 
-Participation in public modeling competitions demonstrates this incentive. 
-\textbf{Fourth}, modelers have an incentive to use \textit{SciUnit} during development (see TDD, above) to ensure that ongoing development preserves correspondence between model and data. 
-A popular test suite can represent a ``gold standard'' by which progress during development is judged.
+Participation in public modeling competitions demonstrates that this incentive can draw several participants. We plan to assist with such competitions by advocating for use of SciUnit as the underlying technical substrate in the future. 
+\textbf{Fourth}, modelers have an incentive to use \textit{SciUnit} during development (see TDD, Sec. \ref{sec:introduction}) to ensure that ongoing development preserves correspondence between model and data. 
+A popular test suite can represent a ``gold standard'' by which progress during development is judged, even within a single project.
 
 \subsection{Participation from Experimental Communities}
 Experimentalists may not want to write tests derived from their data.  
 We anticipate four solutions: 
-\textbf{First}, tests require no special data formatting; only a list of required  capabilities (for selecting eligible models), optional metadata (as run-time arguments), and a statistical data summary (for scoring tests) are required. 
-A unit test is focused and does not require arbitrary computations on data. 
-For example, suppose intracellular current injection evokes 100 action potentials, the width of which is of interest. 
-Writing the test consists of selecting \verbx{ReceivesCurrent} and \verbx{ProducesActionPotentialShape} capabilities (one line of code each), computing the mean and variance of action potential widths (one line of code), specifying current injection parameters, e.g. amplitude and duration (two lines of code), and selecting a scoring mechanism from \verbx{sciunit.scores}, e.g. (colloquially) ``Must be $<$ 1 standard deviation of the mean'' (one line of code). 
-This example can be found in \verbx{NeuronUnit.tests.SpikeWidthTest}; heavy-lifting is done by the interface.
-\textbf{Second}, data-sharing is becoming accepted, and test-writing can be distributed across scientists, including non-experimentalists with other aims such as analysis or modeling. 
-\textbf{Third}, many tests can be automatically generated using NeuronUnit, and the continued emergence of data-aggregation initiatives such as NeuroElectro will expand these possibilities. 
-\textbf{Fourth}, an incentive to write tests for one's data exists: the ability to identify models that give the data clear context and impact. 
+\textbf{First}, we will emphasize that tests do not require releasing entire datasets; a test consists only of a list of required  capabilities (for selecting eligible models), and sufficient statistics suitable for executing the scoring logic. This can simply be means and standard deviations in many cases, such as the examples in this paper. Most scoring logic will consist of a few calls to capability methods followed by a standard statistical test, which can be implemented once in \textit{SciUnit} or a discipline-specific repository like \textit{NeuronUnit}.
+\textbf{Second}, data-sharing is becoming accepted. If data is available from a community repository, as many granting agencies are increasingly requiring, then tests can often be generated automatically using bridges developed collaboratively by the community. 
+\textbf{Third}, an incentive to write tests for one's data exists: the ability to identify models that give the data clear context and impact. If a new piece of data invalidates a widely-accepted model, this can be cited in publications.  
+\textbf{Fourth}, one can compare new data against existing data by simply creating a \emph{data-derived model} that directly generates ``predictions'' by draws from the new dataset directly. Thus the model validation procedures described in this paper can also be used to perform data validation -- that is, check the goodness-of-fit of new data with old data.
 
 \subsection{Diversity of Levels and Kinds of Models and Data}
 The diversity of topics in biology is vast. 
