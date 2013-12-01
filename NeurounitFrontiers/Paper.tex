@@ -522,13 +522,10 @@ We anticipate four solutions:
 
 \subsection{Diversity of Levels and Kinds of Models and Data}
 The diversity of topics in biology is vast. 
-\textbf{First}, we address this by providing an interface allowing modelers to express specific capabilities.  
-This capability set determines the range of eligible tests.  Scale hierarchies are embedded in capability inheritance. 
-For example, \verbx{HasActionPotentials} inherits from \verbx{HasNeurons}, and \verbx{HodgkinHuxley} inherits from \verbx{VoltageGated}. 
-Thus, incompatibility of a test-requiring-action-potentials for a model-lacking-neurons is known without explicit tagging. 
+\textbf{First}, we address this by providing an interface allowing modelers to flexibly express precisely how a model should be interfaced with using  capabilities.  Capabilities can inherit from and call into each other.  This is more flexible than the fixed interfaces used in existing modeling competitions or domains like machine learning where only a few interfaces are of interest (e.g. classifiers). 
 \textbf{Second}, NeuroML naturally addresses diversity of scales because it is organized hierarchically, in ``levels.''  
 Models can be sub- or supersets of other models; similarly for SBML (\cite{hucka_systems_2003}, \url{http://sbml.org}) a general systems biology markup language. 
-\textbf{Third}, cross-level testing can use ``Representional Similarity Analysis'' (RSA) \citep{kriegeskorte_representational_2008}, requiring only that a model respond to defined inputs (e.g. stimuli). 
+\textbf{Third}, cross-level testing can use ``Representional Similarity Analysis'' (RSA) \citep{kriegeskorte_representational_2008}, requiring only that a model respond to defined inputs (e.g. stimuli)\todo{I have no idea what this means}. 
 A ``similarity matrix'' for input responses defines a unique model signature, and can serve as intermediate test output. 
 Goodness-of-fit between similarity matrices for model and experiment determines test scores; 
 these matrices are independent of model scale because their size depends only on test inputs, not system detail.  
