@@ -5,28 +5,46 @@
 
 \begin{document}
 
+\section*{The NeuroElectro Project}
+
+\subsection*{Synonyms}
+neuroelectro, neuroelectro.org
+
+\subsection*{Definition}
+The NeuroElectro Project is an effort to curate data about the electrophysiological properties
+of neurons.  It contains experimental data extracted from the literature about dozens of
+basic properties (such as resting membrane potential, action potential width, etc.) for hundreds of distinct types of neurons.  It can be browsed online at http://neuroelectro.org.  
+
+\subsection*{Detailed Description}
 Computational neuroscientists have argued that the electrophysiological properties of neurons determine their computational roles.
 Furthermore, models containing or concerning neurons can be constrained or validated in part using empirical data on single cell electrophysiology.
 However, compared with imaging or genetic data, these data are infrequently published in a format that permits them to be easily discovered in the literature.
 The NeuroElectro Project (\url{http://neuroelectro.org}, \cite{neuroelectro_2013}) solves this problem by providing a database on the electrophysiological diversity of mammalian neuron types.
 
+\subsubsection*{Implementation}
 This database is populated primarily using automated text extraction from tables of journal articles using Python.
 A subset of records have been manually validated against the primary literature.
 Neuron types are identified using the listing of neuron types provided by NeuroLex (\cite{larson_neurolex.org:_2013,hamilton_ontological_2012}, \url{http://neurolex.org});
 Electrophysiological property types are identified using a custom ontology which formalizes existing community standards \cite{ascoli_petilla_2008}.
 
+\subsubsection*{Data provenance}
 While NeuroElectro contains information about 27 distinct electrophysiological properties, those most heavily represented include resting membrane potential, input resistance, action potential height and width, etc.
 The list of journals containing the source information include those from the Elsevier, Highwire, Wiley, and Oxford family of journals, including The Journal of Neuroscience, The Journal of Physiology, and The Journal of Neurophysiology, among others.
 NeuroElectro also contains details on each study’s experimental conditions (like species or electrode type used), the so-called ``metadata'', obtained using similar text extraction techniques applied to article methods sections.
 
+\subsubsection*{Participation}
 The NeuroElectro web interface (\url{http://neuroelectro.org} also invites users to contribute to the database’s content.
 For example, users can suggest relevant articles on a specific neuron type as well as validate content that has been extracted via the automated algorithms.
-Furthermore, users can elect to become ``content-experts” on a specific neuron type and can then modify the database’s content directly.
+Furthermore, users can elect to become ``content-experts" on a specific neuron type and can then modify the database’s content directly.
 
+\subsubsection*{Scientific Goals}
 NeuroElectro also contains analyses of the resulting database yielding novel relationships on the electrophysiological similarity of different neuron types throughout the brain.
 Among these are hierarchical classifications of neuron types based on similarity of electrophysiological properties.
 The project maintainers are also aiming to relate gene expression patterns in specific cell types to those cells' electrophysiological properties, using expression data obtained through the Allen Brain Atlas (\cite{lein_genome-wide_2007}, \url{http://brain-map.org}).
 
-\bibliographystyle{plainnat}
-\nobibliography{shreejoy}
+\subsection*{Cross-References/Related Terms}
+None
+
+\bibliographystyle{abbrv}
+\bibliography{shreejoy}
 \end{document}
