@@ -142,7 +142,8 @@ Upon identifying candidate articles, we then downloaded the full text of each po
 articles downloaded from the publisher Elsevier (e.g., \emph{Neuron and Brain Research}) were downloaded as XML using the provided text-mining API and subsequently converted to HTML.  
 We chose to work with HTML (as opposed to PDF or XML) because HTML provides a machine-readable markup of the article's content, allowing us to easily identify relevant elements within the article -- such as data tables and the methods section -- using publicly available HTML-parsing tools (here we used the Beautiful Soup HTML-processing library implemented in Python: \url{http://www.crummy.com/software/BeautifulSoup/bs4/doc/}).  
 Furthermore, because HTML is a single semi-structured standard used across publishers, we could write relatively generic HTML-processing algorithms applicable to content published across journals.  
-However, our focus on using HTML limits us to relatively newer articles -- typically those published after 1997 -- because most publications before this time are only available as scanned PDF files. 
+Our focus on using HTML limits us to relatively newer articles - typically those published after 1996 - because before this time most publications are only available as scanned PDF files.  
+However, because the rate of publication across the field has grown exponentially, this HTML-available subset constitutes the vast majority of neuroscience articles ever published.  
 
 We stored the HTML-enhanced full text of each article in our database and associated each article with its corresponding PubMed ID (\url{http://www.ncbi.nlm.nih.gov}).  
 These 8-digit IDs serve as publisher-independent unique identifiers for each article, and allow us to use PubMed-specific tools, such as a powerful API (i.e., PubMed eutils, \url{http://www.ncbi.nlm.nih.gov/books/NBK25500/}).  
@@ -409,6 +410,15 @@ Given the necessity of these manual steps, the scalability of our current approa
 Despite this limitation, our current pipeline is still much faster than a purely manual one.  The methodology could be further improved by addressing falsely matching entities (such as EPSP amplitude in section \ref{sec:ephys_extraction}) by either auto-suggesting alternative matches returned by string-similarity algorithms or by simply adding these concepts to the electrophysiolgical ontology.  
 Moreover, these improvements would facilitate formally computing the sensitivity and specificity of these entity recognition methods.
 
+\subsection{Preliminary use of NeuroElectro in scientific work}
+The NeuroElectro project is intended to facilitate scientific investigation by providing easy access to large quantities of data about neurons.  
+Because the data is machine-readable, we have already begun to conduct several analyses that would not be possible without this resource.  
+First, we have begun an investigation of the relationships between neurons defined by the similarity of their electrophysiological properties.  
+This information can be used to make predictions about as yet unmeasured properties.  
+Second, we have begun to explore the relationship between patterns of gene expression (using both the Allen Brain Atlas and single cell qPCR approaches) and electrophysiological properties of neurons.  
+Third, we have begun automated testing of quantitative neuron models, under the reasonable assumption that these models should be constrained by the available experimental data.  
+These projects are described in manuscripts currently in preparation.  
+
 \subsection{Extensions and improvements to the current semi-automated algorithms}
 Currently, neuron type identification is a critical bottleneck in our approach.  
 One potential improvement would be to replace the nonspecific bag-of-words approach we are currently using in favor of a bioNLP classifier-based approach \citep{mccallum_mallet:_2002}.  
@@ -434,6 +444,11 @@ Given our preference to obtain data in their most raw form, we initially conside
 However, digitizing article figures (presented by publishers as images) into a form that can be further analyzed presents multiple challenges.  
 Though techniques and tools exist to digitize figures, substantial amounts of manual effort are required to employ them correctly, making this figure-based approach difficult to scale to increasing numbers of articles without also employing a large team of human curators.  
 While automatically extracting measurements from figure images will likely prove challenging, our methods can likely be adapted to operate on article text, perhaps by making use of bioNLP methodologies currently used for relationship extraction in the identification of connected brain regions \citep{french_application_2012} or interacting pairs of proteins \citep{kim_classifying_2011}. 
+
+Future developments in machine extraction of data from the scientific literature will be of great benefit.  
+These should include better semantic understanding of context, ranging from relatively unambiguous notations such as units, to syntax-parsing that relates objects of study to their reported properties in free-form prose.  
+Much progress has been made by computer scientists in some of these areas, and more future engagement with their research should enable vastly more data to be extracted from the literature.  
+In the mean time, experimentalists who would like their data to be easily curated should strongly consider using data tables in future publications.  
 
 However, more widespread inclusion of fundamental electrophysiological measurements in data tables in future publications will strongly facilitate data-sharing and meta-analysis initiatives such as NeuroElectro.  
 We believe that, if successful, the use of NeuroElectro will influence the practices of scientists writing papers and reporting results.  
