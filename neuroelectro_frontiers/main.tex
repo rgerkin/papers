@@ -56,7 +56,7 @@ We solve this problem through the NeuroElectro project: a Python library, RESTfu
 Information is organized both by neuron type (using neuron definitions provided by NeuroLex) and by electrophysiological property (using a newly developed ontology).  
 We describe the techniques and challenges associated with the automated extraction of tabular electrophysiological data and methodological metadata from journal articles.  
 We further discuss strategies for how to best combine, normalize and organize data across these heterogeneous sources.  
-NeuroElectro is a valuable resource for experimental physiologists looking to supplement their own data, for computational modelers looking to constrain their model parameters, and for theoreticians searching for undiscovered relationships among neurons and their properties. 
+NeuroElectro is a valuable resource for experimental physiologists attempting to supplement their own data, for computational modelers looking to constrain their model parameters, and for theoreticians searching for undiscovered relationships among neurons and their properties. 
 \tiny
  \keyFont{ \section{Keywords:} neuroinformatics, electrophysiology, database, text-mining, metadata, API, machine learning, natural language processing} 
  %All article types: you may provide up to 8 keywords; at least 5 are mandatory.
@@ -79,7 +79,7 @@ Success among these projects can be defined according to different criteria.
 Such criteria include completeness and comprehensiveness; 
 for example, what percentage of relevant connectivity studies are indexed within BAMS? 
 How many different neuron types are contained within the NeuroMorpho database?  
-Alternatively, success can be defined in terms of the utility of these databases in driving subsequent research, like the use of BAMS as a resource for discovering relationships between brain region connectivity and gene expression \citep{french_relationships_2011} or the use of NeuroMorpho to discover general scaling relationships among the morphology of neuron types \citep{teeter_general_2011}. 
+Alternatively, success can be defined in terms of the utility of these databases in driving subsequent research, like the use of BAMS as a resource for discovering relationships between brain region connectivity and gene expression \citep{french_relationships_2011} or the use of NeuroMorpho to discover general scaling relationships among the morphologies of neuron types \citep{teeter_general_2011}. 
 Similarly, NeuroSynth is widely used by cognitive scientists as a starting point for designing functional imaging studies.  
 Thus while these projects are not yet comprehensive and likely contain data records of varying quality, these resources may nevertheless be employed to draw novel inferences.
 
@@ -141,7 +141,7 @@ We first identified potential articles that were likely to contain information r
 This pre-selection step allowed us to identify and download only articles that contained data relevant to our project.  
 Upon identifying candidate articles, we then downloaded the full text of each potentially-relevant article as HTML; 
 articles downloaded from the publisher Elsevier (e.g., \emph{Neuron and Brain Research}) were downloaded as XML using the provided text-mining API and subsequently converted to HTML.  
-We chose to work with HTML (as opposed to PDF or XML) because HTML provides a machine-readable markup of the article's content, allowing us to easily identify relevant elements within the article -- such as data tables and the methods section -- using publicly available HTML-parsing tools (here we used the Beautiful Soup HTML-processing library implemented in Python: \url{http://www.crummy.com/software/BeautifulSoup/bs4/doc/}).  
+We chose to work with HTML (as opposed to PDF or XML) because HTML provides a machine-readable markup of the article's content, allowing us easily to identify relevant elements within the article -- such as data tables and the methods section -- using publicly available HTML-parsing tools (here we used the Beautiful Soup HTML-processing library implemented in Python: \url{http://www.crummy.com/software/BeautifulSoup/bs4/doc/}).  
 Furthermore, because HTML is a single semi-structured standard used across publishers, we could write relatively generic HTML-processing algorithms applicable to content published across journals.  
 Our focus on using HTML limits us to relatively newer articles - typically those published after 1996 - because before this time most publications are only available as scanned PDF files.  
 However, because the rate of publication across the field has grown exponentially, this HTML-available subset constitutes the majority of published neuroscience articles.
@@ -183,8 +183,8 @@ While we estimate that only 5-10\% of electrophysiology articles contain data ta
 In extracting electrophysiological data, we took advantage of the fact that certain measurements are commonly made during intracellular recordings.  
 For example, such recordings are commonly used to: 
 1) measure a neuron's resting membrane potential, 
-2) to apply hyperpolarizing current injections for measurement of input resistance and membrane time constant, and 
-3) to apply depolarizing current steps to evoke action potentials (spikes) and enable measurement of characteristics such as spike threshold, width, and amplitude.
+2) apply hyperpolarizing current injections for measurement of input resistance and membrane time constant, and 
+3) apply depolarizing current steps to evoke action potentials (spikes) and enable measurement of characteristics such as spike threshold, width, and amplitude.
 
 We developed an electrophysiological lexicon comprising 28 measurements that we found to be commonly reported in the literature, largely based on previously published definitions \citep{toledo-rodriguez_correlation_2004,ascoli_petilla_2008}.  
 To account for subtle differences in terminology that authors use to refer to the same electrophysiological concept (e.g., resting membrane potential is often referred to as ``rmp'' and ``V$_{rest}$''), we also identified a common list of synonyms to map to each concept.  
@@ -225,7 +225,8 @@ For example, investigators can use different experimental protocols to measure t
 Additionally, the spike amplitude itself can be calculated in different ways, such as using the neuron's resting membrane potential as the baseline instead of the spike threshold (\textit{calculation differences}).  
 Furthermore, the value of spike amplitude that an investigator reports will also be affected by specific experimental conditions such as the animal species or age and recording solution temperature or contents (\textit{condition differences}).
 
-When manually curating the text-mined content for the most commonly reported electrophysiological properties (resting membrane potential, input resistance, membrane time constant, spike half-width, spike amplitude, and spike threshold), we took care to account for where the investigator had calculated an electrophysiological measurement using an inconsistent methodology (e.g., protocol or calculation differences) by normalizing such measurements to a common reference definition or removing such data when normalization was not possible.
+When manually curating the text-mined content for some of the most commonly reported electrophysiological properties, we accounted for an investigator's calculation of an electrophysiological measurement using an inconsistent methodology (e.g., protocol or calculation differences). 
+We did so by normalizing such measurements to a common reference definition or removing such data when normalization was not possible.
 However we note that we could not identify all of these cases (in particular: spike amplitude, input resistance, and membrane time constant), in part because investigators did not always explicitly define how these measurements were calculated within their article.  
 We note that in cases where we pool measurements which are measured using inconsistent protocols or calculations, this will tend to add unexplained variance to our data set.  
 Given these measurement inconsistencies, we provide our recommendations for how these electrophysiological properties should be reported in future investigations via our electrophysiology ontology (see Supplemental Materials).  
@@ -266,11 +267,11 @@ first searching for data entities contained within parentheses, then for entitie
 We found that occasionally data were reported as ``XX (LL - HH)'' -- where LL and HH indicate the lower and upper limits of a data range -- and accounted for these cases similarly.  
 We used regular expressions to identify entities such as digits, decimal signs, parentheses, and $\pm$ signs.  
 We then converted the individual data elements which were encoded as textual strings of digits to double precision decimal entities before storing these into our database.  
-Our focus here was primarily on parsing the mean value from a data record (i.e., summarizing the properties of a number of recorded neurons), but also extracted and stored the error term and sample size where possible.  
+Our focus here was primarily on parsing the mean value from a data record (i.e., summarizing the properties of a number of recorded neurons), but we also extracted and stored the error term and sample size where possible.  
 Using these methods, we were able to extract 2176 electrophysiological values for 93 distinct neuron types within 279 articles.
 
 \subsection{Manual validation of automated data extraction}
-Following these automated concept identification and data extraction steps, we manually validated associated concepts and fixed incorrect concept mappings as necessary.  
+Following these automated concept identification and data extraction steps, we manually validated associated concepts and corrected incorrect concept mappings as necessary.  
 We developed custom-HTML and javascript code to allow human curators to graphically interact with downloaded HTML data tables and ``mark-up'' entities within the table (Fig. \ref{human_validation}).  
 This code allows for textual based elements of the HTML table to be semantically annotated using drop down menus and text fields.  
 Moreover, because annotation is implemented via user interfaces composed of interactive web pages and drop down menus, these user interfaces are simple enough to be utilized by other expert curators with little formal instruction. 
@@ -408,7 +409,8 @@ We note that multiple steps in our approach require manual intervention by an ex
 Namely, an expert curator needs to confirm which of the machine-identified candidate neuron types are recorded from in each article and where data from the normotypic or ``control'' states of these neurons are textually referenced within a data table.  
 Moreover, given the current accuracy of the unsurpervised algorithmic assignment of electrophysiological concepts and experimental metadata (78\% and 50\%, respectively), these also need to be manually validated and corrected and normalized as required by an expert.  
 Given the necessity of these manual steps, the scalability of our current approach is limited by our ability to manually curate this information or by our ability to improve the error rate of the automated methods.  
-Despite this limitation, our current pipeline is still much faster than a purely manual one.  The methodology could be further improved by addressing falsely matching entities (such as EPSP amplitude in section \ref{sec:ephys_extraction}) by either auto-suggesting alternative matches returned by string-similarity algorithms or by simply adding these concepts to the electrophysiolgical ontology.  
+Despite this limitation, our current pipeline is still much faster than a purely manual one.  The methodology could be further improved by correcting falsely matching entities (such as EPSP amplitude in section \ref{sec:ephys_extraction}).
+These could be corrected by simply adding these valid concepts to the electrophysiolgical ontology.  
 Moreover, these improvements would facilitate formally computing the sensitivity and specificity of these entity recognition methods.
 
 \subsection{Preliminary use of NeuroElectro in scientific work}
@@ -431,7 +433,7 @@ Existing approaches, such as optical character recognition technology (OCR; e.g.
 %[Imagine that Neuroscience journals replace and CAPTCHA validation with NeuroCaptcha - to validate data from papers]
 
 Given the relatively low accuracy of the automated approach to identifying neuron types, there may be several avenues through which this process can be improved. 
-For example, we note the automated approach was particularly ineffective when the neuron type investigated within an article was not already described in NeuroLex or when the neuron had an insufficient list of synonyms associated with it.  
+For example, we note that the automated approach was particularly ineffective when the neuron type investigated within an article was not already described in NeuroLex or when the neuron had an insufficient list of synonyms associated with it.  
 The current implementation of NeuroElectro also does not consider common neuron type acronyms (e.g., that olfactory bulb mitral cells are commonly referred to as ``MCs'').  
 Adding acronym and abbreviation identification to future iterations will thus likely improve the automated approach \citep{okazaki_building_2006,french_using_2012}.  
 Moreover, our current implementation of the bag-of-words algorithm would likely be enhanced via minor improvements, such as only identifying neurons using the text of the abstract or results and discarding text from the introduction or discussion. 
