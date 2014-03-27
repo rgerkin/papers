@@ -89,7 +89,7 @@ Software engineers seeking to verify, validate and contribute to a complex softw
 Drawing inspiration from this practice, we have developed \textit{SciUnit}, an easy-to-use framework for developing ``model validation tests'' -- 
 executable functions, here written in Python. 
 These tests generate and statistically validate predictions from a specified class of scientific models against one relevant empirical observation to produce a score indicating agreement between the model and the data. 
-Suites of such validation tests, collaboratively developed by a scientific community in common repositories, produce up-to-date statistical summaries of the state of the field. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. 
+Suites of such validation tests, collaboratively developed by a scientific community in common repositories, can produce up-to-date statistical summaries of the state of the field. In this paper, we aim to detail this test-driven workflow and introduce it to the neuroscience community. 
 As an initial example, we describe \textit{NeuronUnit}, a library that builds upon \textit{SciUnit} and integrates with several existing neuroinformatics resources to support validating single-neuron models using data gathered by neurophysiologists. 
 
 \tiny
@@ -104,8 +104,9 @@ Neuroscientists construct quantitative models to coherently explain experimental
 A model can be characterized by its \textit{scope}: the set of observable quantities that it can generate predictions about, and by its \textit{validity}: the extent to which its predictions agree with available experimental  observations of those quantities.
 
 Today, scientists contribute a new model to the research community by submitting a paper containing a description of the model's structure and scope along with text and figures that demonstrate its validity and argue for its novelty.  
-The scientists tasked with reviewing the paper are  responsible for evaluating these claims, discovering competing models and relevant data the paper did not adequately consider, and ensuring that goodness-of-fit was measured in a statistically sound manner, drawing on their knowledge of prior literature. 
-Once a modeling paper is published, it is frozen and cited as-is in perpetuity. 
+The scientists tasked with reviewing the paper are responsible for evaluating these claims, discovering competing models and relevant data the paper did not adequately consider, and ensuring that goodness-of-fit was measured in a statistically sound manner, drawing on their knowledge of prior literature. 
+Often, there are no means for verifying even the basic results \citep{Donoho0815years}.
+And once a modeling paper is published, it is frozen and cited as-is in perpetuity. 
 
 Because publications are the sole vehicle for knowledge about model scope and validity, scientists must rely on an encyclopedic knowledge of the literature to answer \emph{summary questions} like the following:
 \begin{itemize}
@@ -368,8 +369,7 @@ The result is a \emph{score matrix}, like the one diagrammed in Fig. \ref{fig:sc
   In [6]: scores = CA1_suite.judge([ARX_model, AdEx1_model, aSRM_model, PP_model])
 \end{ipy}
 A simple summary of the scores in a score matrix can be printed to the console or visualized by other tools.  
-For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \citep{perez_ipython_2007} (Fig. \ref{fig:scidash_matrix}).
-
+For example, the score matrix can be visualized as a hyperlinked table inside an IPython notebook \citep{perez_ipython_2007} (Fig. \ref{fig:scidash_matrix}).  The code for generating such visualizations is available in the main SciUnit repository (\url{http://github.com/scidash/sciunit}), and for generating this particular visualization is available at \url{Cyrus put a URL here}.  
 
 \begin{figure}%[18]{r}{1\textwidth}
 \vspace{-5px}
@@ -403,7 +403,7 @@ We anticipate that other communities within neuroscience (and indeed, within sci
 Using these common repositories, smaller groups of scientists interested in particular systems of interest will develop tests and models in test repositories like \textit{hippocampus\_tests}. 
 Each research community can develop suitable quality standards and processes for merging pull requests. 
 
-The most visible result of these efforts will be tables, like the one shown in Figure \ref{fig:scidash_matrix}, that allow scientists to understand, precisely, the state-of-the-art in their field. 
+The most visible result of these efforts will be tables, like the one shown in Figure \ref{fig:scidash_matrix}, that allow scientists to represent, formally, the state of model development in their field, as judged against corresponding experimental data. 
 We are developing a lightweight portal, \textit{SciDash}, that directs scientists to the canonical test repositories in their field in order to prevent fragmentation and encourage community participation \citep{omar_sciunit_2013}. 
 \textit{SciDash} will also facilitate viewing test results without needing to clone test repositories and run tests locally for exploratory purposes, based on the \textit{iPython notebook} technology mentioned in Sec. \ref{sec:visualization}. 
 We leave details of \textit{SciDash} as future work, focusing this paper on the core testing methodology (Sec. 2) and on the details of the bridge technologies, below.
@@ -446,6 +446,8 @@ The latter is illustrated in Figure \ref{fig:neuronunit_example}, on lines 1-4.
 Once data has been retrieved from NeuroElectro, associated statistics (e.g. mean, standard error and sample size) can be extracted to parameterize tests (e.g. a test of spike widths on line 10). 
 Data from NeuroElectro can be used to validate a variety of basic electrophysiological features of neuron models, including spike width, resting membrane potential, after-hyperpolarization amplitude, etc. 
 As NeuroElectro is the only public, curated source of such data, it represents a key resource facilitating test construction.  
+However, in selecting data from NeuroElectro (either averaged data across all reports, or data from selected reports) for test construction, one is implicitly assuming that it represents the kind data that ought to be binding in model development.  
+For some models, data obtained in this way is ought not to guide model development, and other data sources will need to be identified and used for test construction.  
 
 \subsection{Models from NeuroML and OpenSourceBrain}\label{sec:neuroml_models}
 NeuroML is a standardized model description language for neuroscience \citep{gleeson_neuroml:_2010}. 
@@ -522,6 +524,7 @@ Automated generation of NeuroML from native model source code is in development 
 This minimizes modeler effort for a large (at least 1000, \url{http://www.neuron.yale.edu/neuron/node/69}) and growing number of neuronal models. 
 \textbf{Third}, modelers have an incentive to demonstrate publicly their models' validity. 
 Participation in public modeling competitions demonstrates that this incentive can draw several participants. We plan to assist with such competitions by advocating for use of SciUnit as the underlying technical substrate in the future. 
+Currently, we are in discussion with field specialists to organize competitions for spiking neuron models (a sequel to the QSNMC), spike-sorting algorithms, calcium imaging spike time reconstruction, brain-computer interfaces, neural network function prediction, and seizure prediction.  
 \textbf{Fourth}, modelers have an incentive to use \textit{SciUnit} during development (see TDD, Sec. \ref{sec:introduction}) to ensure that ongoing development preserves correspondence between model and data. 
 A popular test suite can represent a ``gold standard'' by which progress during development is judged, even within a single project.
 
@@ -577,6 +580,7 @@ All things being equal, simpler models are better.
 Model complexity, though fundamentally a subjective measure, has many correlates \citep{mccabe_complexity_1976}, including: 
 1) model length; 2) memory use; 3) CPU load; 4) \# of capabilities. 
 Future \textit{SciUnit} tools will analyze these factors, and may include tools for gathering community ratings about subjective factors like complexity. As a result of these enhancements, scientists will be able to visualize the model validity vs complexity tradeoff in tabular form (e.g. as a column in Figure \ref{fig:scidash_matrix}), or as a scatter plot, with the ``best'' models being in the high validity / low complexity corner of the plot. 
+Validity may be equated to cross-validation accuracy, or the inverse of some loss function.
 The set of models which \textit{dominate} all others, i.e. that have the highest validity for a given complexity, can be represented as a ``frontier'' in such a scatter plot (e.g. as used in the symbolic regression package Eureqa \citep{schmidt_distilling_2009}).  
 
 \subsection{Expansion Into Other Areas of Biology}
@@ -586,6 +590,10 @@ Community participation begins with enumerating the capabilities relevant to a s
 Model description can expand within NeuroML (which already covers multiple levels within neuroscience) and tools for capability implementation can incorporate libraries for neuroimaging (NiBabel, \url{http://nipy.org/nibabel}), neuroanatomy (NeuroHDF, \url{http://neurohdf.readthedocs.org}) and other sub-disciplines. 
 SBML will enable expansion beyond neuroscience, facilitated by parallel efforts among NeuroML developers to interface with it (Crook, unpublished). 
 One intriguing possiblity is applying \textit{SciUnit} to the OpenWorm project (\url{http://www.openworm.org}), which through open, collaborative development seeks to model the entire organism C. elegans.  
+
+\subsection{Project Development}
+Gewaltig and Cannon describe the maturity of a computational software project \citep{gewaltig_current_2014} as ``review ready'', ``research ready'', or ``user ready''.  
+The development of the underlying SciUnit framework is complete \citep{omar_sciunit_2014}, and it provides the full interface necessary for continued development of domain-specific unit-testing frameworks -- it is research ready.  NeuronUnit is ``review ready'' -- we invite others to participate in building it out to satisfy the use cases they encounter.  Corresponding test suite repositories on GitHub, containing NeuronUnit-based tests, do not even reach this stage.  With the exception of the repositories in development for the QSNMC, and for the Open Source Brain pipeline describe in Section 4, they are non-existent.  We plan to continue creating such repositories; more importantly we invite interested parties to create their own, either to guide in-house model development or to assess larger pools of established models.  
 
 \section*{Disclosure/Conflict-of-Interest Statement}
 %All relationships financial, commercial or otherwise that might be perceived by the academic community as representing a potential conflict of interest must be described. If no such relationship exists, authors will be asked to declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
